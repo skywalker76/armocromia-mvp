@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/*
+ * Design System Armocromia — Tailwind CSS v4
+ *
+ * Why: Tailwind v4 usa @theme inline per definire i design tokens.
+ * Non serve più tailwind.config.ts per i colori custom.
+ */
+@theme inline {
+  /* --- Colori Brand --- */
+  --color-cream: #FAF7F2;
+  --color-cream-dark: #F0EBE3;
+  --color-ink: #2A1810;
+  --color-ink-light: #3D2B20;
+  --color-accent: #B97A6A;
+  --color-accent-hover: #A66B5C;
+  --color-accent-light: #D4A99A;
+  --color-muted: #8E6B57;
+  --color-muted-light: #B8A090;
+
+  /* --- Font Families --- */
+  --font-serif: var(--font-playfair-display), "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* --- Base Styles --- */
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Smooth scroll --- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* --- Selection style — on-brand --- */
+::selection {
+  background-color: var(--color-accent-light);
+  color: var(--color-ink);
+}
