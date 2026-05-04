@@ -49,7 +49,7 @@ export default function HomePage() {
           {/* CTA */}
           <div className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <a
-              href="#"
+              href="/auth/login"
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:bg-accent-hover hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
             >
               Inizia ora
