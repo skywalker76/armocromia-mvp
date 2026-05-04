@@ -1,4 +1,280 @@
 {
-  "_comment": "Tabella 12 stagioni — placeholder. Sarà popolata con i dati reali delle palette.",
-  "seasons": []
+  "seasons": [
+    {
+      "subSeason": "primavera-chiara",
+      "macroSeason": "primavera",
+      "displayName": "Primavera Chiara",
+      "description": "Colori luminosi e delicati, come la luce del mattino primaverile. Tonalità calde e chiare con sottotono giallo-pesca.",
+      "colors": [
+        { "hex": "#FFF5E1", "name": "Crema caldo", "category": "base" },
+        { "hex": "#FFD8B1", "name": "Pesca chiaro", "category": "base" },
+        { "hex": "#F7C8A0", "name": "Albicocca", "category": "base" },
+        { "hex": "#E8D5B7", "name": "Cammello chiaro", "category": "neutral" },
+        { "hex": "#C9B99A", "name": "Sabbia calda", "category": "neutral" },
+        { "hex": "#87CEEB", "name": "Azzurro cielo", "category": "accent" },
+        { "hex": "#98D8C8", "name": "Acquamarina", "category": "accent" },
+        { "hex": "#FF7F50", "name": "Corallo", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#800020", "name": "Borgogna", "category": "accent" },
+        { "hex": "#2F4F4F", "name": "Grigio scuro", "category": "neutral" },
+        { "hex": "#4A0E4E", "name": "Prugna scuro", "category": "accent" }
+      ],
+      "metals": ["oro-giallo", "oro-rosa"]
+    },
+    {
+      "subSeason": "primavera-calda",
+      "macroSeason": "primavera",
+      "displayName": "Primavera Calda",
+      "description": "Colori ricchi e dorati, come il sole del pomeriggio. Tonalità calde e saturate con sottotono dorato.",
+      "colors": [
+        { "hex": "#FFF8DC", "name": "Mais chiaro", "category": "base" },
+        { "hex": "#F4A460", "name": "Ambra dorata", "category": "base" },
+        { "hex": "#DAA520", "name": "Oro antico", "category": "base" },
+        { "hex": "#D2B48C", "name": "Beige dorato", "category": "neutral" },
+        { "hex": "#BC8F8F", "name": "Rosa antico", "category": "neutral" },
+        { "hex": "#FF6347", "name": "Rosso pomodoro", "category": "accent" },
+        { "hex": "#2E8B57", "name": "Verde smeraldo caldo", "category": "accent" },
+        { "hex": "#FF8C00", "name": "Arancio caldo", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#C0C0C0", "name": "Argento freddo", "category": "neutral" },
+        { "hex": "#E6E6FA", "name": "Lavanda fredda", "category": "accent" },
+        { "hex": "#FFB6C1", "name": "Rosa baby freddo", "category": "accent" }
+      ],
+      "metals": ["oro-giallo"]
+    },
+    {
+      "subSeason": "primavera-brillante",
+      "macroSeason": "primavera",
+      "displayName": "Primavera Brillante",
+      "description": "Colori vividi e ad alto contrasto, come fiori tropicali al sole. Tonalità calde e brillanti, saturazione massima.",
+      "colors": [
+        { "hex": "#FFFFFF", "name": "Bianco puro", "category": "base" },
+        { "hex": "#FFFACD", "name": "Giallo limone chiaro", "category": "base" },
+        { "hex": "#F0E68C", "name": "Giallo caldo", "category": "base" },
+        { "hex": "#A0522D", "name": "Cognac", "category": "neutral" },
+        { "hex": "#808080", "name": "Grigio medio caldo", "category": "neutral" },
+        { "hex": "#FF1493", "name": "Fucsia caldo", "category": "accent" },
+        { "hex": "#00CED1", "name": "Turchese brillante", "category": "accent" },
+        { "hex": "#FF4500", "name": "Rosso arancio", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#696969", "name": "Grigio spento", "category": "neutral" },
+        { "hex": "#8B4513", "name": "Marrone opaco", "category": "neutral" },
+        { "hex": "#C8A2C8", "name": "Lilla polveroso", "category": "accent" },
+        { "hex": "#556B2F", "name": "Verde oliva scuro", "category": "accent" }
+      ],
+      "metals": ["oro-giallo", "oro-rosa"]
+    },
+    {
+      "subSeason": "estate-chiara",
+      "macroSeason": "estate",
+      "displayName": "Estate Chiara",
+      "description": "Colori pastello e delicati, come un cielo estivo velato. Tonalità fredde e leggere con sottotono rosato.",
+      "colors": [
+        { "hex": "#FFF0F5", "name": "Rosa cipria", "category": "base" },
+        { "hex": "#E6E6FA", "name": "Lavanda chiara", "category": "base" },
+        { "hex": "#F0F8FF", "name": "Azzurro ghiaccio", "category": "base" },
+        { "hex": "#D3D3D3", "name": "Grigio perla", "category": "neutral" },
+        { "hex": "#C4AEAD", "name": "Rosa cenere", "category": "neutral" },
+        { "hex": "#87CEEB", "name": "Azzurro polvere", "category": "accent" },
+        { "hex": "#DDA0DD", "name": "Malva chiaro", "category": "accent" },
+        { "hex": "#F08080", "name": "Corallo rosato", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#FF8C00", "name": "Arancio caldo", "category": "accent" },
+        { "hex": "#8B0000", "name": "Rosso scuro", "category": "accent" },
+        { "hex": "#DAA520", "name": "Oro caldo", "category": "accent" }
+      ],
+      "metals": ["argento", "oro-rosa"]
+    },
+    {
+      "subSeason": "estate-fredda",
+      "macroSeason": "estate",
+      "displayName": "Estate Fredda",
+      "description": "Colori freddi e raffinati, come il tramonto sul mare. Tonalità blu-rosate con intensità media e sottotono freddo.",
+      "colors": [
+        { "hex": "#F5F5F5", "name": "Bianco gesso", "category": "base" },
+        { "hex": "#B0C4DE", "name": "Acciaio chiaro", "category": "base" },
+        { "hex": "#778899", "name": "Grigio ardesia", "category": "base" },
+        { "hex": "#A9A9A9", "name": "Grigio medio freddo", "category": "neutral" },
+        { "hex": "#C8A2C8", "name": "Lilla freddo", "category": "neutral" },
+        { "hex": "#4169E1", "name": "Blu reale", "category": "accent" },
+        { "hex": "#DA70D6", "name": "Orchidea", "category": "accent" },
+        { "hex": "#DC143C", "name": "Rosso ciliegia", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#FF8C00", "name": "Arancio", "category": "accent" },
+        { "hex": "#FFD700", "name": "Giallo oro", "category": "accent" },
+        { "hex": "#8B4513", "name": "Marrone caldo", "category": "neutral" },
+        { "hex": "#FF6347", "name": "Rosso pomodoro", "category": "accent" }
+      ],
+      "metals": ["argento", "platino"]
+    },
+    {
+      "subSeason": "estate-tenue",
+      "macroSeason": "estate",
+      "displayName": "Estate Tenue",
+      "description": "Colori morbidi e sfumati, come nebbia estiva. Tonalità desaturate e polverose con sottotono freddo-neutro.",
+      "colors": [
+        { "hex": "#F5F5DC", "name": "Beige freddo", "category": "base" },
+        { "hex": "#D8CAB8", "name": "Sabbia rosata", "category": "base" },
+        { "hex": "#C4B7A6", "name": "Tortora", "category": "base" },
+        { "hex": "#A9A9A9", "name": "Grigio colomba", "category": "neutral" },
+        { "hex": "#B5A89E", "name": "Greige", "category": "neutral" },
+        { "hex": "#6B8E8E", "name": "Verde salvia", "category": "accent" },
+        { "hex": "#B0A4C8", "name": "Glicine", "category": "accent" },
+        { "hex": "#C4767A", "name": "Rosa antico freddo", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#FF0000", "name": "Rosso vivo", "category": "accent" },
+        { "hex": "#FF4500", "name": "Arancio vivo", "category": "accent" },
+        { "hex": "#00FF00", "name": "Verde elettrico", "category": "accent" }
+      ],
+      "metals": ["argento", "oro-rosa"]
+    },
+    {
+      "subSeason": "autunno-tenue",
+      "macroSeason": "autunno",
+      "displayName": "Autunno Tenue",
+      "description": "Colori morbidi e terrosi, come foglie autunnali nella foschia. Tonalità calde e desaturate, eleganza naturale.",
+      "colors": [
+        { "hex": "#F5F0E8", "name": "Avorio caldo", "category": "base" },
+        { "hex": "#D2C6A5", "name": "Camoscio", "category": "base" },
+        { "hex": "#C4A882", "name": "Caramello morbido", "category": "base" },
+        { "hex": "#8B7D6B", "name": "Taupe caldo", "category": "neutral" },
+        { "hex": "#A0937D", "name": "Kaki morbido", "category": "neutral" },
+        { "hex": "#6B8E6B", "name": "Verde muschio", "category": "accent" },
+        { "hex": "#CD853F", "name": "Ambra tenue", "category": "accent" },
+        { "hex": "#BC6C64", "name": "Terracotta rosata", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#FF1493", "name": "Fucsia", "category": "accent" },
+        { "hex": "#0000FF", "name": "Blu elettrico", "category": "accent" },
+        { "hex": "#FFFFFF", "name": "Bianco ottico", "category": "base" }
+      ],
+      "metals": ["oro-giallo", "oro-rosa"]
+    },
+    {
+      "subSeason": "autunno-caldo",
+      "macroSeason": "autunno",
+      "displayName": "Autunno Caldo",
+      "description": "Colori ricchi e terrosi, come il foliage al tramonto. Tonalità calde e medie, la quintessenza dell'autunno.",
+      "colors": [
+        { "hex": "#FFF8E7", "name": "Crema vaniglia", "category": "base" },
+        { "hex": "#D2691E", "name": "Cannella", "category": "base" },
+        { "hex": "#B8860B", "name": "Oro scuro", "category": "base" },
+        { "hex": "#8B7355", "name": "Cammello scuro", "category": "neutral" },
+        { "hex": "#A0522D", "name": "Terra di Siena", "category": "neutral" },
+        { "hex": "#556B2F", "name": "Verde oliva", "category": "accent" },
+        { "hex": "#CC5500", "name": "Arancio bruciato", "category": "accent" },
+        { "hex": "#8B0000", "name": "Rosso mattone", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#C0C0C0", "name": "Argento freddo", "category": "neutral" },
+        { "hex": "#FF69B4", "name": "Rosa shocking", "category": "accent" },
+        { "hex": "#E6E6FA", "name": "Lavanda", "category": "accent" }
+      ],
+      "metals": ["oro-giallo"]
+    },
+    {
+      "subSeason": "autunno-profondo",
+      "macroSeason": "autunno",
+      "displayName": "Autunno Profondo",
+      "description": "Colori intensi e profondi, come un bosco d'autunno al crepuscolo. Tonalità calde, scure e drammatiche.",
+      "colors": [
+        { "hex": "#F5EDE0", "name": "Avorio profondo", "category": "base" },
+        { "hex": "#8B4513", "name": "Cioccolato", "category": "base" },
+        { "hex": "#704214", "name": "Mogano", "category": "base" },
+        { "hex": "#3B2F2F", "name": "Caffè espresso", "category": "neutral" },
+        { "hex": "#696969", "name": "Grigio caldo scuro", "category": "neutral" },
+        { "hex": "#006400", "name": "Verde foresta", "category": "accent" },
+        { "hex": "#800020", "name": "Borgogna", "category": "accent" },
+        { "hex": "#B8860B", "name": "Oro zecchino", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#FFB6C1", "name": "Rosa pastello", "category": "accent" },
+        { "hex": "#87CEEB", "name": "Azzurro pastello", "category": "accent" },
+        { "hex": "#E6E6FA", "name": "Lavanda pastello", "category": "accent" },
+        { "hex": "#C0C0C0", "name": "Argento chiaro", "category": "neutral" }
+      ],
+      "metals": ["oro-giallo"]
+    },
+    {
+      "subSeason": "inverno-profondo",
+      "macroSeason": "inverno",
+      "displayName": "Inverno Profondo",
+      "description": "Colori intensi e drammatici, come una notte stellata d'inverno. Alto contrasto, tonalità fredde e profonde.",
+      "colors": [
+        { "hex": "#FFFFFF", "name": "Bianco puro", "category": "base" },
+        { "hex": "#000000", "name": "Nero assoluto", "category": "base" },
+        { "hex": "#191970", "name": "Blu notte", "category": "base" },
+        { "hex": "#36454F", "name": "Antracite", "category": "neutral" },
+        { "hex": "#708090", "name": "Grigio ardesia", "category": "neutral" },
+        { "hex": "#8B0000", "name": "Rosso scuro", "category": "accent" },
+        { "hex": "#006400", "name": "Verde scuro", "category": "accent" },
+        { "hex": "#4B0082", "name": "Indaco", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#FFD700", "name": "Giallo oro caldo", "category": "accent" },
+        { "hex": "#FF8C00", "name": "Arancio", "category": "accent" },
+        { "hex": "#F4A460", "name": "Sabbia calda", "category": "neutral" },
+        { "hex": "#DEB887", "name": "Cammello caldo", "category": "neutral" }
+      ],
+      "metals": ["argento", "platino"]
+    },
+    {
+      "subSeason": "inverno-freddo",
+      "macroSeason": "inverno",
+      "displayName": "Inverno Freddo",
+      "description": "Colori glaciali e raffinati, come ghiaccio e cristalli. Tonalità fredde blu-rosate con alta saturazione.",
+      "colors": [
+        { "hex": "#FFFFFF", "name": "Bianco neve", "category": "base" },
+        { "hex": "#000080", "name": "Blu marina", "category": "base" },
+        { "hex": "#2F4F4F", "name": "Verde petrolio scuro", "category": "base" },
+        { "hex": "#696969", "name": "Grigio freddo", "category": "neutral" },
+        { "hex": "#4A4A4A", "name": "Grigio carbone", "category": "neutral" },
+        { "hex": "#DC143C", "name": "Rosso cremisi", "category": "accent" },
+        { "hex": "#FF00FF", "name": "Magenta", "category": "accent" },
+        { "hex": "#00CED1", "name": "Turchese freddo", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#FF8C00", "name": "Arancio caldo", "category": "accent" },
+        { "hex": "#DAA520", "name": "Oro caldo", "category": "accent" },
+        { "hex": "#D2691E", "name": "Cannella", "category": "neutral" },
+        { "hex": "#CD853F", "name": "Miele caldo", "category": "neutral" }
+      ],
+      "metals": ["argento", "platino"]
+    },
+    {
+      "subSeason": "inverno-brillante",
+      "macroSeason": "inverno",
+      "displayName": "Inverno Brillante",
+      "description": "Colori vividi e ad altissimo contrasto, come cristalli di ghiaccio al sole. Colori puri, netti e brillanti.",
+      "colors": [
+        { "hex": "#FFFFFF", "name": "Bianco assoluto", "category": "base" },
+        { "hex": "#000000", "name": "Nero puro", "category": "base" },
+        { "hex": "#1C1C1C", "name": "Nero profondo", "category": "base" },
+        { "hex": "#808080", "name": "Grigio medio", "category": "neutral" },
+        { "hex": "#C0C0C0", "name": "Argento", "category": "neutral" },
+        { "hex": "#FF0000", "name": "Rosso puro", "category": "accent" },
+        { "hex": "#0000FF", "name": "Blu elettrico", "category": "accent" },
+        { "hex": "#FF1493", "name": "Rosa shocking", "category": "accent" }
+      ],
+      "avoidColors": [
+        { "hex": "#F4A460", "name": "Sabbia calda", "category": "neutral" },
+        { "hex": "#DEB887", "name": "Beige caldo", "category": "neutral" },
+        { "hex": "#D2691E", "name": "Cannella", "category": "neutral" },
+        { "hex": "#556B2F", "name": "Verde oliva", "category": "accent" }
+      ],
+      "metals": ["argento", "platino", "oro-rosa"]
+    }
+  ]
 }
