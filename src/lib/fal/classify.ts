@@ -72,9 +72,9 @@ export async function classifyPhoto(
     ? `${CLASSIFICATION_PROMPT}\n\nNote dal soggetto: "${userNotes}"`
     : CLASSIFICATION_PROMPT;
 
-  const result = await fal.subscribe("openrouter/router/vision", {
+  const result = await fal.subscribe("fal-ai/any-llm/vision", {
     input: {
-      image_urls: [photoUrl],
+      image_url: photoUrl,
       prompt,
       model: "google/gemini-2.5-flash",
     },

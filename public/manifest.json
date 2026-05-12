@@ -1,59 +1,21 @@
 {
-  "name": "Armocromia — Dossier Cromatico AI",
+  "name": "Armocromia",
   "short_name": "Armocromia",
-  "description": "Scopri la tua armocromia personale con un dossier visivo professionale generato dall'intelligenza artificiale.",
-  "start_url": "/dashboard",
-  "scope": "/",
+  "description": "Scopri la tua armocromia personale con un dossier visivo professionale.",
+  "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "background_color": "#FCF9F6",
   "theme_color": "#B97A6A",
-  "background_color": "#FAF7F2",
-  "lang": "it",
-  "categories": ["lifestyle", "beauty"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/demo/dossier-autumn.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Scopri la tua palette ideale"
-    },
-    {
-      "src": "/demo/dossier-winter.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Dossier cromatico generato da AI"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "I miei dossier",
-      "short_name": "Dossier",
-      "description": "Visualizza i tuoi dossier salvati",
-      "url": "/dashboard",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Nuova Analisi",
-      "short_name": "Nuovo",
-      "description": "Inizia una nuova analisi armocromatica",
-      "url": "/dashboard?new=true",
-      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+      "type": "image/png"
     }
   ]
 }
