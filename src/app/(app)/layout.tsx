@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import ToastContainer from "@/components/ui/Toast";
+import NavBar from "@/components/app/NavBar";
 
 /**
  * Layout per l'area autenticata — route group (app).
@@ -24,34 +26,14 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Header — area autenticata */}
-      <header className="border-b border-accent/10 px-6 py-4">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <a
-            href="/dashboard"
-            className="font-serif text-xl text-ink hover:text-accent transition-colors"
-          >
-            Armocromia
-          </a>
-
-          <div className="flex items-center gap-6">
-            <span className="text-sm text-muted hidden sm:block">
-              {user.email}
-            </span>
-            <form action="/api/auth/logout" method="POST">
-              <button
-                type="submit"
-                className="text-sm font-medium text-muted hover:text-ink transition-colors"
-              >
-                Esci
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      {/* Premium Navbar */}
+      <NavBar email={user.email ?? ""} />
 
       {/* Content */}
       <main className="flex-1">{children}</main>
+
+      {/* Toast system */}
+      <ToastContainer />
     </div>
   );
 }

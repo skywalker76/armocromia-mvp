@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sei offline — Armocromia</title>
+  <meta name="theme-color" content="#FAF7F2">
+  <style>
+    :root {
+      --color-cream: #FAF7F2;
+      --color-ink: #2A1810;
+      --color-accent: #B97A6A;
+      --color-muted: #8E6B57;
+      --font-serif: "Playfair Display", Georgia, serif;
+      --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--color-cream);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 400px;
+      padding: 40px 24px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(42, 24, 16, 0.06);
+    }
+    .icon {
+      width: 64px;
+      height: 64px;
+      background: var(--color-cream);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: var(--color-accent);
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      margin: 0 0 16px 0;
+      color: var(--color-ink);
+    }
+    p {
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin: 0 0 32px 0;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-accent);
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .btn:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
+      </svg>
+    </div>
+    <h1>Sei offline</h1>
+    <p>La connessione internet sembra assente. I dossier già generati sono salvati sul tuo dispositivo e rimangono consultabili.</p>
+    <a href="/dashboard" class="btn">Vai alla Dashboard</a>
+  </div>
+</body>
+</html>

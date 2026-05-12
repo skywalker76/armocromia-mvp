@@ -1,9 +1,10 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { classifyPhoto } from "@/lib/fal/classify";
-import { generateDossierImage } from "@/lib/fal/generate-dossier";
+import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossier";
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 
 /**
@@ -53,10 +54,12 @@ export async function analyzePhoto(
   // ── 1. Validazione input ──
   const rawFile = formData.get("photo");
   const rawNotes = formData.get("userNotes");
+  const rawMode = formData.get("analysisMode");
 
   const parsed = uploadPhotoSchema.safeParse({
     file: rawFile,
     userNotes: typeof rawNotes === "string" ? rawNotes : undefined,
+    analysisMode: typeof rawMode === "string" ? rawMode : undefined,
   });
 
   if (!parsed.success) {
@@ -64,7 +67,7 @@ export async function analyzePhoto(
     return { status: "error", error: firstError };
   }
 
-  const { file, userNotes } = parsed.data;
+  const { file, userNotes, analysisMode } = parsed.data;
   let dossierId: number | undefined = undefined;
 
   try {
@@ -85,19 +88,33 @@ export async function analyzePhoto(
 
     dossierId = dossier.id;
 
-    // ── 3. Upload foto su Supabase Storage ──
+    // ── 3. Upload foto su Supabase Storage (con retry) ──
     const fileExt = file.name.split(".").pop() ?? "jpg";
     const photoPath = `${user.id}/${dossierId}.${fileExt}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("photos")
-      .upload(photoPath, file, {
-        contentType: file.type,
-        upsert: true,
-      });
+    // Converti File in ArrayBuffer per upload affidabile
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
+
+    let uploadError: Error | null = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const { error } = await supabase.storage
+        .from("photos")
+        .upload(photoPath, fileBuffer, {
+          contentType: file.type,
+          upsert: true,
+        });
+
+      if (!error) {
+        uploadError = null;
+        break;
+      }
+      console.warn(`[analyzePhoto] Upload attempt ${attempt}/3 failed:`, error.message);
+      uploadError = new Error(error.message);
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
+    }
 
     if (uploadError) {
-      throw new Error(`Storage upload failed: ${uploadError.message}`);
+      throw new Error(`Storage upload failed after 3 attempts: ${uploadError.message}`);
     }
 
     // Aggiorna path nel record
@@ -133,26 +150,37 @@ export async function analyzePhoto(
 
     // ── 5. Genera dossier visivo con GPT Image 2 ──
     const palette = getPaletteBySubSeason(classification.subSeason);
-    const dossierImageUrl = await generateDossierImage(palette, classification);
+    const dossierImageUrl = await generateDossierImage(palette, classification, signedUrl.signedUrl, analysisMode as DossierMode);
 
-    // ── 6. Scarica e upload dossier su Supabase Storage ──
+    // ── 6. Scarica e upload dossier su Supabase Storage (con retry) ──
     const dossierResponse = await fetch(dossierImageUrl);
     if (!dossierResponse.ok) {
       throw new Error("Failed to download generated dossier image");
     }
-    const dossierBlob = await dossierResponse.blob();
-    const dossierPath = `${user.id}/${dossierId}.webp`;
+    const dossierBuffer = Buffer.from(await dossierResponse.arrayBuffer());
+    const dossierPath = `${user.id}/${dossierId}.png`;
 
-    const { error: dossierUploadError } = await supabase.storage
-      .from("dossiers")
-      .upload(dossierPath, dossierBlob, {
-        contentType: "image/webp",
-        upsert: true,
-      });
+    let dossierUploadError: Error | null = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const { error } = await supabase.storage
+        .from("dossiers")
+        .upload(dossierPath, dossierBuffer, {
+          contentType: "image/png",
+          upsert: true,
+        });
+
+      if (!error) {
+        dossierUploadError = null;
+        break;
+      }
+      console.warn(`[analyzePhoto] Dossier upload attempt ${attempt}/3 failed:`, error.message);
+      dossierUploadError = new Error(error.message);
+      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
+    }
 
     if (dossierUploadError) {
       throw new Error(
-        `Dossier storage upload failed: ${dossierUploadError.message}`
+        `Dossier storage upload failed after 3 attempts: ${dossierUploadError.message}`
       );
     }
 
@@ -187,3 +215,79 @@ export async function analyzePhoto(
     };
   }
 }
+
+/**
+ * Server Action — elimina un dossier con tutti i file associati.
+ *
+ * Pipeline:
+ * 1. Verifica auth
+ * 2. Verifica ownership (user_id match)
+ * 3. Elimina file da photos bucket
+ * 4. Elimina file da dossiers bucket
+ * 5. Elimina record DB
+ * 6. Revalida la dashboard
+ */
+export async function deleteDossier(dossierId: number): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "Non autenticato" };
+  }
+
+  try {
+    // Fetch dossier to get file paths + verify ownership
+    const { data: dossier, error: fetchError } = await supabase
+      .from("dossiers")
+      .select("id, user_id, original_photo_path, generated_dossier_path")
+      .eq("id", dossierId)
+      .single();
+
+    if (fetchError || !dossier) {
+      return { success: false, error: "Dossier non trovato" };
+    }
+
+    if (dossier.user_id !== user.id) {
+      return { success: false, error: "Non autorizzato" };
+    }
+
+    // Delete files from Storage (best-effort, don't fail if missing)
+    const filesToDelete: Array<{ bucket: string; path: string }> = [];
+    if (dossier.original_photo_path) {
+      filesToDelete.push({ bucket: "photos", path: dossier.original_photo_path });
+    }
+    if (dossier.generated_dossier_path) {
+      filesToDelete.push({ bucket: "dossiers", path: dossier.generated_dossier_path });
+    }
+
+    for (const file of filesToDelete) {
+      const { error } = await supabase.storage.from(file.bucket).remove([file.path]);
+      if (error) {
+        console.warn(`[deleteDossier] Failed to delete ${file.bucket}/${file.path}:`, error.message);
+      }
+    }
+
+    // Delete DB record
+    const { error: deleteError } = await supabase
+      .from("dossiers")
+      .delete()
+      .eq("id", dossierId);
+
+    if (deleteError) {
+      throw new Error(`DB delete failed: ${deleteError.message}`);
+    }
+
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (err) {
+    console.error("[deleteDossier] Failed:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Errore durante l'eliminazione",
+    };
+  }
+}
+

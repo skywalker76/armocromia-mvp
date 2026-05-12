@@ -11,12 +11,16 @@ import { fal } from "@fal-ai/client";
  * IMPORTANTE: non importare questo file in Client Components.
  */
 
-// Why: fal.ai legge automaticamente FAL_KEY dalle env vars.
-// La configurazione esplicita è necessaria solo se vuoi override.
+// Why: passiamo la key esplicitamente perché "from_env" non funziona
+// in modo affidabile con Next.js Turbopack (non legge FAL_KEY).
+const falKey = process.env.FAL_KEY;
+
+if (!falKey) {
+  console.warn("[fal] FAL_KEY non configurata — la pipeline AI non funzionerà");
+}
+
 fal.config({
-  // Why: credentials "from_env" è il default, ma lo rendiamo esplicito
-  // per chiarezza. Legge process.env.FAL_KEY automaticamente.
-  credentials: "from_env",
+  credentials: falKey,
 });
 
 export { fal };

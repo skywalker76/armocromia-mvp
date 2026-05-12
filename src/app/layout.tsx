@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -22,6 +22,19 @@ const inter = Inter({
   display: "swap",
 });
 
+/**
+ * Viewport configuration — separata da metadata per Next.js 16.
+ * Why: viewport-fit=cover abilita safe area su iPhone con notch/Dynamic Island.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#B97A6A",
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Armocromia — I colori che ti fanno splendere",
@@ -29,7 +42,16 @@ export const metadata: Metadata = {
   },
   description:
     "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
-  // Why: lang="it" per SEO Italia
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Armocromia",
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
 };
 
 export default function RootLayout({
@@ -42,7 +64,21 @@ export default function RootLayout({
       lang="it"
       className={`${playfairDisplay.variable} ${inter.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        {/* Service Worker registration — only in production */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js');
+                });
+              }
+            `,
+          }}
+        />
+      </body>
     </html>
   );
 }

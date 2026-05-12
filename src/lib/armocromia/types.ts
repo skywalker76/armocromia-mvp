@@ -45,8 +45,17 @@ export interface SeasonPalette {
   displayName: string;
   /** Descrizione breve della palette */
   description: string;
-  /** Colori della palette, ordinati per importanza */
+  /** Colori della palette (flat list per backward compat) */
   colors: ColorSwatch[];
+  /** Colori organizzati su 3 livelli gerarchici (se disponibili) */
+  colorTiers?: {
+    /** Tonalità principali — i 7 colori più valorizzanti */
+    primary: ColorSwatch[];
+    /** Tonalità secondarie — colori complementari */
+    secondary: ColorSwatch[];
+    /** Neutri ideali — basi sicure per ogni outfit */
+    neutrals: ColorSwatch[];
+  };
   /** Colori da evitare */
   avoidColors: ColorSwatch[];
   /** Metalli consigliati */
@@ -100,6 +109,19 @@ export interface ClassificationResult {
     hairColor: string;
     eyeColor: string;
     undertone: "caldo" | "freddo" | "neutro";
-    contrast: "basso" | "medio" | "alto";
+    contrast: "basso" | "medio-basso" | "medio" | "medio-alto" | "alto";
+    value?: "chiaro" | "medio" | "scuro";
+    intensity?: "morbida" | "media" | "brillante";
+  };
+  /** Ragionamento dettagliato */
+  reasoning: {
+    whyTheseColors: string;
+    whyNotOthers: string;
+    practicalTips: string[];
+    lookSuggestions?: Array<{
+      name: string;
+      colors: string;
+      description: string;
+    }>;
   };
 }

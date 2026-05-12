@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import DeleteDossierButton from "./DeleteDossierButton";
 
 /**
- * Card per visualizzare un dossier completato nella dashboard.
- *
- * Why: Client Component perché ha interazioni (expand, copy hex).
- * Riceve dati pre-processati dal Server Component dashboard.
+ * Card premium per dossier completato con hover lift, overlay azioni, delete.
  */
 
 interface DossierCardProps {
@@ -27,117 +25,139 @@ interface DossierCardProps {
     generated_dossier_path: string | null;
   };
   dossierImageUrl: string | null;
+  /** Index per stagger animation */
+  index?: number;
 }
 
-/** Mappa sotto-stagione → colore badge */
-const SEASON_COLORS: Record<string, string> = {
-  "primavera-chiara": "bg-amber-50 text-amber-700 border-amber-200",
-  "primavera-calda": "bg-orange-50 text-orange-700 border-orange-200",
-  "primavera-brillante": "bg-rose-50 text-rose-700 border-rose-200",
-  "estate-chiara": "bg-sky-50 text-sky-700 border-sky-200",
-  "estate-fredda": "bg-blue-50 text-blue-700 border-blue-200",
-  "estate-tenue": "bg-slate-50 text-slate-600 border-slate-200",
-  "autunno-tenue": "bg-stone-50 text-stone-700 border-stone-200",
-  "autunno-caldo": "bg-amber-50 text-amber-800 border-amber-300",
-  "autunno-profondo": "bg-red-50 text-red-800 border-red-200",
-  "inverno-profondo": "bg-indigo-50 text-indigo-700 border-indigo-200",
-  "inverno-freddo": "bg-cyan-50 text-cyan-700 border-cyan-200",
-  "inverno-brillante": "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200",
+/** Mappa stagione → colore badge + icona */
+const SEASON_STYLES: Record<string, { class: string; icon: string }> = {
+  "primavera-chiara": { class: "bg-amber-50 text-amber-700 border-amber-200", icon: "🌸" },
+  "primavera-calda": { class: "bg-orange-50 text-orange-700 border-orange-200", icon: "🌻" },
+  "primavera-brillante": { class: "bg-rose-50 text-rose-700 border-rose-200", icon: "🌺" },
+  "estate-chiara": { class: "bg-sky-50 text-sky-700 border-sky-200", icon: "☁️" },
+  "estate-fredda": { class: "bg-blue-50 text-blue-700 border-blue-200", icon: "❄️" },
+  "estate-tenue": { class: "bg-slate-50 text-slate-600 border-slate-200", icon: "🌫️" },
+  "autunno-tenue": { class: "bg-stone-50 text-stone-700 border-stone-200", icon: "🍂" },
+  "autunno-caldo": { class: "bg-amber-50 text-amber-800 border-amber-300", icon: "🍁" },
+  "autunno-profondo": { class: "bg-red-50 text-red-800 border-red-200", icon: "🌰" },
+  "inverno-profondo": { class: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: "🌙" },
+  "inverno-freddo": { class: "bg-cyan-50 text-cyan-700 border-cyan-200", icon: "💎" },
+  "inverno-brillante": { class: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200", icon: "✨" },
 };
+
+/** Tempo relativo (italiano) */
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Adesso";
+  if (mins < 60) return `${mins} min fa`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h fa`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "Ieri";
+  if (days < 7) return `${days} giorni fa`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks} sett. fa`;
+  return new Date(dateStr).toLocaleDateString("it-IT", { day: "numeric", month: "short" });
+}
 
 export default function DossierCard({
   dossier,
   dossierImageUrl,
+  index = 0,
 }: DossierCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const seasonKey = dossier.classified_season ?? "";
   const seasonLabel = seasonKey.replace("-", " ");
-  const badgeClass = SEASON_COLORS[seasonKey] ?? "bg-gray-50 text-gray-700 border-gray-200";
+  const style = SEASON_STYLES[seasonKey] ?? { class: "bg-gray-50 text-gray-700 border-gray-200", icon: "🎨" };
   const analysis = dossier.classification_result?.analysis;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-accent/10 bg-white shadow-sm transition-shadow hover:shadow-md">
-      {/* Dossier Image */}
+    <div
+      className="group relative overflow-hidden rounded-2xl border border-accent/8 bg-white shadow-xs transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up"
+      style={{ animationDelay: `${index * 0.08}s` }}
+    >
+      {/* Image Section */}
       {dossierImageUrl && (
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-cream-dark">
+        <a href={`/dossier/${dossier.id}`} className="relative block aspect-[3/4] w-full overflow-hidden bg-cream-dark">
+          {/* Skeleton loader */}
           {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
-            </div>
+            <div className="absolute inset-0 skeleton" />
           )}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dossierImageUrl}
             alt={`Dossier ${seasonLabel}`}
-            className={`h-full w-full object-cover transition-opacity duration-500 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+            className={`h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.03] ${imageLoaded ? "opacity-100" : "opacity-0"}`}
             onLoad={() => setImageLoaded(true)}
           />
-        </div>
+          {/* Hover overlay con azioni rapide */}
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between opacity-0 transition-all duration-300 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
+            <span className="rounded-full bg-white/90 backdrop-blur-sm px-4 py-2 text-xs font-semibold text-ink shadow-sm">
+              Vedi dettaglio →
+            </span>
+          </div>
+        </a>
       )}
 
       {/* Content */}
-      <div className="p-6">
-        {/* Season badge */}
+      <div className="p-5">
+        {/* Top row: Badge + Actions */}
         <div className="flex items-center justify-between">
-          <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold capitalize ${badgeClass}`}>
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold capitalize ${style.class}`}>
+            <span className="text-sm">{style.icon}</span>
             {seasonLabel || dossier.status}
           </span>
-          <span className="text-xs text-muted-light">
-            {new Date(dossier.created_at).toLocaleDateString("it-IT", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </span>
+          <div className="flex items-center gap-1">
+            <DeleteDossierButton dossierId={dossier.id} seasonLabel={seasonLabel} variant="icon" />
+          </div>
         </div>
 
-        {/* Analysis details */}
+        {/* Analysis chips */}
         {analysis && (
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            {analysis.skinTone && (
-              <div>
-                <span className="text-muted-light text-xs">Incarnato</span>
-                <p className="text-ink">{analysis.skinTone}</p>
-              </div>
-            )}
-            {analysis.hairColor && (
-              <div>
-                <span className="text-muted-light text-xs">Capelli</span>
-                <p className="text-ink">{analysis.hairColor}</p>
-              </div>
-            )}
-            {analysis.eyeColor && (
-              <div>
-                <span className="text-muted-light text-xs">Occhi</span>
-                <p className="text-ink">{analysis.eyeColor}</p>
-              </div>
-            )}
+          <div className="mt-4 flex flex-wrap gap-2">
             {analysis.undertone && (
-              <div>
-                <span className="text-muted-light text-xs">Sottotono</span>
-                <p className="text-ink capitalize">{analysis.undertone}</p>
-              </div>
+              <span className="rounded-lg bg-cream px-2.5 py-1 text-xs text-muted">
+                {analysis.undertone}
+              </span>
+            )}
+            {analysis.contrast && (
+              <span className="rounded-lg bg-cream px-2.5 py-1 text-xs text-muted">
+                {analysis.contrast}
+              </span>
             )}
           </div>
         )}
 
+        {/* Date */}
+        <p
+          className="mt-3 text-xs text-muted-light"
+          title={new Date(dossier.created_at).toLocaleString("it-IT")}
+        >
+          {timeAgo(dossier.created_at)}
+        </p>
+
         {/* Actions */}
-        <div className="mt-6 flex gap-3">
+        <div className="mt-4 flex gap-2">
           <a
             href={`/dossier/${dossier.id}`}
-            className="flex-1 rounded-full bg-accent px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+            className="flex-1 rounded-xl bg-accent px-4 py-2.5 text-center text-sm font-medium text-white transition-all hover:bg-accent-hover hover:shadow-md"
           >
-            Vedi dettaglio
+            Apri dossier
           </a>
           {dossierImageUrl && (
             <a
               href={dossierImageUrl}
-              download={`armocromia-dossier-${dossier.id}.webp`}
+              download={`armocromia-dossier-${dossier.id}.png`}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-accent/20 px-4 py-2.5 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-accent/15 text-accent transition-all hover:bg-accent/5 hover:border-accent/25"
+              title="Scarica PNG"
             >
-              Scarica
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
             </a>
           )}
         </div>

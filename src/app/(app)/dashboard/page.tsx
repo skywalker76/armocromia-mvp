@@ -3,8 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
 
+/** Pipeline GPT Image 2 /edit richiede ~60-90s. Default Next.js = 30s. */
+export const maxDuration = 120;
+
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Dashboard — Armocromia",
   description: "Il tuo pannello personale per gestire l'analisi cromatica.",
 };
 
@@ -31,10 +34,14 @@ export default async function DashboardPage() {
     .eq("user_id", user!.id)
     .order("created_at", { ascending: false });
 
-  const completedDossiers = dossiers?.filter((d) => d.status === "completed") ?? [];
-  const pendingDossiers = dossiers?.filter((d) =>
-    ["processing", "generating"].includes(d.status)
-  ) ?? [];
+  const completedDossiers =
+    dossiers?.filter((d) => d.status === "completed") ?? [];
+  const pendingDossiers =
+    dossiers?.filter((d) =>
+      ["processing", "generating"].includes(d.status)
+    ) ?? [];
+  const failedDossiers =
+    dossiers?.filter((d) => d.status === "failed") ?? [];
   const hasDossiers = (dossiers?.length ?? 0) > 0;
 
   // Genera signed URLs per i dossier completati
@@ -51,67 +58,122 @@ export default async function DashboardPage() {
     })
   );
 
+  const displayName = user?.email ? user.email.split("@")[0] : "Utente";
+
+  // Greeting dinamico
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
+
   return (
-    <div className="px-6 py-12">
-      <div className="mx-auto max-w-4xl">
-        {/* Welcome */}
-        <div className="mb-12">
+    <div className="px-6 py-10 sm:py-14">
+      <div className="mx-auto max-w-5xl">
+        {/* ── Welcome Header ── */}
+        <div className="mb-10 animate-fade-in">
           <p className="text-sm font-medium tracking-[0.15em] uppercase text-muted">
-            Il tuo spazio personale
+            {greeting}
           </p>
           <h1 className="mt-2 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
-            Ciao{user?.email ? `, ${user.email.split("@")[0]}` : ""} 👋
+            {displayName}
           </h1>
+          {hasDossiers && (
+            <p className="mt-3 text-muted">
+              {completedDossiers.length === 1
+                ? "Hai 1 dossier completato"
+                : `Hai ${completedDossiers.length} dossier completati`}
+              {pendingDossiers.length > 0 &&
+                ` · ${pendingDossiers.length} in elaborazione`}
+            </p>
+          )}
         </div>
 
-        {/* Dossier in elaborazione */}
+        {/* ── Dossier in elaborazione ── */}
         {pendingDossiers.length > 0 && (
-          <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50/50 p-6">
+          <div className="mb-8 rounded-2xl border border-warning/20 bg-warning-light p-6 animate-slide-up">
             <div className="flex items-center gap-3">
-              <div className="h-3 w-3 animate-pulse rounded-full bg-amber-500" />
-              <p className="font-medium text-amber-800">
+              <div className="relative flex h-3 w-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-warning opacity-75" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-warning" />
+              </div>
+              <p className="font-medium text-ink">
                 {pendingDossiers.length === 1
-                  ? "Un dossier è in elaborazione..."
-                  : `${pendingDossiers.length} dossier in elaborazione...`}
+                  ? "Un dossier è in elaborazione…"
+                  : `${pendingDossiers.length} dossier in elaborazione…`}
               </p>
             </div>
-            <p className="mt-2 text-sm text-amber-700">
-              Ricarica la pagina tra qualche istante per visualizzare i risultati.
+            <p className="mt-2 text-sm text-muted">
+              L&apos;intelligenza artificiale sta generando il tuo dossier
+              personalizzato. Ricarica la pagina tra qualche istante.
             </p>
           </div>
         )}
 
-        {/* Dossier completati */}
+        {/* ── Dossier falliti ── */}
+        {failedDossiers.length > 0 && (
+          <div className="mb-8 rounded-2xl border border-error/15 bg-error-light p-6 animate-slide-up">
+            <div className="flex items-center gap-3">
+              <svg className="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+              </svg>
+              <p className="font-medium text-ink">
+                {failedDossiers.length === 1
+                  ? "Un&apos;analisi non è andata a buon fine"
+                  : `${failedDossiers.length} analisi non riuscite`}
+              </p>
+            </div>
+            <p className="mt-2 text-sm text-muted">
+              Puoi riprovare caricando una nuova foto oppure contattare
+              il supporto.
+            </p>
+          </div>
+        )}
+
+        {/* ── Dossier completati — Grid ── */}
         {completedDossiers.length > 0 && (
-          <div className="mb-12">
-            <h2 className="mb-6 font-serif text-xl text-ink">I tuoi dossier</h2>
-            <div className="grid gap-8 sm:grid-cols-2">
-              {dossiersWithUrls.map(({ dossier, imageUrl }) => (
+          <div className="mb-14">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="font-serif text-xl text-ink">I tuoi dossier</h2>
+              <span className="rounded-full bg-accent/8 px-3 py-1 text-xs font-semibold text-accent">
+                {completedDossiers.length}
+              </span>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {dossiersWithUrls.map(({ dossier, imageUrl }, i) => (
                 <DossierCard
                   key={dossier.id}
                   dossier={dossier}
                   dossierImageUrl={imageUrl}
+                  index={i}
                 />
               ))}
             </div>
           </div>
         )}
 
-        {/* Nuova analisi o stato vuoto */}
-        <div className="rounded-2xl border border-accent/10 bg-white p-8 shadow-sm">
+        {/* ── Nuova analisi ── */}
+        <div className="rounded-2xl border border-accent/8 bg-white p-8 shadow-xs animate-slide-up">
+          {/* Decorative accent line */}
+          <div className="mx-auto mb-6 h-1 w-12 rounded-full bg-gradient-to-r from-accent-light to-accent" />
           <div className="mb-6 text-center">
             <h2 className="font-serif text-2xl text-ink">
               {hasDossiers
                 ? "Nuova analisi cromatica"
                 : "Inizia la tua analisi cromatica"}
             </h2>
-            <p className="mt-2 text-muted leading-relaxed">
+            <p className="mt-3 mx-auto max-w-lg text-muted leading-relaxed">
               {hasDossiers
-                ? "Carica una nuova foto per un'analisi aggiuntiva."
-                : "Carica una foto ritratto e riceverai un dossier visivo personalizzato con palette, outfit e makeup su misura."}
+                ? "Carica una nuova foto per scoprire altri abbinamenti e palette personalizzate."
+                : "Carica una foto ritratto e l'intelligenza artificiale creerà un dossier visivo personalizzato con palette, outfit e consigli su misura per te."}
             </p>
           </div>
           <PhotoUploader />
+        </div>
+
+        {/* ── Footer branding ── */}
+        <div className="mt-14 text-center">
+          <p className="text-xs text-muted-light/60 tracking-wide">
+            Armocromia AI · Powered by Antigravity
+          </p>
         </div>
       </div>
     </div>
