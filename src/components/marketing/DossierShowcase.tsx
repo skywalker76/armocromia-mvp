@@ -21,6 +21,22 @@ interface DemoSeason {
 
 const DEMO_SEASONS: DemoSeason[] = [
   {
+    id: "spring",
+    name: "Primavera",
+    subtitle: "Luminosità e freschezza",
+    image: "/demo/dossier-spring.png",
+    palette: ["#FF7F7F", "#FFDAB9", "#E6E6FA", "#98FB98", "#FFD700", "#40E0D0", "#FFC0CB", "#F0E68C"],
+    features: ["Palette fresca e vivace", "Oro giallo e rosa", "Outfit in corallo e pesca"],
+  },
+  {
+    id: "summer",
+    name: "Estate",
+    subtitle: "Delicata, fredda e smorzata",
+    image: "/demo/dossier-summer.png",
+    palette: ["#B0C4DE", "#DDA0DD", "#C0C0C0", "#E6E6FA", "#778899", "#87CEEB", "#D8BFD8", "#A9A9C8"],
+    features: ["Palette soft e polverosa", "Argento e oro bianco", "Outfit in lavanda e grigio perla"],
+  },
+  {
     id: "autumn",
     name: "Autunno",
     subtitle: "Tonalità calde e avvolgenti",
@@ -35,14 +51,6 @@ const DEMO_SEASONS: DemoSeason[] = [
     image: "/demo/dossier-winter.png",
     palette: ["#1B365D", "#2C2C2C", "#4A0E4E", "#0B3D2E", "#87CEEB", "#C0C0C0", "#2F4F4F", "#191970"],
     features: ["Palette fredda e brillante", "Argento e platino", "Outfit in blu e nero puro"],
-  },
-  {
-    id: "spring",
-    name: "Primavera",
-    subtitle: "Luminosità e freschezza",
-    image: "/demo/dossier-spring.png",
-    palette: ["#FF7F7F", "#FFDAB9", "#E6E6FA", "#98FB98", "#FFD700", "#40E0D0", "#FFC0CB", "#F0E68C"],
-    features: ["Palette fresca e vivace", "Oro giallo e rosa", "Outfit in corallo e pesca"],
   },
 ];
 

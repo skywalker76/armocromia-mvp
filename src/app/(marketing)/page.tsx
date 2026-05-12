@@ -46,7 +46,7 @@ export default function HomePage() {
           {/* Left — Copy */}
           <div className="relative z-10 animate-fade-in">
             <p className="mb-5 text-xs font-semibold tracking-[0.25em] uppercase text-accent">
-              Analisi cromatica con AI
+              Analisi cromatica personalizzata
             </p>
 
             <h1 className="font-serif text-3xl leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-6xl">
@@ -63,8 +63,8 @@ export default function HomePage() {
 
             <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted">
               Carica una tua foto e ricevi un dossier visivo professionale:
-              palette colori personalizzata, abbinamenti outfit e consigli
-              cromatici generati dall&apos;intelligenza artificiale.
+              palette colori su misura, abbinamenti outfit e consigli cromatici
+              creati apposta per te dalla nostra tecnologia avanzata.
             </p>
 
             {/* CTA group */}
@@ -151,12 +151,13 @@ export default function HomePage() {
           TRUST BAR — Credibilità
          ═══════════════════════════════════════════════ */}
       <section className="border-y border-accent/8 bg-white/50 px-4 sm:px-6 py-6 sm:py-8">
-        <div className="mx-auto grid max-w-4xl grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-x-10 gap-y-3 sm:gap-y-4 text-center text-sm text-muted">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-x-10 gap-y-3 sm:gap-y-4 text-center text-sm text-muted">
           {[
             { icon: "🎨", text: "12 sotto-stagioni cromatiche" },
-            { icon: "🤖", text: "Analisi con GPT Image 2" },
+            { icon: "✨", text: "Visione AI avanzata" },
             { icon: "⚡", text: "Risultato in ~90 secondi" },
             { icon: "👤", text: "Per uomo e donna" },
+            { icon: "💎", text: "Pagamento unico, tuo per sempre" },
           ].map((item) => (
             <div key={item.text} className="flex items-center gap-2">
               <span className="text-base">{item.icon}</span>
@@ -369,7 +370,7 @@ export default function HomePage() {
               </svg>
             </a>
             <p className="text-sm text-muted-light">
-              Nessun abbonamento. Un pagamento unico.
+              Nessun abbonamento · Un pagamento unico · Soddisfatti o rimborsati
             </p>
           </div>
 
@@ -401,14 +402,23 @@ export default function HomePage() {
           FOOTER
          ═══════════════════════════════════════════════ */}
       <footer className="border-t border-accent/8 px-6 py-12">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="font-serif text-lg text-ink">Armocromia</p>
-          <p className="mt-1 text-xs text-muted-light">
-            Powered by Antigravity
-          </p>
-          <p className="mt-4 text-xs text-muted-light/60">
-            &copy; {new Date().getFullYear()} — Tutti i diritti riservati
-          </p>
+        <div className="mx-auto max-w-5xl">
+          <div className="flex flex-col items-center gap-4">
+            <p className="font-serif text-lg text-ink">Armocromia</p>
+            <p className="text-xs text-muted-light">
+              Powered by Antigravity
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-light/80">
+              <a href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</a>
+              <span className="hidden sm:inline">·</span>
+              <a href="/terms" className="hover:text-accent transition-colors">Termini di Servizio</a>
+              <span className="hidden sm:inline">·</span>
+              <a href="mailto:info@antigravity.dev" className="hover:text-accent transition-colors">Contatti</a>
+            </div>
+            <p className="mt-2 text-xs text-muted-light/50">
+              &copy; {new Date().getFullYear()} Antigravity — Tutti i diritti riservati
+            </p>
+          </div>
         </div>
       </footer>
       {/* ═══════════════════════════════════════════════
@@ -419,7 +429,7 @@ export default function HomePage() {
           href="/auth/login"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-lg active:scale-[0.98] transition-transform"
         >
-          Crea il tuo dossier
+          Crea il tuo dossier — da €9,90
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
           </svg>

@@ -23,7 +23,7 @@ const STEPS = [
     number: "02",
     title: "L'AI analizza i tuoi colori",
     description:
-      "In circa 90 secondi, GPT Image 2 analizza sottotono, valore, intensità e contrasto per classificarti in una delle 12 sotto-stagioni cromatiche.",
+      "In circa 90 secondi, la nostra tecnologia di visione avanzata analizza sottotono, valore, intensità e contrasto per classificarti in una delle 12 sotto-stagioni cromatiche.",
     tip: "Analisi automatica, senza attese",
     icon: (
       <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
