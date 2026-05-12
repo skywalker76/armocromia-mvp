@@ -31,7 +31,18 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
-    console.error("[magic-link] Supabase error:", error.message);
+    console.error("[magic-link] Supabase error:", JSON.stringify({
+      message: error.message,
+      status: error.status,
+      code: error.code,
+      name: error.name,
+    }));
+    console.error("[magic-link] ENV check:", {
+      urlSet: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      urlPrefix: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20),
+      keySet: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+      keyPrefix: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.substring(0, 15),
+    });
     return NextResponse.json(
       { error: "Impossibile inviare il link. Riprova." },
       { status: 500 }
