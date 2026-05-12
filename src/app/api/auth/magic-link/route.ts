@@ -35,14 +35,17 @@ export async function POST(request: NextRequest) {
       message: error.message,
       status: error.status,
       code: error.code,
-      name: error.name,
     }));
-    console.error("[magic-link] ENV check:", {
-      urlSet: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-      urlPrefix: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20),
-      keySet: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-      keyPrefix: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.substring(0, 15),
-    });
+
+    // Why: distinguiamo rate limit (429) da errori generici per dare feedback
+    // chiaro all'utente — "aspetta" vs "riprova".
+    if (error.status === 429 || error.code === "over_email_send_rate_limit") {
+      return NextResponse.json(
+        { error: "Troppi tentativi. Attendi qualche minuto e riprova." },
+        { status: 429 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Impossibile inviare il link. Riprova." },
       { status: 500 }
