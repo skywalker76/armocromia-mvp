@@ -5,15 +5,15 @@ import type { FormEvent, KeyboardEvent, ClipboardEvent } from "react";
 import { useRouter } from "next/navigation";
 
 /**
- * Pagina di login — OTP a 8 cifre via email.
+ * Pagina di login — OTP a 6 cifre via email.
  *
  * Why: "use client" perché gestisce stato del form (email, OTP, loading).
  * Flusso a 2 step:
  *   Step 1: Inserisci email → invio codice
- *   Step 2: Digita codice a 8 cifre → verifica → redirect a dashboard
+ *   Step 2: Digita codice a 6 cifre → verifica → redirect a dashboard
  */
 
-const OTP_LENGTH = 8;
+const OTP_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 60;
 
 export default function LoginPage() {
@@ -255,12 +255,12 @@ export default function LoginPage() {
 
             <h1 className="font-serif text-3xl text-ink">Inserisci il codice</h1>
             <p className="mt-4 text-muted leading-relaxed">
-              Abbiamo inviato un codice a 8 cifre a{" "}
+              Abbiamo inviato un codice a 6 cifre a{" "}
               <span className="font-medium text-ink">{email}</span>
             </p>
 
             {/* OTP Inputs */}
-            <div className="mt-8 flex justify-center gap-2">
+            <div className="mt-8 flex justify-center gap-3">
               {Array.from({ length: OTP_LENGTH }).map((_, i) => (
                 <input
                   key={i}
@@ -275,7 +275,7 @@ export default function LoginPage() {
                   onPaste={i === 0 ? handleOtpPaste : undefined}
                   disabled={status === "loading"}
                   className={`
-                    h-13 w-10 rounded-lg border-2 bg-white text-center text-xl font-semibold text-ink
+                    h-14 w-12 rounded-xl border-2 bg-white text-center text-2xl font-semibold text-ink
                     transition-all duration-200 focus:outline-none
                     ${status === "error"
                       ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
