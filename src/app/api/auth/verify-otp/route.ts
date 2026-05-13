@@ -32,7 +32,9 @@ export async function POST(request: Request) {
   const { error } = await supabase.auth.verifyOtp({
     email,
     token,
-    type: "email",
+    // Why: DEVE essere "magiclink" (non "email") perché il token è stato
+    // generato da signInWithOtp(). Il type "email" è per la conferma signup.
+    type: "magiclink",
   });
 
   if (error) {
@@ -42,8 +44,10 @@ export async function POST(request: Request) {
       code: error.code,
     }));
 
-    // Why: feedback chiaro all'utente per i casi più comuni.
-    if (error.message?.toLowerCase().includes("expired")) {
+    // Why: Supabase restituisce "Token has expired or is invalid" come messaggio
+    // generico. Usiamo il code per distinguere i casi quando possibile.
+    const isExpired = error.code === "otp_expired";
+    if (isExpired) {
       return NextResponse.json(
         { error: "Il codice è scaduto. Richiedine uno nuovo." },
         { status: 400 }
