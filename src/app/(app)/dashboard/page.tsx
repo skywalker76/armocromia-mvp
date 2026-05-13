@@ -6,6 +6,13 @@ import DossierCard from "@/components/app/DossierCard";
 /** Pipeline GPT Image 2 /edit richiede 60-180s. Massimo consentito su Vercel Pro = 300. */
 export const maxDuration = 300;
 
+/**
+ * Why: la pagina legge cookies (auth Supabase) + DB dell'utente → MUST be dynamic.
+ * Next.js 16 a volte tenta prerender statico se non viene dichiarato esplicitamente
+ * e fallisce per env vars mancanti nel contesto build.
+ */
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Dashboard — Armocromia",
   description: "Il tuo pannello personale per gestire l'analisi cromatica.",

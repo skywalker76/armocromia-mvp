@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"console.log\\(require\\('C:/Users/gamat/AppData/Roaming/com.vercel.cli/Data/auth.json'\\).token\\)\")",
+      "Bash(VERCEL_TOKEN=$\\(node -e \"console.log\\(require\\('C:/Users/gamat/AppData/Roaming/com.vercel.cli/Data/auth.json'\\).token\\)\"\\) vercel build --prod --scope antigravity-studio --cwd C:/Antigravity/armocromia-mvp)",
+      "Bash(curl -s -H 'Authorization: Bearer __TRACKED_VAR__' https://api.vercel.com/v3/deployments/dpl_Rx59JTuyXeBwMkvVMMyjmfVR7yyY/events?teamId=team_vfywrd5T19eJgk64MvKWGXHO)",
+      "Bash(curl -s -H 'Authorization: Bearer __TRACKED_VAR__' https://api.vercel.com/v13/deployments/dpl_Rx59JTuyXeBwMkvVMMyjmfVR7yyY?teamId=team_vfywrd5T19eJgk64MvKWGXHO)",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{try{const j=JSON.parse\\(s\\);console.log\\('state:',j.readyState||j.state\\);console.log\\('errorMessage:',j.errorMessage\\);console.log\\('errorCode:',j.errorCode\\);console.log\\('errorStep:',j.errorStep\\);console.log\\('build:',JSON.stringify\\(j.build||{},null,2\\).slice\\(0,500\\)\\);}catch\\(e\\){console.log\\('raw:',s.slice\\(0,800\\)\\)}}\\);\")",
+      "Bash(VERCEL_TOKEN=$\\(node -e \"console.log\\(require\\('C:/Users/gamat/AppData/Roaming/com.vercel.cli/Data/auth.json'\\).token\\)\"\\) vercel deploy --yes --archive=tgz --scope antigravity-studio --cwd C:/Antigravity/armocromia-mvp)"
+    ]
+  }
+}

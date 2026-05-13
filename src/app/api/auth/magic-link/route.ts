@@ -39,7 +39,12 @@ export async function POST(request: NextRequest) {
 
     // Why: distinguiamo rate limit (429) da errori generici per dare feedback
     // chiaro all'utente — "aspetta" vs "riprova".
-    if (error.status === 429 || error.code === "over_email_send_rate_limit") {
+    // Supabase non sempre restituisce status 429, a volte solo il messaggio.
+    const isRateLimit =
+      error.status === 429 ||
+      error.code === "over_email_send_rate_limit" ||
+      error.message?.toLowerCase().includes("rate limit");
+    if (isRateLimit) {
       return NextResponse.json(
         { error: "Troppi tentativi. Attendi qualche minuto e riprova." },
         { status: 429 }
