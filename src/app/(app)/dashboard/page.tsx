@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
+import DeleteDossierButton from "@/components/app/DeleteDossierButton";
 
 /** Pipeline GPT Image 2 /edit richiede 60-180s. Massimo consentito su Vercel Pro = 300. */
 export const maxDuration = 300;
@@ -135,14 +136,51 @@ export default async function DashboardPage() {
               </svg>
               <p className="font-medium text-ink">
                 {failedDossiers.length === 1
-                  ? "Un&apos;analisi non è andata a buon fine"
+                  ? "Un'analisi non è andata a buon fine"
                   : `${failedDossiers.length} analisi non riuscite`}
               </p>
             </div>
             <p className="mt-2 text-sm text-muted">
-              Puoi riprovare caricando una nuova foto oppure contattare
-              il supporto.
+              Puoi eliminarle e riprovare caricando una nuova foto.
             </p>
+
+            {/* Lista dei dossier falliti con bottone elimina */}
+            <ul className="mt-5 divide-y divide-error/10 rounded-xl border border-error/10 bg-white/60">
+              {failedDossiers.map((d) => {
+                const seasonLabel = d.classified_season?.replace("-", " ");
+                const dateStr = new Date(d.created_at).toLocaleString("it-IT", {
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+                return (
+                  <li
+                    key={d.id}
+                    className="flex items-center justify-between gap-3 px-4 py-3 text-sm"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium text-ink">
+                        Dossier #{d.id}
+                        {seasonLabel && (
+                          <span className="ml-2 text-xs font-normal text-muted capitalize">
+                            (classificato come {seasonLabel})
+                          </span>
+                        )}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-light">
+                        {dateStr}
+                      </p>
+                    </div>
+                    <DeleteDossierButton
+                      dossierId={d.id}
+                      seasonLabel={seasonLabel ?? `#${d.id}`}
+                      variant="icon"
+                    />
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
 
