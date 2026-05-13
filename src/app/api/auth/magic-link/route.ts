@@ -27,6 +27,9 @@ export async function POST(request: NextRequest) {
       // Why: emailRedirectTo indica a Supabase dove redirigere dopo il click
       // sul magic link nella email. Deve puntare alla callback route.
       emailRedirectTo: `${getBaseUrl(request)}/auth/callback`,
+      // Why: usiamo shouldCreateUser per creare l'utente automaticamente
+      // al primo accesso, come promesso nella UI.
+      shouldCreateUser: true,
     },
   });
 
