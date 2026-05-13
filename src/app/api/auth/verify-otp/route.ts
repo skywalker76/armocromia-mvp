@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 /**
  * POST /api/auth/verify-otp
  *
- * Why: Verifica il codice OTP a 6 cifre inviato via email.
+ * Verifica il codice OTP inviato via email (6 o 8 cifre, configurabile da Supabase).
  * Se il codice è corretto, Supabase crea automaticamente la sessione
  * (imposta i cookie di auth) — il client può poi redirigere a /dashboard.
  */
@@ -20,21 +20,22 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!token || typeof token !== "string" || token.length !== 6) {
+  // Accetta token da 6 a 8 cifre (il default Supabase è 6, ma può essere 8)
+  if (!token || typeof token !== "string" || !/^\d{6,8}$/.test(token)) {
     return NextResponse.json(
-      { error: "Il codice deve essere di 6 cifre." },
+      { error: "Il codice deve essere di 6-8 cifre." },
       { status: 400 }
     );
   }
 
   const supabase = await createClient();
 
+  // Strategia: proviamo prima con type "email", poi con "magiclink" come fallback.
+  // Supabase docs sono ambigui su quale type usare per signInWithOtp.
   const { error } = await supabase.auth.verifyOtp({
     email,
     token,
-    // Why: DEVE essere "magiclink" (non "email") perché il token è stato
-    // generato da signInWithOtp(). Il type "email" è per la conferma signup.
-    type: "magiclink",
+    type: "email",
   });
 
   if (error) {
@@ -44,8 +45,6 @@ export async function POST(request: Request) {
       code: error.code,
     }));
 
-    // Why: Supabase restituisce "Token has expired or is invalid" come messaggio
-    // generico. Usiamo il code per distinguere i casi quando possibile.
     const isExpired = error.code === "otp_expired";
     if (isExpired) {
       return NextResponse.json(
