@@ -230,6 +230,7 @@ RIGA 4 — ACCESSORI (4 elementi):
 SEZIONE LATERALE — PERSONA + PALETTE
 ═══════════════════════════════════════
 A sinistra o in alto: la STESSA IDENTICA persona dalla foto allegata con un outfit combinato dai capi del guardaroba.
+IMPORTANTE: La foto della persona DEVE essere a FIGURA INTERA, dalla testa ai piedi, mostrando l'intero corpo senza tagliare gambe o scarpe. Inquadratura verticale completa che mostri il look completo con tutti gli elementi dell'outfit visibili (capospalla, top, pantaloni, scarpe).
 A destra: la palette completa con swatch colori organizzati:
 - Colori principali: ${formatColors(tiers.primary)}
 - Neutri base: ${formatColors(tiers.neutrals)}
@@ -252,7 +253,8 @@ STILE GRAFICO:
 - Swatch colore sotto ogni capo
 - Tipografia pulita e moderna
 - Tutto in ITALIANO
-- FONDAMENTALE: la persona mostrata DEVE avere lo STESSO IDENTICO volto della foto allegata`;
+- FONDAMENTALE: la persona mostrata DEVE avere lo STESSO IDENTICO volto della foto allegata
+- FONDAMENTALE: la persona DEVE essere mostrata a FIGURA INTERA (dalla testa ai piedi, includendo gambe e scarpe), MAI tagliata a mezzo busto o a tre quarti`;
 }
 
 // ═══════════════════════════════════════

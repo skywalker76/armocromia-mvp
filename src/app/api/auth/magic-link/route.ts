@@ -4,9 +4,11 @@ import { NextResponse, type NextRequest } from "next/server";
 /**
  * POST /api/auth/magic-link
  *
- * Why: Route Handler (non Server Action) perché il login è una operazione
- * stateless che non muta dati dell'app — solo autenticazione.
- * Il client invia l'email, il server chiama Supabase Auth.
+ * Why: Invia un OTP a 6 cifre via email. Il path resta "magic-link" per
+ * retrocompatibilità dei bookmark, ma il comportamento è OTP-only.
+ *
+ * Supabase invia automaticamente un codice numerico a 6 cifre quando
+ * emailRedirectTo è ASSENTE dalle options.
  */
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -24,17 +26,15 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      // Why: emailRedirectTo indica a Supabase dove redirigere dopo il click
-      // sul magic link nella email. Deve puntare alla callback route.
-      emailRedirectTo: `${getBaseUrl(request)}/auth/callback`,
-      // Why: usiamo shouldCreateUser per creare l'utente automaticamente
-      // al primo accesso, come promesso nella UI.
+      // Why: SENZA emailRedirectTo, Supabase invia un codice OTP a 6 cifre
+      // invece di un magic link cliccabile. Questo elimina il problema PKCE
+      // (code_verifier mismatch quando si apre il link in un browser diverso).
       shouldCreateUser: true,
     },
   });
 
   if (error) {
-    console.error("[magic-link] Supabase error:", JSON.stringify({
+    console.error("[send-otp] Supabase error:", JSON.stringify({
       message: error.message,
       status: error.status,
       code: error.code,
@@ -54,27 +54,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Why: errore generico (es. configurazione SMTP mancante o server down)
     return NextResponse.json(
-      { error: "Impossibile inviare il link. Riprova." },
+      { error: "Impossibile inviare il codice. Riprova." },
       { status: 500 }
     );
   }
 
   return NextResponse.json({ success: true });
-}
-
-/**
- * Why: costruiamo la base URL dalla request per supportare sia localhost
- * che il deploy su Vercel senza hardcodare l'URL.
- */
-function getBaseUrl(request: NextRequest): string {
-  // Priorità: env var > header x-forwarded-host > request URL
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL;
-  }
-
-  const host = request.headers.get("x-forwarded-host") || request.nextUrl.host;
-  const protocol = request.headers.get("x-forwarded-proto") || "http";
-
-  return `${protocol}://${host}`;
 }
