@@ -3,8 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
 
-/** Pipeline GPT Image 2 /edit richiede ~60-90s. Default Next.js = 30s. */
-export const maxDuration = 120;
+/** Pipeline GPT Image 2 /edit richiede 60-180s. Massimo consentito su Vercel Pro = 300. */
+export const maxDuration = 300;
 
 export const metadata: Metadata = {
   title: "Dashboard — Armocromia",
@@ -24,6 +24,17 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Safety net: marca come 'failed' i dossier rimasti in processing/generating
+  // da più di 5 minuti (sintomo di funzione killata da Vercel timeout).
+  // Why: senza questo, l'utente vedrebbe "in elaborazione" all'infinito.
+  const stuckCutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  await supabase
+    .from("dossiers")
+    .update({ status: "failed" })
+    .eq("user_id", user!.id)
+    .in("status", ["processing", "generating"])
+    .lt("created_at", stuckCutoff);
 
   // Carica i dossier dell'utente
   const { data: dossiers } = await supabase
