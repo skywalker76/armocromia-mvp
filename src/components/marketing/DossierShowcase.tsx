@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { localePath } from "@/lib/i18n/config";
 
 /**
  * DossierShowcase — Interactive demo gallery.
@@ -57,6 +59,8 @@ const DEMO_SEASONS: DemoSeason[] = [
 import { useSwipe } from "@/hooks/useSwipe";
 
 export default function DossierShowcase() {
+  const locale = useLocale();
+  const loginHref = localePath(locale, "/auth/login");
   const [activeIndex, setActiveIndex] = useState(0);
   const active = DEMO_SEASONS[activeIndex];
 
@@ -170,7 +174,7 @@ export default function DossierShowcase() {
 
           {/* CTA */}
           <a
-            href="/auth/login"
+            href={loginHref}
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
           >
             Scopri la tua stagione

@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import type { FormEvent, KeyboardEvent, ClipboardEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { localePath } from "@/lib/i18n/config";
 
 /**
  * Pagina di login — OTP a 6 cifre via email.
@@ -18,6 +20,7 @@ const RESEND_COOLDOWN_SECONDS = 60;
 
 export default function LoginPage() {
   const router = useRouter();
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -94,7 +97,7 @@ export default function LoginPage() {
 
       setStatus("success");
       // Breve delay per mostrare l'animazione di successo, poi redirect
-      setTimeout(() => router.push("/dashboard"), 800);
+      setTimeout(() => router.push(localePath(locale, "/dashboard")), 800);
     } catch {
       setStatus("error");
       setErrorMessage("Errore di rete. Riprova.");
@@ -203,7 +206,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo / Brand */}
         <div className="text-center mb-12">
-          <a href="/" className="font-serif text-2xl text-ink hover:text-accent transition-colors">
+          <a href={localePath(locale, "/")} className="font-serif text-2xl text-ink hover:text-accent transition-colors">
             Armocromia
           </a>
         </div>

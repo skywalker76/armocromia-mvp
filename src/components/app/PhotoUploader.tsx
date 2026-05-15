@@ -2,8 +2,10 @@
 
 import { useActionState, useRef, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { analyzePhoto, type AnalyzePhotoState } from "@/app/(app)/dashboard/actions";
+import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
 import { UPLOAD_CONSTANTS, ANALYSIS_MODES } from "@/lib/armocromia/schemas";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { localePath } from "@/lib/i18n/config";
 import ProgressStepper from "./ProgressStepper";
 
 /**
@@ -16,6 +18,7 @@ import ProgressStepper from "./ProgressStepper";
 const initialState: AnalyzePhotoState = { status: "idle" };
 
 export default function PhotoUploader() {
+  const locale = useLocale();
   const [state, formAction, isPending] = useActionState(analyzePhoto, initialState);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -122,7 +125,7 @@ export default function PhotoUploader() {
   if (state.status === "success") {
     // Redirect al dossier se disponibile
     if (state.dossierId) {
-      setTimeout(() => router.push(`/dossier/${state.dossierId}`), 1500);
+      setTimeout(() => router.push(localePath(locale, `/dossier/${state.dossierId}`)), 1500);
     }
 
     return (

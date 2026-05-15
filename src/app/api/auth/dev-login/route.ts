@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { defaultLocale, localePath } from "@/lib/i18n/config";
 
 /**
  * GET /api/auth/dev-login?email=...
@@ -99,9 +100,9 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Sessione creata nei cookie → redirect alla dashboard
+  // Sessione creata nei cookie → redirect alla dashboard (default locale)
   const dashboardUrl = request.nextUrl.clone();
-  dashboardUrl.pathname = "/dashboard";
+  dashboardUrl.pathname = localePath(defaultLocale, "/dashboard");
   dashboardUrl.search = "";
   return NextResponse.redirect(dashboardUrl);
 }

@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
-import "./globals.css";
+import { notFound } from "next/navigation";
+import "../globals.css";
+import { LocaleProvider } from "@/lib/i18n/locale-context";
+import { isValidLocale, locales } from "@/lib/i18n/config";
 
 /**
  * Font Playfair Display — serif editoriale per titoli.
@@ -96,18 +99,35 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+/**
+ * Pre-rendering statico delle route per ogni locale.
+ * Why: permette a Next.js di sapere quali [lang] sono validi e generare
+ * static params senza indovinare a runtime.
+ */
+export async function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
+
+export default async function RootLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
+  // Why: se l'utente naviga a /xx/* con un locale non supportato, 404 invece
+  // di renderizzare in italiano in silenzio — più chiaro per debug.
+  if (!isValidLocale(lang)) notFound();
+
   return (
     <html
-      lang="it"
+      lang={lang}
       className={`${playfairDisplay.variable} ${inter.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <LocaleProvider locale={lang}>{children}</LocaleProvider>
         {/* Service Worker registration — only in production */}
         <script
           dangerouslySetInnerHTML={{

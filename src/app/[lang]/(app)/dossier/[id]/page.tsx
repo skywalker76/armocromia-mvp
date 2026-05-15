@@ -5,9 +5,10 @@ import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import type { SubSeason } from "@/lib/armocromia/types";
 import PaletteGrid from "./PaletteGrid";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
+import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 
 interface DossierPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; lang: string }>;
 }
 
 export async function generateMetadata({
@@ -27,7 +28,9 @@ export async function generateMetadata({
  * La palette interattiva è delegata al Client Component PaletteGrid.
  */
 export default async function DossierPage({ params }: DossierPageProps) {
-  const { id } = await params;
+  const { id, lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const dashboardHref = localePath(locale, "/dashboard");
   const dossierId = parseInt(id, 10);
 
   if (isNaN(dossierId)) {
@@ -107,7 +110,7 @@ export default async function DossierPage({ params }: DossierPageProps) {
         {/* ── Breadcrumb ── */}
         <nav className="mb-8 flex items-center gap-2 text-sm animate-fade-in">
           <a
-            href="/dashboard"
+            href={dashboardHref}
             className="font-medium text-muted hover:text-ink transition-colors"
           >
             Dashboard

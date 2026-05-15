@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { localePath } from "@/lib/i18n/config";
 
 interface NavBarProps {
   email: string;
@@ -12,6 +14,9 @@ interface NavBarProps {
  * Why: Client Component per gestire scroll detection, dropdown e mobile menu.
  */
 export default function NavBar({ email }: NavBarProps) {
+  const locale = useLocale();
+  const dashboardHref = localePath(locale, "/dashboard");
+  const homeHref = localePath(locale, "/");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -60,7 +65,7 @@ export default function NavBar({ email }: NavBarProps) {
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           {/* Logo */}
           <a
-            href="/dashboard"
+            href={dashboardHref}
             className="group flex items-center gap-2 sm:gap-2.5 transition-colors"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 transition-all group-hover:bg-accent/15 group-hover:shadow-sm">
@@ -119,7 +124,7 @@ export default function NavBar({ email }: NavBarProps) {
                 </div>
                 <div className="py-1">
                   <a
-                    href="/dashboard"
+                    href={dashboardHref}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-cream"
                   >
                     <svg className="h-4 w-4 text-muted-light" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -208,7 +213,7 @@ export default function NavBar({ email }: NavBarProps) {
             {/* Menu items */}
             <nav className="px-3 py-3 space-y-1">
               <a
-                href="/dashboard"
+                href={dashboardHref}
                 className="flex items-center gap-4 rounded-xl px-4 py-3.5 text-ink transition-colors hover:bg-cream active:bg-cream-dark"
                 onClick={() => setMobileMenuOpen(false)}
               >
@@ -218,7 +223,7 @@ export default function NavBar({ email }: NavBarProps) {
                 <span className="font-medium">Dashboard</span>
               </a>
               <a
-                href="/"
+                href={homeHref}
                 className="flex items-center gap-4 rounded-xl px-4 py-3.5 text-ink transition-colors hover:bg-cream active:bg-cream-dark"
                 onClick={() => setMobileMenuOpen(false)}
               >

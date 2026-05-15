@@ -307,7 +307,9 @@ export async function deleteDossier(dossierId: number): Promise<{ success: boole
       throw new Error(`DB delete failed: ${deleteError.message}`);
     }
 
-    revalidatePath("/dashboard");
+    // Why: passa per [lang] perché la dashboard ora vive sotto /<locale>/dashboard.
+    // Il secondo argomento "page" invalida tutte le varianti di locale in una shot.
+    revalidatePath("/[lang]/dashboard", "page");
     return { success: true };
   } catch (err) {
     console.error("[deleteDossier] Failed:", err);

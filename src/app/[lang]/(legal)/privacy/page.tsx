@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
 
 const LAST_UPDATED = "15 maggio 2026";
 
-export default function PrivacyPage() {
+export default async function PrivacyPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const homeHref = localePath(locale, "/");
   return (
     <>
       <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -25,7 +33,7 @@ export default function PrivacyPage() {
           La presente informativa descrive come Armocromia (di seguito anche
           &quot;noi&quot; o &quot;il Servizio&quot;) tratta i dati personali
           degli utenti che accedono al sito{" "}
-          <a href="/" className="text-accent hover:underline">
+          <a href={homeHref} className="text-accent hover:underline">
             armocromia-mvp-nine.vercel.app
           </a>{" "}
           e utilizzano il servizio di analisi cromatica AI.

@@ -3,6 +3,7 @@ import Image from "next/image";
 import DossierShowcase from "@/components/marketing/DossierShowcase";
 import SeasonCarousel from "@/components/marketing/SeasonCarousel";
 import HowItWorks from "@/components/marketing/HowItWorks";
+import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 
 export const metadata: Metadata = {
   description:
@@ -64,7 +65,17 @@ const jsonLd = {
   ],
 };
 
-export default function HomePage() {
+interface HomePageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default async function HomePage({ params }: HomePageProps) {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const loginHref = localePath(locale, "/auth/login");
+  const privacyHref = localePath(locale, "/privacy");
+  const termsHref = localePath(locale, "/terms");
+
   return (
     <main className="flex flex-1 flex-col overflow-x-hidden">
       <script
@@ -115,7 +126,7 @@ export default function HomePage() {
             {/* CTA group */}
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <a
-                href="/auth/login"
+                href={loginHref}
                 className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
               >
                 Crea il tuo dossier
@@ -403,7 +414,7 @@ export default function HomePage() {
 
           <div className="mt-10 flex flex-col items-center gap-5">
             <a
-              href="/auth/login"
+              href={loginHref}
               className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-10 py-5 text-lg font-medium text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
             >
               Scopri la tua stagione
@@ -455,9 +466,9 @@ export default function HomePage() {
               Powered by Antigravity
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-light/80">
-              <a href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</a>
+              <a href={privacyHref} className="hover:text-accent transition-colors">Privacy Policy</a>
               <span className="hidden sm:inline">·</span>
-              <a href="/terms" className="hover:text-accent transition-colors">Termini di Servizio</a>
+              <a href={termsHref} className="hover:text-accent transition-colors">Termini di Servizio</a>
               <span className="hidden sm:inline">·</span>
               <a href="mailto:info@antigravity.dev" className="hover:text-accent transition-colors">Contatti</a>
             </div>
@@ -472,7 +483,7 @@ export default function HomePage() {
          ═══════════════════════════════════════════════ */}
       <div className="fixed bottom-0 inset-x-0 z-30 sm:hidden border-t border-accent/10 bg-white/95 backdrop-blur-md px-4 py-3 safe-area-bottom">
         <a
-          href="/auth/login"
+          href={loginHref}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-lg active:scale-[0.98] transition-transform"
         >
           Crea il tuo dossier — €29

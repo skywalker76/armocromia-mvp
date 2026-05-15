@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { deleteDossier } from "@/app/(app)/dashboard/actions";
+import { deleteDossier } from "@/app/[lang]/(app)/dashboard/actions";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import { showToast } from "@/components/ui/Toast";
 
