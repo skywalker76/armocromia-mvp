@@ -5,7 +5,6 @@ import SeasonCarousel from "@/components/marketing/SeasonCarousel";
 import HowItWorks from "@/components/marketing/HowItWorks";
 
 export const metadata: Metadata = {
-  title: "Armocromia — I colori che ti fanno splendere",
   description:
     "Scopri la tua armocromia personale con un dossier visivo professionale. Palette colori, outfit suggeriti e consigli su misura generati dall'intelligenza artificiale.",
 };
@@ -83,7 +82,7 @@ export default function HomePage() {
                 </svg>
               </a>
               <span className="text-sm text-muted-light">
-                Risultato in <span className="font-semibold text-ink">meno di 2 minuti</span>
+                <span className="font-semibold text-ink">€29</span> una tantum · Soddisfatti o rimborsati 14 giorni
               </span>
             </div>
 
@@ -429,7 +428,7 @@ export default function HomePage() {
           href="/auth/login"
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-lg active:scale-[0.98] transition-transform"
         >
-          Crea il tuo dossier — da €9,90
+          Crea il tuo dossier — €29
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
           </svg>

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard
+Disallow: /dossier/
+
+Sitemap: https://armocromia-mvp-nine.vercel.app/sitemap.xml

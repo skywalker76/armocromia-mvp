@@ -12,11 +12,15 @@ import { createClient } from "@/lib/supabase/server";
  * ⚠️  Attiva SOLO in development — bloccata in produzione.
  */
 export async function GET(request: NextRequest) {
-  // Security: solo in development
-  if (process.env.NODE_ENV !== "development") {
+  // Double-gate: NODE_ENV deve essere development AND non siamo su un deploy Vercel (preview/production).
+  // Why: se NODE_ENV leak in produzione, VERCEL_ENV resta un'env var sicura controllata dalla piattaforma.
+  const isDev =
+    process.env.NODE_ENV === "development" && !process.env.VERCEL_ENV;
+
+  if (!isDev) {
     return NextResponse.json(
-      { error: "Only available in development" },
-      { status: 403 }
+      { error: "Not found" },
+      { status: 404 }
     );
   }
 
@@ -36,7 +40,7 @@ export async function GET(request: NextRequest) {
         <h2>🔐 Dev Login</h2>
         <p>Accesso diretto senza Magic Link (solo development)</p>
         <form onsubmit="location.href='/api/auth/dev-login?email='+encodeURIComponent(document.getElementById('e').value);return false">
-          <input id="e" type="email" placeholder="La tua email" value="gamatig@gmail.com" required>
+          <input id="e" type="email" placeholder="your-email@example.com" required>
           <button type="submit">Accedi</button>
         </form>
       </body></html>`,

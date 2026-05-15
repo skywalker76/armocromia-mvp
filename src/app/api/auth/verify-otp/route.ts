@@ -20,10 +20,9 @@ export async function POST(request: Request) {
     );
   }
 
-  // Accetta token da 6 a 8 cifre (il default Supabase è 6, ma può essere 8)
-  if (!token || typeof token !== "string" || !/^\d{6,8}$/.test(token)) {
+  if (!token || typeof token !== "string" || !/^\d{6}$/.test(token)) {
     return NextResponse.json(
-      { error: "Il codice deve essere di 6-8 cifre." },
+      { error: "Il codice deve essere di 6 cifre." },
       { status: 400 }
     );
   }
