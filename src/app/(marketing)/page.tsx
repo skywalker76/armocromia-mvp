@@ -22,9 +22,55 @@ export const metadata: Metadata = {
  * 7. Final CTA
  * 8. Footer
  */
+const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "Armocromia",
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon-512.png`,
+      sameAs: [],
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Armocromia",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      inLanguage: "it-IT",
+    },
+    {
+      "@type": "Service",
+      "@id": `${SITE_URL}/#service`,
+      name: "Analisi cromatica AI",
+      description:
+        "Analisi cromatica personalizzata con dossier visivo professionale: palette colori, outfit suggeriti e consigli su misura generati dall'intelligenza artificiale.",
+      provider: { "@id": `${SITE_URL}/#organization` },
+      areaServed: "Worldwide",
+      serviceType: "Personal color analysis",
+      offers: {
+        "@type": "Offer",
+        price: "29.00",
+        priceCurrency: "EUR",
+        availability: "https://schema.org/InStock",
+        url: `${SITE_URL}/auth/login`,
+        category: "DigitalService",
+      },
+    },
+  ],
+};
+
 export default function HomePage() {
   return (
     <main className="flex flex-1 flex-col overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ═══════════════════════════════════════════════
           HERO — Split Layout (Anti-center bias)
          ═══════════════════════════════════════════════ */}
@@ -155,6 +201,7 @@ export default function HomePage() {
             { icon: "🎨", text: "12 sotto-stagioni cromatiche" },
             { icon: "✨", text: "Visione AI avanzata" },
             { icon: "⚡", text: "Risultato in ~90 secondi" },
+            { icon: "🔒", text: "Foto cancellata in 24h" },
             { icon: "👤", text: "Per uomo e donna" },
             { icon: "💎", text: "Pagamento unico, tuo per sempre" },
           ].map((item) => (
@@ -379,7 +426,7 @@ export default function HomePage() {
               <svg className="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
               </svg>
-              Dati sicuri e protetti
+              Foto cancellata in 24 ore
             </div>
             <div className="flex items-center gap-2">
               <svg className="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

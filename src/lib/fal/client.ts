@@ -15,8 +15,12 @@ import { fal } from "@fal-ai/client";
 // in modo affidabile con Next.js Turbopack (non legge FAL_KEY).
 const falKey = process.env.FAL_KEY;
 
+// Fail-fast: senza FAL_KEY l'intera pipeline AI è morta — meglio errore chiaro
+// all'init che "Forbidden" generico al primo upload.
 if (!falKey) {
-  console.warn("[fal] FAL_KEY non configurata — la pipeline AI non funzionerà");
+  throw new Error(
+    "[fal] FAL_KEY env var mancante. Configurala in .env.local (locale) o nel Vercel dashboard (production)."
+  );
 }
 
 fal.config({

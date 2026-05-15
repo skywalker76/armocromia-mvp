@@ -10,11 +10,13 @@
   --color-cream-dark: #F0EBE3;
   --color-ink: #2A1810;
   --color-ink-light: #3D2B20;
-  --color-accent: #B97A6A;
-  --color-accent-hover: #A66B5C;
+  /* WCAG AA: accent darkened from #B97A6A (3.47:1) to #8B5443 (5.4:1 on white) */
+  --color-accent: #8B5443;
+  --color-accent-hover: #6B4031;
   --color-accent-light: #D4A99A;
-  --color-muted: #8E6B57;
-  --color-muted-light: #B8A090;
+  --color-muted: #6B5444;
+  /* WCAG AA: muted-light darkened from #B8A090 (2.48:1) to #8A7060 (4.7:1 on white) */
+  --color-muted-light: #8A7060;
 
   /* --- Colori Semantici --- */
   --color-success: #3D8B6E;

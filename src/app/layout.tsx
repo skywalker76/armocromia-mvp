@@ -33,14 +33,58 @@ export const viewport: Viewport = {
   themeColor: "#B97A6A",
 };
 
+const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Armocromia — I colori che ti fanno splendere",
     template: "%s | Armocromia",
   },
   description:
     "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
+  applicationName: "Armocromia",
+  keywords: [
+    "armocromia",
+    "analisi cromatica",
+    "personal color analysis",
+    "palette colori",
+    "consulenza immagine",
+    "stagione cromatica",
+    "AI styling",
+  ],
+  authors: [{ name: "Antigravity" }],
+  creator: "Antigravity",
+  publisher: "Antigravity",
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Armocromia — I colori che ti fanno splendere",
+    description:
+      "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in 90 secondi grazie all'AI.",
+    url: SITE_URL,
+    siteName: "Armocromia",
+    locale: "it_IT",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Armocromia — I colori che ti fanno splendere",
+    description:
+      "Analisi cromatica AI in 90 secondi. Palette, outfit e consigli su misura per la tua stagione.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
