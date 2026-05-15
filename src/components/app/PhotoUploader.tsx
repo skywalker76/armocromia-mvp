@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState, useCallback } from "react";
+import { useActionState, useRef, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { analyzePhoto, type AnalyzePhotoState } from "@/app/(app)/dashboard/actions";
 import { UPLOAD_CONSTANTS, ANALYSIS_MODES } from "@/lib/armocromia/schemas";
@@ -25,7 +25,18 @@ export default function PhotoUploader() {
   const [userNotes, setUserNotes] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
+  // "Genera" l'utente è scrollato in basso. Quando isPending diventa true il
+  // form sparisce e il ProgressStepper appare in cima al container — ma fuori
+  // dal viewport. Scrollare on-pending elimina il "nulla succede" percepito.
+  useEffect(() => {
+    if (isPending) {
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isPending]);
 
   const currentStep = isPending ? 2 : state.status === "success" ? 4 : 0;
 
@@ -92,6 +103,12 @@ export default function PhotoUploader() {
       e.preventDefault();
       if (!file || isPending) return;
 
+      // Feedback immediato: scrolla subito al container così l'utente vede
+      // il ProgressStepper apparire al posto del form. Non aspettiamo
+      // l'effetto su isPending per evitare il "vuoto" percepito tra click
+      // e re-render React.
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
       const formData = new FormData();
       formData.append("photo", file);
       formData.append("analysisMode", selectedMode);
@@ -128,7 +145,7 @@ export default function PhotoUploader() {
   }
 
   return (
-    <div className="space-y-8">
+    <div ref={containerRef} className="space-y-8 scroll-mt-6">
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
       {isPending && (
         <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
