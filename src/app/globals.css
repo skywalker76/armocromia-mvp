@@ -15,8 +15,8 @@
   --color-accent-hover: #6B4031;
   --color-accent-light: #D4A99A;
   --color-muted: #6B5444;
-  /* WCAG AA: muted-light darkened from #B8A090 (2.48:1) to #8A7060 (4.7:1 on white) */
-  --color-muted-light: #8A7060;
+  /* WCAG AA: muted-light darkened to #7A6354 — 4.5:1 anche su cream #FAF7F2 (non solo white) */
+  --color-muted-light: #7A6354;
 
   /* --- Colori Semantici --- */
   --color-success: #3D8B6E;
