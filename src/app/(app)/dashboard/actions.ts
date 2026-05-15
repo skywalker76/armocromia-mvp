@@ -89,7 +89,18 @@ export async function analyzePhoto(
     dossierId = dossier.id;
 
     // ── 3. Upload foto su Supabase Storage (con retry) ──
-    const fileExt = file.name.split(".").pop() ?? "jpg";
+    // Why: deriviamo l'estensione DAL MIME (già validato dal Zod schema)
+    // invece che dal filename utente. Questo elimina il rischio che un
+    // attacker controlli l'estensione del path (defense-in-depth oltre RLS).
+    const MIME_TO_EXT: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+    };
+    const fileExt = MIME_TO_EXT[file.type];
+    if (!fileExt) {
+      throw new Error(`MIME non supportato: ${file.type}`);
+    }
     const photoPath = `${user.id}/${dossierId}.${fileExt}`;
 
     // Converti File in ArrayBuffer per upload affidabile
@@ -205,13 +216,29 @@ export async function analyzePhoto(
         .eq("id", dossierId);
     }
 
-    const message =
-      err instanceof Error ? err.message : "Errore durante l'analisi";
+    const rawMessage = err instanceof Error ? err.message : "";
+    const lower = rawMessage.toLowerCase();
+
+    // Why: @fal-ai/client lancia Error con .message === "Forbidden" (status HTTP
+    // grezzo) quando il credito fal.ai è esaurito, la API key è revocata, o il
+    // modello non è accessibile. Mostrare "Forbidden" all'utente finale è
+    // imbarazzante — mappiamo a un messaggio comprensibile.
+    let userMessage: string;
+    if (lower === "forbidden" || lower.includes("403")) {
+      userMessage =
+        "Il servizio di analisi AI è momentaneamente non disponibile. Riprova tra qualche minuto.";
+    } else if (lower.includes("429") || lower.includes("rate limit")) {
+      userMessage = "Troppe richieste in corso. Attendi qualche istante e riprova.";
+    } else if (rawMessage) {
+      userMessage = rawMessage;
+    } else {
+      userMessage = "Si è verificato un errore durante l'analisi. Riprova.";
+    }
 
     return {
       status: "error",
       dossierId,
-      error: message,
+      error: userMessage,
     };
   }
 }

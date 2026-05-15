@@ -17,44 +17,43 @@ const initialState: AnalyzePhotoState = { status: "idle" };
 
 export default function PhotoUploader() {
   const [state, formAction, isPending] = useActionState(analyzePhoto, initialState);
+  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<string>("infografica");
+  const [userNotes, setUserNotes] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const currentStep = isPending ? 2 : state.status === "success" ? 4 : 0;
 
-  const handleFile = useCallback((file: File | null) => {
-    if (!file) return;
+  const handleFile = useCallback((selected: File | null) => {
+    if (!selected) return;
 
-    if (file.size > UPLOAD_CONSTANTS.maxFileSize) {
+    if (selected.size > UPLOAD_CONSTANTS.maxFileSize) {
       alert(`La foto deve essere al massimo ${UPLOAD_CONSTANTS.maxFileSizeMB}MB`);
       return;
     }
-    if (!UPLOAD_CONSTANTS.acceptedTypes.includes(file.type as typeof UPLOAD_CONSTANTS.acceptedTypes[number])) {
-      alert("Formato non supportato. Usa JPEG, PNG o WebP");
+    // Why: lato client accettiamo qualsiasi image/* (incluso HEIC iOS) per non
+    // bloccare il picker mobile. Il browser di norma converte HEIC→JPEG durante
+    // l'upload, e il server valida comunque con lo schema Zod.
+    if (!selected.type.startsWith("image/")) {
+      alert("Seleziona un'immagine valida");
       return;
     }
 
-    setFileName(file.name);
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-
-    if (fileInputRef.current) {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      fileInputRef.current.files = dt.files;
-    }
+    setFile(selected);
+    setFileName(selected.name);
+    setPreview(URL.createObjectURL(selected));
   }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
       setIsDragOver(false);
-      const file = e.dataTransfer.files[0] ?? null;
-      handleFile(file);
+      handleFile(e.dataTransfer.files[0] ?? null);
     },
     [handleFile]
   );
@@ -70,19 +69,37 @@ export default function PhotoUploader() {
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0] ?? null;
-      handleFile(file);
+      handleFile(e.target.files?.[0] ?? null);
     },
     [handleFile]
   );
 
   const clearPreview = useCallback(() => {
+    setFile(null);
     setPreview(null);
     setFileName(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    if (cameraInputRef.current) cameraInputRef.current.value = "";
   }, []);
+
+  // Why: la submission via <form action={...}> nativa richiede che il File sia
+  // dentro un <input name="photo"> al momento del submit. Su iOS Safari non si
+  // può assegnare programmaticamente input.files (DataTransfer bloccato), quindi
+  // costruiamo la FormData manualmente dallo stato React e la passiamo a
+  // formAction() — pattern supportato da useActionState e cross-browser.
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!file || isPending) return;
+
+      const formData = new FormData();
+      formData.append("photo", file);
+      formData.append("analysisMode", selectedMode);
+      formData.append("userNotes", userNotes);
+      formAction(formData);
+    },
+    [file, selectedMode, userNotes, isPending, formAction]
+  );
 
   // Successo → redirect automatico dopo breve delay
   if (state.status === "success") {
@@ -146,9 +163,7 @@ export default function PhotoUploader() {
 
       {/* Form upload */}
       {!isPending && (
-        <form action={formAction} className="space-y-6">
-          <input type="hidden" name="analysisMode" value={selectedMode} />
-
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Drop zone */}
           <div
             onDrop={handleDrop}
@@ -169,11 +184,9 @@ export default function PhotoUploader() {
             <input
               ref={fileInputRef}
               type="file"
-              name="photo"
-              accept={UPLOAD_CONSTANTS.acceptString}
+              accept="image/*"
               onChange={handleInputChange}
               className="hidden"
-              required
             />
 
             {preview ? (
@@ -209,7 +222,6 @@ export default function PhotoUploader() {
                 </div>
               </div>
             ) : (
-              <>
               <div className="flex flex-col items-center gap-4 py-6">
                 <div className={`flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 ${isDragOver ? "bg-accent/15 scale-110" : "bg-accent/8"}`}>
                   <svg
@@ -239,31 +251,37 @@ export default function PhotoUploader() {
                     oppure <span className="text-accent font-medium cursor-pointer hover:underline">sfoglia i file</span>
                   </p>
                   <p className="mt-4 text-xs text-muted-light">
-                    JPEG, PNG o WebP · Max {UPLOAD_CONSTANTS.maxFileSizeMB}MB
+                    Max {UPLOAD_CONSTANTS.maxFileSizeMB}MB
                   </p>
                 </div>
               </div>
-
-              {/* Mobile camera capture button */}
-              <div className="sm:hidden mt-4 pt-4 border-t border-accent/10">
-                <label className="flex items-center justify-center gap-3 rounded-xl border-2 border-accent/20 bg-accent/5 px-6 py-4 text-sm font-medium text-accent cursor-pointer active:scale-[0.98] transition-transform">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
-                  </svg>
-                  Scatta una foto
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="user"
-                    onChange={handleInputChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-              </>
             )}
           </div>
+
+          {/* Mobile camera capture — fuori dal drop zone per evitare click
+              bubbling che innescava entrambi i picker su iOS. */}
+          {!preview && (
+            <div className="sm:hidden -mt-2">
+              <label
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center justify-center gap-3 rounded-xl border-2 border-accent/20 bg-accent/5 px-6 py-4 text-sm font-medium text-accent cursor-pointer active:scale-[0.98] transition-transform"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                </svg>
+                Scatta una foto
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  onChange={handleInputChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          )}
 
           {/* Selettore modalità analisi */}
           {preview && (
@@ -309,8 +327,9 @@ export default function PhotoUploader() {
               </label>
               <input
                 id="userNotes"
-                name="userNotes"
                 type="text"
+                value={userNotes}
+                onChange={(e) => setUserNotes(e.target.value)}
                 placeholder="Es. Ho i capelli tinti, il colore naturale è castano"
                 maxLength={500}
                 className="w-full rounded-xl border border-accent/15 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted-light focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 transition-all"
@@ -322,7 +341,7 @@ export default function PhotoUploader() {
           {preview && (
             <button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || !file}
               className="w-full rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg animate-slide-up"
               style={{ animationDelay: "0.2s" }}
             >
