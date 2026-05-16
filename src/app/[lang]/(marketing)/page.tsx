@@ -3,6 +3,7 @@ import Image from "next/image";
 import DossierShowcase from "@/components/marketing/DossierShowcase";
 import SeasonCarousel from "@/components/marketing/SeasonCarousel";
 import HowItWorks from "@/components/marketing/HowItWorks";
+import CookiePreferencesLink from "@/components/consent/CookiePreferencesLink";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
 
@@ -468,6 +469,8 @@ export default async function HomePage({ params }: HomePageProps) {
               <a href={privacyHref} className="hover:text-accent transition-colors">{t("footer.privacy")}</a>
               <span className="hidden sm:inline">·</span>
               <a href={termsHref} className="hover:text-accent transition-colors">{t("footer.terms")}</a>
+              <span className="hidden sm:inline">·</span>
+              <CookiePreferencesLink className="hover:text-accent transition-colors" />
               <span className="hidden sm:inline">·</span>
               <a href="mailto:info@antigravity.dev" className="hover:text-accent transition-colors">{t("footer.contact")}</a>
             </div>

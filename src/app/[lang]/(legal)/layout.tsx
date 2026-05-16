@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
+import CookiePreferencesLink from "@/components/consent/CookiePreferencesLink";
 
 /**
  * Layout condiviso per le pagine legali (/[lang]/privacy, /[lang]/terms).
@@ -56,6 +57,8 @@ export default async function LegalLayout({
             <a href={termsHref} className="hover:text-accent transition-colors">
               {t("footerTerms")}
             </a>
+            <span>·</span>
+            <CookiePreferencesLink className="hover:text-accent transition-colors" />
             <span>·</span>
             <a
               href="mailto:info@antigravity.dev"

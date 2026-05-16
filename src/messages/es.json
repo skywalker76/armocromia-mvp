@@ -468,6 +468,40 @@
     "argento": "Plata",
     "platino": "Platino"
   },
+  "consent": {
+    "banner": {
+      "title": "Respetamos tu privacidad",
+      "body": "Usamos cookies técnicas necesarias para el funcionamiento del sitio y, con tu consentimiento, cookies analíticas para entender cómo mejorar el servicio. No utilizamos cookies publicitarias de terceros.",
+      "acceptAll": "Aceptar todo",
+      "rejectAll": "Rechazar",
+      "customize": "Personalizar",
+      "privacyLink": "Leer la Política de Privacidad"
+    },
+    "preferences": {
+      "title": "Preferencias de cookies",
+      "body": "Elige qué categorías de cookies autorizar. Puedes cambiar de opinión en cualquier momento desde el enlace del pie de página.",
+      "save": "Guardar preferencias",
+      "acceptAll": "Aceptar todo",
+      "rejectAll": "Rechazar todo",
+      "alwaysOn": "Siempre activas",
+      "close": "Cerrar"
+    },
+    "categories": {
+      "necessary": {
+        "title": "Cookies necesarias",
+        "description": "Indispensables para el funcionamiento del sitio: autenticación, sesión, seguridad. No se pueden desactivar."
+      },
+      "analytics": {
+        "title": "Cookies analíticas",
+        "description": "Nos ayudan a entender cómo usas el sitio (páginas visitadas, tiempo de permanencia) de forma agregada. Mediante Google Analytics 4."
+      },
+      "marketing": {
+        "title": "Cookies de marketing",
+        "description": "Píxeles publicitarios y de retargeting. Actualmente no en uso, pero mantenemos la categoría por transparencia futura."
+      }
+    },
+    "footerLink": "Preferencias de cookies"
+  },
   "auth": {
     "login": {
       "brandLink": "Armocromia",
@@ -568,9 +602,10 @@
           { "provider": "Supabase", "role": "Base de datos, autenticación, almacenamiento de fotos/dossiers", "location": "UE (Fráncfort)" },
           { "provider": "fal.ai", "role": "Análisis IA de la imagen (Google Gemini Vision)", "location": "EE.UU. — SCC adoptadas" },
           { "provider": "Vercel", "role": "Hosting de la aplicación web", "location": "EE.UU. — SCC adoptadas" },
-          { "provider": "Stripe", "role": "Procesamiento de pagos, facturación, Stripe Tax", "location": "EE.UU. / Irlanda" }
+          { "provider": "Stripe", "role": "Procesamiento de pagos, facturación, Stripe Tax", "location": "EE.UU. / Irlanda" },
+          { "provider": "Google Analytics 4", "role": "Estadísticas de uso agregadas (solo con consentimiento explícito)", "location": "EE.UU. — SCC adoptadas, IP anonimizada" }
         ],
-        "after": "Las transferencias fuera de la UE se realizan sobre la base de las <strong>Cláusulas Contractuales Tipo (SCC)</strong> aprobadas por la Comisión Europea mediante Decisión 2021/914. fal.ai y Vercel han firmado Acuerdos de Tratamiento de Datos que prohíben el uso de los datos para entrenar modelos de IA."
+        "after": "Las transferencias fuera de la UE se realizan sobre la base de las <strong>Cláusulas Contractuales Tipo (SCC)</strong> aprobadas por la Comisión Europea mediante Decisión 2021/914. fal.ai y Vercel han firmado Acuerdos de Tratamiento de Datos que prohíben el uso de los datos para entrenar modelos de IA. Google Analytics 4 se activa <strong>solo después de tu consentimiento explícito</strong> mediante el banner de cookies (Google Consent Mode v2 con valor por defecto 'denied')."
       },
       "sec7": {
         "heading": "7. Tus derechos",

@@ -7,6 +7,9 @@ import { TranslationsProvider } from "@/lib/i18n/translations-context";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getTranslations } from "@/lib/i18n/server";
 import { defaultLocale, isValidLocale, locales, type Locale } from "@/lib/i18n/config";
+import { ConsentProvider } from "@/lib/consent/consent-context";
+import CookieBanner from "@/components/consent/CookieBanner";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 /**
  * Font Playfair Display — serif editoriale per titoli.
@@ -170,7 +173,11 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <LocaleProvider locale={lang}>
           <TranslationsProvider dict={dict} fallbackDict={fallbackDict}>
-            {children}
+            <ConsentProvider>
+              {children}
+              <CookieBanner />
+              <GoogleAnalytics />
+            </ConsentProvider>
           </TranslationsProvider>
         </LocaleProvider>
         {/* Service Worker registration — only in production */}
