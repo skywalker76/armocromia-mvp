@@ -14,8 +14,20 @@ function getNested(obj: unknown, path: string): unknown {
   }, obj);
 }
 
+export type InterpolationVars = Record<string, string | number>;
+
+function interpolate(template: string, vars?: InterpolationVars): string {
+  if (!vars) return template;
+  return template.replace(/\{(\w+)\}/g, (match, name: string) => {
+    if (Object.prototype.hasOwnProperty.call(vars, name)) {
+      return String(vars[name]);
+    }
+    return match;
+  });
+}
+
 export interface Translator {
-  t: (key: string) => string;
+  t: (key: string, vars?: InterpolationVars) => string;
   raw: <T = unknown>(key: string) => T;
 }
 
@@ -26,6 +38,7 @@ export interface Translator {
  * dictionary è caricato server-side. Il namespace permette accessi corti:
  *   const { t } = await getTranslations(locale, "marketing.hero");
  *   t("title") // → "Scopri i colori..."
+ *   t("price.line", { price: "€29" }) // sostituisce {price} con €29
  *
  * Fallback: se la chiave manca nel locale corrente, si tenta il `defaultLocale`
  * (IT). Questo permette di rilasciare EN/ES parzialmente tradotti senza che
@@ -46,9 +59,9 @@ export async function getTranslations(
 
   return {
     dict,
-    t: (key: string): string => {
+    t: (key: string, vars?: InterpolationVars): string => {
       const val = getNested(base, key);
-      if (typeof val === "string") return val;
+      if (typeof val === "string") return interpolate(val, vars);
 
       const fallbackVal = getNested(baseFallback, key);
       if (typeof fallbackVal === "string") {
@@ -56,12 +69,11 @@ export async function getTranslations(
           const fullPath = namespace ? `${namespace}.${key}` : key;
           console.warn(`[i18n] Missing "${fullPath}" for "${locale}" — using "${defaultLocale}" fallback`);
         }
-        return fallbackVal;
+        return interpolate(fallbackVal, vars);
       }
 
       if (process.env.NODE_ENV !== "production") {
         const fullPath = namespace ? `${namespace}.${key}` : key;
-        // eslint-disable-next-line no-console
         console.warn(`[i18n] Missing translation: "${fullPath}" (no fallback)`);
       }
       return key;

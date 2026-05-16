@@ -189,5 +189,232 @@
       "copyrightSuffix": "Antigravity — Tutti i diritti riservati"
     },
     "mobileCta": "Crea il tuo dossier — €29"
+  },
+  "auth": {
+    "login": {
+      "brandLink": "Armocromia",
+      "successTitle": "Accesso effettuato!",
+      "successMessage": "Reindirizzamento alla dashboard…",
+      "otpTitle": "Inserisci il codice",
+      "otpLeadBefore": "Abbiamo inviato un codice a {length} cifre a",
+      "otpDigitLabel": "Cifra {index} di {length}",
+      "otpVerifying": "Verifica in corso…",
+      "otpInvalidCode": "Codice non valido.",
+      "otpNetworkError": "Errore di rete. Riprova.",
+      "resendIn": "Reinvia codice tra {seconds}s",
+      "resendCta": "Non hai ricevuto il codice? Reinvia",
+      "changeEmail": "← Cambia email",
+      "emailTitle": "Accedi al tuo dossier",
+      "emailLeadLine1": "Inserisci la tua email e riceverai un codice di accesso.",
+      "emailLeadLine2": "Niente password da ricordare.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "la-tua@email.it",
+      "submitSending": "Invio in corso…",
+      "submitCta": "Invia codice di accesso",
+      "footerLine": "Non hai ancora un account?",
+      "footerNote": "Verrà creato automaticamente al primo accesso.",
+      "genericError": "Qualcosa è andato storto.",
+      "networkError": "Errore di rete. Riprova tra qualche secondo."
+    }
+  },
+  "legal": {
+    "common": {
+      "brand": "Armocromia",
+      "backHome": "← Torna alla home",
+      "footerBrand": "Armocromia",
+      "footerTagline": "Powered by Antigravity",
+      "footerPrivacy": "Privacy Policy",
+      "footerTerms": "Termini di Servizio",
+      "footerContact": "Contatti",
+      "lastUpdatedLabel": "Ultimo aggiornamento:",
+      "lastUpdated": "15 maggio 2026"
+    },
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "Informativa sulla privacy di Armocromia: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR.",
+      "eyebrow": "Informativa",
+      "title": "Privacy Policy",
+      "intro": [
+        "La presente informativa descrive come Armocromia (di seguito anche &quot;noi&quot; o &quot;il Servizio&quot;) tratta i dati personali degli utenti che accedono al sito <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">armocromia-mvp-nine.vercel.app</a> e utilizzano il servizio di analisi cromatica AI.",
+        "Il trattamento è effettuato in conformità al <strong>Regolamento (UE) 2016/679 (GDPR)</strong>, al D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 e — per gli utenti residenti fuori dall'Unione Europea — alle normative applicabili (CCPA per la California, UK GDPR, LGPD in Brasile, PIPEDA in Canada)."
+      ],
+      "sec1": {
+        "heading": "1. Titolare del trattamento",
+        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>",
+        "p2": "Per qualsiasi richiesta relativa al trattamento dei tuoi dati personali puoi scriverci a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>."
+      },
+      "sec2": {
+        "heading": "2. Tipologie di dati raccolti",
+        "intro": "Trattiamo le seguenti categorie di dati personali:",
+        "items": [
+          "<strong>Indirizzo email</strong>: necessario per autenticarti tramite codice OTP e ricevere comunicazioni di servizio (ricevuta acquisto, notifiche dossier pronto).",
+          "<strong>Fotografia del viso</strong>: l'immagine che carichi per l'analisi cromatica costituisce un <strong>dato biometrico</strong> ai sensi dell'art. 9 GDPR (categoria particolare). Viene processata dall'intelligenza artificiale per estrarre informazioni su incarnato, capelli e occhi, e <strong>cancellata automaticamente entro 24 ore</strong> dall'upload.",
+          "<strong>Risultato dell'analisi (dossier)</strong>: la classificazione cromatica, la palette e i consigli generati. Sono conservati per consentirti di consultare e scaricare il tuo dossier finché mantieni l'account attivo.",
+          "<strong>Dati di pagamento</strong>: gestiti direttamente da Stripe (vedi § 6). Noi non memorizziamo numeri di carta o credenziali bancarie — riceviamo solo l'ID transazione e l'esito.",
+          "<strong>Dati tecnici</strong>: indirizzo IP, user agent, timestamp richieste, cookie di sessione necessari al funzionamento del login. Non utilizziamo cookie di profilazione o di terze parti per advertising."
+        ]
+      },
+      "sec3": {
+        "heading": "3. Finalità e base giuridica",
+        "tableHeadPurpose": "Finalità",
+        "tableHeadBasis": "Base giuridica",
+        "rows": [
+          { "purpose": "Erogazione del servizio (analisi foto, generazione dossier)", "basis": "Esecuzione di un contratto (art. 6.1.b GDPR) <strong>+ consenso esplicito</strong> per i dati biometrici (art. 9.2.a GDPR)" },
+          { "purpose": "Autenticazione e gestione account", "basis": "Esecuzione di un contratto (art. 6.1.b)" },
+          { "purpose": "Fatturazione e adempimenti fiscali", "basis": "Obbligo legale (art. 6.1.c)" },
+          { "purpose": "Sicurezza, anti-frode, log tecnici", "basis": "Legittimo interesse (art. 6.1.f) — prevenzione abusi" }
+        ],
+        "after": "Il consenso per il trattamento della tua foto come dato biometrico viene raccolto al momento del caricamento, prima dell'invio all'AI. Puoi <strong>revocare il consenso in qualsiasi momento</strong> cancellando il tuo account o richiedendo la rimozione tramite email."
+      },
+      "sec4": {
+        "heading": "4. Periodo di conservazione",
+        "items": [
+          "<strong>Fotografia originale</strong>: cancellata automaticamente entro 24 ore dall'upload tramite job programmato. Nessuna copia backup viene conservata oltre questo periodo.",
+          "<strong>Dossier generato e palette</strong>: conservati finché mantieni l'account attivo. Puoi cancellarli singolarmente dalla dashboard in qualsiasi momento.",
+          "<strong>Account e email</strong>: cancellati su tua richiesta o dopo 24 mesi di inattività (con preavviso via email 30 giorni prima).",
+          "<strong>Dati fiscali</strong>: conservati per 10 anni come da obbligo di legge italiana (art. 2220 c.c.).",
+          "<strong>Log di sicurezza</strong>: conservati per 90 giorni e poi cancellati."
+        ]
+      },
+      "sec5": {
+        "heading": "5. Modalità di trattamento e sicurezza",
+        "p1": "I dati sono trattati con strumenti informatici e custoditi su server protetti, con misure tecniche e organizzative idonee a garantire riservatezza, integrità e disponibilità (cifratura in transito tramite TLS 1.2+, cifratura at-rest dei file storage, autenticazione passwordless con codici OTP a tempo, Row-Level Security a livello database, headers di sicurezza HTTP). Non viene effettuato alcun trattamento manuale né decisione automatizzata che produca effetti giuridici significativi sull'utente (l'analisi cromatica ha natura puramente informativa)."
+      },
+      "sec6": {
+        "heading": "6. Destinatari dei dati (sub-processor)",
+        "intro": "Per erogare il servizio ci avvaliamo dei seguenti fornitori (sub-responsabili del trattamento ex art. 28 GDPR):",
+        "tableHeadProvider": "Fornitore",
+        "tableHeadRole": "Ruolo",
+        "tableHeadLocation": "Sede",
+        "rows": [
+          { "provider": "Supabase", "role": "Database, auth, storage foto/dossier", "location": "UE (Francoforte)" },
+          { "provider": "fal.ai", "role": "Analisi AI dell'immagine (Google Gemini Vision)", "location": "USA — SCC adottate" },
+          { "provider": "Vercel", "role": "Hosting applicazione web", "location": "USA — SCC adottate" },
+          { "provider": "Stripe", "role": "Elaborazione pagamenti, fatturazione, Stripe Tax", "location": "USA / Irlanda" }
+        ],
+        "after": "I trasferimenti extra-UE avvengono sulla base delle <strong>Standard Contractual Clauses (SCC)</strong> approvate dalla Commissione Europea con Decisione 2021/914. fal.ai e Vercel hanno firmato Data Processing Agreement che vietano l'uso dei dati per training di modelli AI."
+      },
+      "sec7": {
+        "heading": "7. I tuoi diritti",
+        "intro": "In qualità di interessato, hai diritto di:",
+        "items": [
+          "<strong>Accesso</strong> (art. 15 GDPR): ottenere copia dei tuoi dati.",
+          "<strong>Rettifica</strong> (art. 16): correggere dati inesatti.",
+          "<strong>Cancellazione / oblio</strong> (art. 17): eliminare account e tutti i dati associati.",
+          "<strong>Limitazione</strong> (art. 18): chiedere la sospensione del trattamento.",
+          "<strong>Portabilità</strong> (art. 20): ricevere i tuoi dati in formato strutturato (JSON).",
+          "<strong>Opposizione</strong> (art. 21): opporti a trattamenti basati sul legittimo interesse.",
+          "<strong>Revoca del consenso</strong> in qualsiasi momento, senza pregiudicare la liceità dei trattamenti precedenti.",
+          "<strong>Reclamo</strong> presso il Garante per la protezione dei dati personali (<a href=\"https://www.garanteprivacy.it\" target=\"_blank\" rel=\"noopener\" class=\"text-accent hover:underline\">garanteprivacy.it</a>) o l'autorità del tuo Stato di residenza."
+        ],
+        "after": "Per esercitare i tuoi diritti scrivici a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Risponderemo entro 30 giorni."
+      },
+      "sec8": {
+        "heading": "8. Utenti residenti in California (CCPA / CPRA)",
+        "p1": "Se risiedi in California, hai diritti aggiuntivi ai sensi del California Consumer Privacy Act: conoscere le categorie di informazioni personali raccolte, chiederne la cancellazione, opporti alla vendita o condivisione (precisiamo: <strong>non vendiamo né condividiamo i tuoi dati personali</strong>)."
+      },
+      "sec9": {
+        "heading": "9. Minori",
+        "p1": "Il Servizio è destinato a utenti di età non inferiore a 16 anni. Non raccogliamo intenzionalmente dati di minori; se veniamo a conoscenza di un account riconducibile a un minore, lo cancelliamo immediatamente."
+      },
+      "sec10": {
+        "heading": "10. Modifiche alla presente informativa",
+        "p1": "Potremo aggiornare questa informativa in caso di modifiche tecniche, normative o organizzative. Le modifiche sostanziali saranno comunicate via email con almeno 30 giorni di preavviso. La data dell'ultimo aggiornamento è indicata in alto."
+      },
+      "callout": {
+        "lead": "<strong class=\"text-ink\">Domande?</strong> Scrivici a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Ti risponderemo entro 5 giorni lavorativi."
+      }
+    },
+    "terms": {
+      "metaTitle": "Termini di Servizio",
+      "metaDescription": "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità.",
+      "eyebrow": "Condizioni d'uso",
+      "title": "Termini di Servizio",
+      "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Armocromia (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
+      "sec1": {
+        "heading": "1. Fornitore",
+        "p1": "Il Servizio è fornito da <strong>Antigravity</strong>, contattabile all'indirizzo email <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
+      },
+      "sec2": {
+        "heading": "2. Oggetto del Servizio",
+        "p1": "Armocromia è un servizio digitale di analisi cromatica personalizzata. L'utente carica una propria fotografia e riceve un <strong>dossier visivo</strong> generato da intelligenza artificiale che include: classificazione in una delle 12 sotto-stagioni cromatiche, palette colori consigliata, suggerimenti di outfit e consigli pratici.",
+        "p2": "Il dossier ha natura <strong>informativa e di intrattenimento</strong> e <strong>non costituisce consulenza professionale di immagine, styling, moda o medica</strong>. L'intelligenza artificiale può commettere errori: i risultati vanno valutati con spirito critico."
+      },
+      "sec3": {
+        "heading": "3. Requisiti e capacità di contrarre",
+        "p1": "Per utilizzare il Servizio devi avere <strong>almeno 16 anni</strong> e possedere la capacità giuridica di concludere contratti vincolanti nel tuo Paese di residenza. Sei tenuto a fornire un indirizzo email valido e a mantenere riservate le credenziali di accesso."
+      },
+      "sec4": {
+        "heading": "4. Account e responsabilità delle credenziali",
+        "p1": "L'accesso avviene tramite indirizzo email e codice OTP usa-e-getta inviato via email (autenticazione passwordless). Sei responsabile della sicurezza della tua casella email e di ogni attività eseguita dal tuo account. In caso di accesso non autorizzato sospetto, contattaci immediatamente."
+      },
+      "sec5": {
+        "heading": "5. Prezzo, IVA e pagamento",
+        "items": [
+          "Il prezzo del Servizio è <strong>{price}</strong> una tantum per dossier generato. Nessun abbonamento, nessun addebito ricorrente.",
+          "Il prezzo è comprensivo di IVA dove applicabile. Per gli utenti residenti nell'Unione Europea, l'IVA viene applicata all'aliquota del Paese di residenza tramite il regime <strong>OSS (One-Stop-Shop)</strong>. Per gli utenti USA, ove richiesto, si applica la sales tax dello Stato di residenza.",
+          "Il pagamento è gestito da <strong>Stripe Payments Europe Ltd</strong> tramite checkout sicuro. Accettiamo le principali carte di credito/debito. Non memorizziamo numeri di carta sui nostri server.",
+          "La ricevuta dell'acquisto è inviata via email e scaricabile dal tuo account in qualsiasi momento."
+        ]
+      },
+      "sec6": {
+        "heading": "6. Diritto di recesso — Rimborso entro {refundDays} giorni",
+        "highlight": "<strong>Hai diritto a un rimborso integrale entro {refundDays} giorni dalla data di acquisto, senza dover fornire alcuna motivazione.</strong>",
+        "p1": "Per esercitare il diritto di recesso è sufficiente scrivere a <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a> indicando l'indirizzo email associato all'acquisto. Il rimborso verrà accreditato sul metodo di pagamento originale entro 5 giorni lavorativi dalla ricezione della richiesta.",
+        "p2": "Ai sensi dell'art. 59 del Codice del Consumo italiano (D.Lgs. 206/2005) e della Direttiva UE 2011/83, il fornitore di un servizio digitale potrebbe escludere il diritto di recesso una volta che il servizio è stato eseguito. <strong>Noi rinunciamo a invocare tale eccezione</strong>: il rimborso entro {refundDays} giorni è garantito anche se hai già visualizzato e scaricato il dossier."
+      },
+      "sec7": {
+        "heading": "7. Proprietà intellettuale",
+        "items": [
+          "Il <strong>dossier generato è di tua proprietà</strong> per uso personale. Puoi scaricarlo, stamparlo, condividerlo con amici e professionisti del settore moda.",
+          "<strong>Non puoi</strong> rivendere, sub-licenziare o utilizzare il dossier per scopi commerciali (es. consulenze a terzi a pagamento) senza nostro consenso scritto.",
+          "Il software, il design del sito, i prompt AI, la grafica dell'infografica e i template di output rimangono di nostra esclusiva proprietà.",
+          "Mantieni la piena titolarità della fotografia caricata. Concedi ad Antigravity una licenza limitata, gratuita e temporanea (massimo 24 ore) per il solo scopo di processarla con l'AI e generare il dossier. Non utilizziamo la tua foto per addestrare modelli AI né la vendiamo a terzi."
+        ]
+      },
+      "sec8": {
+        "heading": "8. Comportamento dell'utente",
+        "intro": "È vietato:",
+        "items": [
+          "caricare fotografie di terzi senza il loro consenso esplicito (può costituire violazione della privacy e della normativa biometrica);",
+          "caricare contenuti illegali, osceni, violenti, discriminatori o che violino diritti di terzi;",
+          "tentare di violare la sicurezza del Servizio, accedere a dati di altri utenti, fare reverse engineering o scraping automatizzato;",
+          "utilizzare il Servizio per finalità illecite o fraudolente, incluso il chargeback abusivo dopo aver ricevuto e utilizzato il dossier."
+        ],
+        "after": "Ci riserviamo il diritto di sospendere o chiudere account che violino questi Termini, fatto salvo il diritto al rimborso del Servizio non ancora erogato."
+      },
+      "sec9": {
+        "heading": "9. Limitazioni di responsabilità",
+        "items": [
+          "Il Servizio è fornito &quot;<strong>così com'è</strong>&quot; (&quot;as-is&quot;). Pur impegnandoci ad assicurare qualità e continuità, non garantiamo che il Servizio sia ininterrotto o privo di errori.",
+          "L'analisi cromatica generata dall'AI è soggettiva e probabilistica. Non garantiamo che la classificazione coincida con analisi effettuate da consulenti di immagine professionali.",
+          "La nostra responsabilità complessiva nei tuoi confronti, per qualsiasi ragione, è limitata all'importo da te effettivamente pagato per il Servizio negli ultimi 12 mesi.",
+          "Nei limiti consentiti dalla legge, escludiamo la responsabilità per danni indiretti, perdita di profitto, perdita di dati o interruzione di attività derivanti dall'uso del Servizio.",
+          "Nulla in questi Termini esclude o limita la responsabilità prevista dalla normativa imperativa applicabile a tutela del consumatore (es. danno alla persona, dolo o colpa grave)."
+        ]
+      },
+      "sec10": {
+        "heading": "10. Forza maggiore",
+        "p1": "Non saremo responsabili per ritardi o mancata esecuzione del Servizio causati da eventi al di fuori del nostro ragionevole controllo, inclusi ma non limitati a: down-time dei fornitori cloud (Vercel, Supabase), sospensione delle API AI di terze parti (fal.ai, Google Gemini), attacchi informatici, calamità naturali, atti governativi."
+      },
+      "sec11": {
+        "heading": "11. Modifiche dei Termini",
+        "p1": "Potremo aggiornare i presenti Termini per ragioni tecniche, normative o organizzative. Le modifiche sostanziali saranno comunicate via email con almeno 30 giorni di preavviso. L'uso continuato del Servizio dopo l'entrata in vigore delle modifiche costituisce accettazione delle stesse. Se non accetti le nuove condizioni, puoi cancellare l'account in qualsiasi momento."
+      },
+      "sec12": {
+        "heading": "12. Legge applicabile e foro competente",
+        "p1": "I presenti Termini sono regolati dalla <strong>legge italiana</strong>.",
+        "p2": "Per le controversie con consumatori residenti nell'Unione Europea, si applicano in via inderogabile le norme di tutela del consumatore del Paese di residenza, ove più favorevoli. Il foro competente è quello del consumatore.",
+        "p3": "Per le controversie con utenti non-consumatori (es. acquisti aziendali), il foro esclusivo è quello di Roma, Italia.",
+        "p4": "La Commissione Europea mette a disposizione una piattaforma di <strong>risoluzione delle controversie online (ODR)</strong>: <a href=\"https://ec.europa.eu/consumers/odr\" target=\"_blank\" rel=\"noopener\" class=\"text-accent hover:underline\">ec.europa.eu/consumers/odr</a>."
+      },
+      "sec13": {
+        "heading": "13. Disposizioni finali",
+        "p1": "Se una clausola dei presenti Termini fosse dichiarata nulla o inefficace, le restanti clausole rimarranno pienamente valide ed efficaci. La tolleranza di una parte rispetto a un inadempimento dell'altra non costituisce rinuncia ai diritti previsti dai presenti Termini."
+      },
+      "callout": {
+        "lead": "<strong class=\"text-ink\">Hai bisogno di aiuto o vuoi un rimborso?</strong> Scrivici a <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>. Risposta entro 24 ore lavorative."
+      }
+    }
   }
 }

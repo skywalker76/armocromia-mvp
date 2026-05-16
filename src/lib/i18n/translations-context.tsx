@@ -31,6 +31,18 @@ function getNested(obj: unknown, path: string): unknown {
   }, obj);
 }
 
+export type InterpolationVars = Record<string, string | number>;
+
+function interpolate(template: string, vars?: InterpolationVars): string {
+  if (!vars) return template;
+  return template.replace(/\{(\w+)\}/g, (match, name: string) => {
+    if (Object.prototype.hasOwnProperty.call(vars, name)) {
+      return String(vars[name]);
+    }
+    return match;
+  });
+}
+
 interface DictionaryBundle {
   dict: Dictionary;
   fallbackDict: Dictionary;
@@ -55,7 +67,7 @@ export function TranslationsProvider({
 }
 
 export interface ClientTranslator {
-  t: (key: string) => string;
+  t: (key: string, vars?: InterpolationVars) => string;
   raw: <T = unknown>(key: string) => T;
 }
 
@@ -65,6 +77,7 @@ export interface ClientTranslator {
  * Uso:
  *   const { t } = useTranslations("marketing.hero");
  *   <button>{t("cta")}</button>
+ *   <p>{t("price.line", { price: "€29" })}</p>  // sostituisce {price}
  *
  * Per dati strutturati (array, oggetti) usa raw<T>():
  *   const features = raw<string[]>("features");
@@ -84,12 +97,12 @@ export function useTranslations(namespace?: string): ClientTranslator {
       : ctx.fallbackDict;
 
     return {
-      t: (key: string): string => {
+      t: (key: string, vars?: InterpolationVars): string => {
         const val = getNested(base, key);
-        if (typeof val === "string") return val;
+        if (typeof val === "string") return interpolate(val, vars);
 
         const fallbackVal = getNested(baseFallback, key);
-        if (typeof fallbackVal === "string") return fallbackVal;
+        if (typeof fallbackVal === "string") return interpolate(fallbackVal, vars);
 
         if (process.env.NODE_ENV !== "production") {
           const fullPath = namespace ? `${namespace}.${key}` : key;

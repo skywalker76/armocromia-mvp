@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import type { FormEvent, KeyboardEvent, ClipboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "@/lib/i18n/locale-context";
+import { useTranslations } from "@/lib/i18n/translations-context";
 import { localePath } from "@/lib/i18n/config";
 
 /**
@@ -21,6 +22,7 @@ const RESEND_COOLDOWN_SECONDS = 60;
 export default function LoginPage() {
   const router = useRouter();
   const locale = useLocale();
+  const { t } = useTranslations("auth.login");
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -57,7 +59,7 @@ export default function LoginPage() {
 
       if (!res.ok) {
         setStatus("error");
-        setErrorMessage(data.error || "Qualcosa è andato storto.");
+        setErrorMessage(data.error || t("genericError"));
         return;
       }
 
@@ -68,7 +70,7 @@ export default function LoginPage() {
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
     } catch {
       setStatus("error");
-      setErrorMessage("Errore di rete. Riprova tra qualche secondo.");
+      setErrorMessage(t("networkError"));
     }
   }
 
@@ -88,7 +90,7 @@ export default function LoginPage() {
 
       if (!res.ok) {
         setStatus("error");
-        setErrorMessage(data.error || "Codice non valido.");
+        setErrorMessage(data.error || t("otpInvalidCode"));
         // Reset delle caselle OTP per permettere un nuovo tentativo
         setOtp(Array(OTP_LENGTH).fill(""));
         setTimeout(() => inputRefs.current[0]?.focus(), 100);
@@ -100,9 +102,9 @@ export default function LoginPage() {
       setTimeout(() => router.push(localePath(locale, "/dashboard")), 800);
     } catch {
       setStatus("error");
-      setErrorMessage("Errore di rete. Riprova.");
+      setErrorMessage(t("otpNetworkError"));
     }
-  }, [email, router]);
+  }, [email, router, locale, t]);
 
   // ── Reinvia codice ──
   async function handleResend() {
@@ -207,7 +209,7 @@ export default function LoginPage() {
         {/* Logo / Brand */}
         <div className="text-center mb-12">
           <a href={localePath(locale, "/")} className="font-serif text-2xl text-ink hover:text-accent transition-colors">
-            Armocromia
+            {t("brandLink")}
           </a>
         </div>
 
@@ -225,8 +227,8 @@ export default function LoginPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
               </svg>
             </div>
-            <h1 className="font-serif text-3xl text-ink">Accesso effettuato!</h1>
-            <p className="mt-4 text-muted">Reindirizzamento alla dashboard…</p>
+            <h1 className="font-serif text-3xl text-ink">{t("successTitle")}</h1>
+            <p className="mt-4 text-muted">{t("successMessage")}</p>
             <div className="mt-4 mx-auto h-1 w-32 overflow-hidden rounded-full bg-green-100">
               <div
                 className="h-full w-full rounded-full bg-green-500"
@@ -256,9 +258,9 @@ export default function LoginPage() {
               </svg>
             </div>
 
-            <h1 className="font-serif text-3xl text-ink">Inserisci il codice</h1>
+            <h1 className="font-serif text-3xl text-ink">{t("otpTitle")}</h1>
             <p className="mt-4 text-muted leading-relaxed">
-              Abbiamo inviato un codice a 6 cifre a{" "}
+              {t("otpLeadBefore", { length: OTP_LENGTH })}{" "}
               <span className="font-medium text-ink">{email}</span>
             </p>
 
@@ -288,7 +290,7 @@ export default function LoginPage() {
                     }
                     disabled:opacity-50 disabled:cursor-not-allowed
                   `}
-                  aria-label={`Cifra ${i + 1} di ${OTP_LENGTH}`}
+                  aria-label={t("otpDigitLabel", { index: i + 1, length: OTP_LENGTH })}
                 />
               ))}
             </div>
@@ -307,7 +309,7 @@ export default function LoginPage() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Verifica in corso…
+                {t("otpVerifying")}
               </div>
             )}
 
@@ -319,8 +321,8 @@ export default function LoginPage() {
                 className="text-sm text-accent hover:text-accent-hover transition-colors disabled:text-muted-light disabled:cursor-not-allowed"
               >
                 {resendTimer > 0
-                  ? `Reinvia codice tra ${resendTimer}s`
-                  : "Non hai ricevuto il codice? Reinvia"
+                  ? t("resendIn", { seconds: resendTimer })
+                  : t("resendCta")
                 }
               </button>
               <br />
@@ -333,7 +335,7 @@ export default function LoginPage() {
                 }}
                 className="text-sm text-muted hover:text-ink transition-colors"
               >
-                ← Cambia email
+                {t("changeEmail")}
               </button>
             </div>
           </div>
@@ -343,12 +345,12 @@ export default function LoginPage() {
         {step === "email" && status !== "success" && (
           <>
             <h1 className="text-center font-serif text-3xl tracking-tight text-ink sm:text-4xl">
-              Accedi al tuo dossier
+              {t("emailTitle")}
             </h1>
             <p className="mt-4 text-center text-muted">
-              Inserisci la tua email e riceverai un codice di accesso.
+              {t("emailLeadLine1")}
               <br />
-              Niente password da ricordare.
+              {t("emailLeadLine2")}
             </p>
 
             <form onSubmit={handleSendOtp} className="mt-10 space-y-6">
@@ -357,7 +359,7 @@ export default function LoginPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-ink-light"
                 >
-                  Email
+                  {t("emailLabel")}
                 </label>
                 <input
                   id="email"
@@ -368,7 +370,7 @@ export default function LoginPage() {
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="la-tua@email.it"
+                  placeholder={t("emailPlaceholder")}
                   className="mt-2 block w-full rounded-xl border border-accent/20 bg-white px-4 py-3 text-ink placeholder:text-muted-light shadow-sm transition-all duration-200 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none"
                 />
               </div>
@@ -407,19 +409,19 @@ export default function LoginPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                       />
                     </svg>
-                    Invio in corso…
+                    {t("submitSending")}
                   </span>
                 ) : (
-                  "Invia codice di accesso"
+                  t("submitCta")
                 )}
               </button>
             </form>
 
             {/* Footer link */}
             <p className="mt-10 text-center text-sm text-muted-light">
-              Non hai ancora un account?{" "}
+              {t("footerLine")}{" "}
               <span className="text-muted">
-                Verrà creato automaticamente al primo accesso.
+                {t("footerNote")}
               </span>
             </p>
           </>
