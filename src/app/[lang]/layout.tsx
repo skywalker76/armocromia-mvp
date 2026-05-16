@@ -5,7 +5,8 @@ import "../globals.css";
 import { LocaleProvider } from "@/lib/i18n/locale-context";
 import { TranslationsProvider } from "@/lib/i18n/translations-context";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { defaultLocale, isValidLocale, locales } from "@/lib/i18n/config";
+import { getTranslations } from "@/lib/i18n/server";
+import { defaultLocale, isValidLocale, locales, type Locale } from "@/lib/i18n/config";
 
 /**
  * Font Playfair Display — serif editoriale per titoli.
@@ -40,16 +41,8 @@ export const viewport: Viewport = {
 
 const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "Armocromia — I colori che ti fanno splendere",
-    template: "%s | Armocromia",
-  },
-  description:
-    "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
-  applicationName: "Armocromia",
-  keywords: [
+const KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
+  it: [
     "armocromia",
     "analisi cromatica",
     "personal color analysis",
@@ -58,48 +51,90 @@ export const metadata: Metadata = {
     "stagione cromatica",
     "AI styling",
   ],
-  authors: [{ name: "Antigravity" }],
-  creator: "Antigravity",
-  publisher: "Antigravity",
-  manifest: "/manifest.json",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Armocromia — I colori che ti fanno splendere",
-    description:
-      "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in 90 secondi grazie all'AI.",
-    url: SITE_URL,
-    siteName: "Armocromia",
-    locale: "it_IT",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Armocromia — I colori che ti fanno splendere",
-    description:
-      "Analisi cromatica AI in 90 secondi. Palette, outfit e consigli su misura per la tua stagione.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+  en: [
+    "color analysis",
+    "personal color analysis",
+    "color season",
+    "color palette",
+    "image consulting",
+    "AI styling",
+    "armocromia",
+  ],
+  es: [
+    "análisis cromático",
+    "análisis de color personal",
+    "armocromía",
+    "paleta de colores",
+    "consultoría de imagen",
+    "estación cromática",
+    "AI styling",
+  ],
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale: Locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "metadata.root");
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: t("titleDefault"),
+      template: t("titleTemplate"),
+    },
+    description: t("description"),
+    applicationName: "Armocromia",
+    keywords: KEYWORDS_BY_LOCALE[locale],
+    authors: [{ name: "Antigravity" }],
+    creator: "Antigravity",
+    publisher: "Antigravity",
+    manifest: "/manifest.json",
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        it: "/it",
+        en: "/en",
+        es: "/es",
+      },
+    },
+    openGraph: {
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      url: `${SITE_URL}/${locale}`,
+      siteName: "Armocromia",
+      locale: t("ogLocale"),
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("twitterTitle"),
+      description: t("twitterDescription"),
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Armocromia",
-  },
-  icons: {
-    icon: "/icon-192.png",
-    apple: "/icon-192.png",
-  },
-};
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: "Armocromia",
+    },
+    icons: {
+      icon: "/icon-192.png",
+      apple: "/icon-192.png",
+    },
+  };
+}
 
 /**
  * Pre-rendering statico delle route per ogni locale.

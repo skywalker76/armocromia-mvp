@@ -3,12 +3,20 @@ import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
 import { RichText } from "@/components/ui/RichText";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description:
-    "Informativa sulla privacy di Armocromia: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR.",
-  alternates: { canonical: "/privacy" },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "metadata.privacy");
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: { canonical: `/${locale}/privacy` },
+  };
+}
 
 interface ProcessorRow {
   provider: string;

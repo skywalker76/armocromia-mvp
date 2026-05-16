@@ -1,4 +1,31 @@
 {
+  "metadata": {
+    "root": {
+      "titleDefault": "Armocromia — I colori che ti fanno splendere",
+      "titleTemplate": "%s | Armocromia",
+      "description": "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
+      "ogTitle": "Armocromia — I colori che ti fanno splendere",
+      "ogDescription": "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in 90 secondi grazie all'AI.",
+      "twitterTitle": "Armocromia — I colori che ti fanno splendere",
+      "twitterDescription": "Analisi cromatica AI in 90 secondi. Palette, outfit e consigli su misura per la tua stagione.",
+      "ogLocale": "it_IT"
+    },
+    "marketing": {
+      "description": "Scopri la tua armocromia personale con un dossier visivo professionale. Palette colori, outfit suggeriti e consigli su misura generati dall'intelligenza artificiale."
+    },
+    "login": {
+      "title": "Accedi",
+      "description": "Accedi al tuo dossier Armocromia. Login senza password tramite codice OTP via email."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "Informativa sulla privacy di Armocromia: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR."
+    },
+    "terms": {
+      "title": "Termini di Servizio",
+      "description": "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità."
+    }
+  },
   "marketing": {
     "hero": {
       "eyebrow": "Analisi cromatica personalizzata",

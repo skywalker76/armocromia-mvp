@@ -6,10 +6,18 @@ import HowItWorks from "@/components/marketing/HowItWorks";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  description:
-    "Scopri la tua armocromia personale con un dossier visivo professionale. Palette colori, outfit suggeriti e consigli su misura generati dall'intelligenza artificiale.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "metadata.marketing");
+  return {
+    description: t("description"),
+  };
+}
 
 const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
 

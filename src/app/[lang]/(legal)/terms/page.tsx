@@ -3,12 +3,20 @@ import { isValidLocale, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
 import { RichText } from "@/components/ui/RichText";
 
-export const metadata: Metadata = {
-  title: "Termini di Servizio",
-  description:
-    "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità.",
-  alternates: { canonical: "/terms" },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "metadata.terms");
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: { canonical: `/${locale}/terms` },
+  };
+}
 
 const PRICE = "€29";
 const REFUND_DAYS = 14;
