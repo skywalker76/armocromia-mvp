@@ -6,6 +6,8 @@ import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { classifyPhoto } from "@/lib/fal/classify";
 import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossier";
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
+import { getTranslations } from "@/lib/i18n/server";
+import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 
 /**
  * Stato ritornato dalla Server Action per feedback al client.
@@ -42,13 +44,22 @@ export async function analyzePhoto(
 ): Promise<AnalyzePhotoState> {
   const supabase = await createClient();
 
+  // ── Locale del client (per AI prompt + error messages) ──
+  const rawLocale = formData.get("locale");
+  const locale: Locale =
+    typeof rawLocale === "string" && isValidLocale(rawLocale)
+      ? rawLocale
+      : defaultLocale;
+  const { t: tErr } = await getTranslations(locale, "app.errors");
+  const { t: tValidation } = await getTranslations(locale, "app.uploadValidation");
+
   // ── 0. Auth check ──
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { status: "error", error: "Devi effettuare il login" };
+    return { status: "error", error: tErr("notAuthenticated") };
   }
 
   // ── 1. Validazione input ──
@@ -63,8 +74,16 @@ export async function analyzePhoto(
   });
 
   if (!parsed.success) {
-    const firstError = parsed.error.issues[0]?.message ?? "Input non valido";
-    return { status: "error", error: firstError };
+    // Le issues di Zod contengono ora CHIAVI (es. "selectPhoto"); le traduciamo
+    // tramite il namespace app.uploadValidation.* — fallback al messaggio raw
+    // se per qualche motivo non corrisponde a una chiave nota.
+    const firstIssue = parsed.error.issues[0];
+    const errorKey = firstIssue?.message ?? "invalidInput";
+    const translated = tValidation(errorKey);
+    return {
+      status: "error",
+      error: translated === errorKey ? tErr("invalidInput") : translated,
+    };
   }
 
   const { file, userNotes, analysisMode } = parsed.data;
@@ -146,7 +165,8 @@ export async function analyzePhoto(
     // ── 4. Classifica con Vision AI ──
     const classification = await classifyPhoto(
       signedUrl.signedUrl,
-      userNotes || undefined
+      userNotes || undefined,
+      locale
     );
 
     // Aggiorna dossier con risultato classificazione
@@ -225,14 +245,13 @@ export async function analyzePhoto(
     // imbarazzante — mappiamo a un messaggio comprensibile.
     let userMessage: string;
     if (lower === "forbidden" || lower.includes("403")) {
-      userMessage =
-        "Il servizio di analisi AI è momentaneamente non disponibile. Riprova tra qualche minuto.";
+      userMessage = tErr("aiUnavailable");
     } else if (lower.includes("429") || lower.includes("rate limit")) {
-      userMessage = "Troppe richieste in corso. Attendi qualche istante e riprova.";
+      userMessage = tErr("rateLimit");
     } else if (rawMessage) {
       userMessage = rawMessage;
     } else {
-      userMessage = "Si è verificato un errore durante l'analisi. Riprova.";
+      userMessage = tErr("genericPipeline");
     }
 
     return {
@@ -254,15 +273,23 @@ export async function analyzePhoto(
  * 5. Elimina record DB
  * 6. Revalida la dashboard
  */
-export async function deleteDossier(dossierId: number): Promise<{ success: boolean; error?: string }> {
+export async function deleteDossier(
+  dossierId: number,
+  clientLocale?: string
+): Promise<{ success: boolean; error?: string }> {
   const supabase = await createClient();
+  const locale: Locale =
+    typeof clientLocale === "string" && isValidLocale(clientLocale)
+      ? clientLocale
+      : defaultLocale;
+  const { t: tErr } = await getTranslations(locale, "app.errors");
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { success: false, error: "Non autenticato" };
+    return { success: false, error: tErr("notAuthenticated") };
   }
 
   try {
@@ -274,11 +301,11 @@ export async function deleteDossier(dossierId: number): Promise<{ success: boole
       .single();
 
     if (fetchError || !dossier) {
-      return { success: false, error: "Dossier non trovato" };
+      return { success: false, error: tErr("dossierNotFound") };
     }
 
     if (dossier.user_id !== user.id) {
-      return { success: false, error: "Non autorizzato" };
+      return { success: false, error: tErr("notAuthorized") };
     }
 
     // Delete files from Storage (best-effort, don't fail if missing)
@@ -315,7 +342,7 @@ export async function deleteDossier(dossierId: number): Promise<{ success: boole
     console.error("[deleteDossier] Failed:", err);
     return {
       success: false,
-      error: err instanceof Error ? err.message : "Errore durante l'eliminazione",
+      error: err instanceof Error ? err.message : tErr("deleteGeneric"),
     };
   }
 }

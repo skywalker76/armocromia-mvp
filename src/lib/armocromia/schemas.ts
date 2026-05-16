@@ -20,19 +20,19 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 /** Validazione del file foto lato server */
 export const uploadPhotoSchema = z.object({
   file: z
-    .instanceof(File, { message: "Seleziona una foto" })
-    .refine((f) => f.size > 0, "Il file è vuoto")
+    .instanceof(File, { message: "selectPhoto" })
+    .refine((f) => f.size > 0, "emptyFile")
     .refine(
       (f) => f.size <= MAX_FILE_SIZE,
-      "La foto deve essere al massimo 10MB"
+      "maxSize"
     )
     .refine(
       (f) => ACCEPTED_IMAGE_TYPES.includes(f.type as typeof ACCEPTED_IMAGE_TYPES[number]),
-      "Formato non supportato. Usa JPEG, PNG o WebP"
+      "invalidFormat"
     ),
   userNotes: z
     .string()
-    .max(500, "Le note possono essere al massimo 500 caratteri")
+    .max(500, "notesTooLong")
     .optional()
     .default(""),
   analysisMode: z
@@ -46,25 +46,15 @@ export type UploadPhotoInput = z.infer<typeof uploadPhotoSchema>;
 /** Modalità di analisi disponibili */
 export type AnalysisMode = UploadPhotoInput["analysisMode"];
 
+/**
+ * IDs delle modalità di analisi. Le etichette/descrizioni/icone vivono nel
+ * dizionario sotto app.analysisModes.{id}.{label,icon,description} per essere
+ * tradotte in IT/EN/ES senza touch al codice.
+ */
 export const ANALYSIS_MODES = [
-  {
-    value: "infografica" as const,
-    label: "Infografica Completa",
-    icon: "📊",
-    description: "Analisi cromatica dettagliata con palette, confronto visivo e consigli pratici",
-  },
-  {
-    value: "lookbook" as const,
-    label: "Look Book",
-    icon: "🎨",
-    description: "4-6 outfit completi con la tua foto, ciascuno con palette colori abbinata",
-  },
-  {
-    value: "guardaroba" as const,
-    label: "Guardaroba Ideale",
-    icon: "👔",
-    description: "Griglia di capi essenziali (giacca, camicia, pantaloni, accessori) nei tuoi colori",
-  },
+  { value: "infografica" as const },
+  { value: "lookbook" as const },
+  { value: "guardaroba" as const },
 ] as const;
 
 /**
@@ -85,33 +75,39 @@ export const classificationResultSchema = z.object({
     skinTone: z.string(),
     hairColor: z.string(),
     eyeColor: z.string(),
+    /**
+     * Sottotono normalizzato a chiave EN stabile (warm/cool/neutral).
+     * Accetta sia il nuovo prompt EN (warm/cool/neutral) sia legacy IT
+     * (caldo/freddo/neutro) per non rompere record DB esistenti.
+     * Why: l'UI usa questa chiave per il lookup ai.values.undertone.*.
+     */
     undertone: z.string().transform((v) => {
       const lower = v.toLowerCase();
-      if (lower.includes("cald") || lower.includes("warm") || lower.includes("gold") || lower.includes("pesc")) return "caldo" as const;
-      if (lower.includes("fredd") || lower.includes("cool") || lower.includes("ros") || lower.includes("blu")) return "freddo" as const;
-      return "neutro" as const;
+      if (lower.includes("warm") || lower.includes("cald") || lower.includes("gold") || lower.includes("pesc")) return "warm" as const;
+      if (lower.includes("cool") || lower.includes("fredd") || lower.includes("ros") || lower.includes("blu")) return "cool" as const;
+      return "neutral" as const;
     }),
     contrast: z.string().transform((v) => {
       const lower = v.toLowerCase();
-      if (lower === "basso" || lower.includes("basso") && !lower.includes("medio")) return "basso" as const;
-      if (lower.includes("medio-basso") || lower.includes("medio basso")) return "medio-basso" as const;
-      if (lower.includes("medio-alto") || lower.includes("medio alto")) return "medio-alto" as const;
-      if (lower === "alto" || (lower.includes("alto") && !lower.includes("medio"))) return "alto" as const;
-      return "medio" as const;
+      if (lower.includes("medium-low") || lower.includes("medio-basso") || lower.includes("medio basso")) return "medium-low" as const;
+      if (lower.includes("medium-high") || lower.includes("medio-alto") || lower.includes("medio alto")) return "medium-high" as const;
+      if (lower === "low" || lower === "basso" || (lower.includes("low") && !lower.includes("medium")) || (lower.includes("basso") && !lower.includes("medio"))) return "low" as const;
+      if (lower === "high" || lower === "alto" || (lower.includes("high") && !lower.includes("medium")) || (lower.includes("alto") && !lower.includes("medio"))) return "high" as const;
+      return "medium" as const;
     }),
     /** Valore: quanto chiaro/scuro è il soggetto complessivamente */
     value: z.string().transform((v) => {
       const lower = v.toLowerCase();
-      if (lower.includes("chiar")) return "chiaro" as const;
-      if (lower.includes("scur")) return "scuro" as const;
-      return "medio" as const;
+      if (lower.includes("light") || lower.includes("chiar")) return "light" as const;
+      if (lower.includes("dark") || lower.includes("scur")) return "dark" as const;
+      return "medium" as const;
     }).optional(),
     /** Intensità: quanto saturati sono i colori naturali del soggetto */
     intensity: z.string().transform((v) => {
       const lower = v.toLowerCase();
-      if (lower.includes("morbid") || lower.includes("soft") || lower.includes("tenu")) return "morbida" as const;
-      if (lower.includes("brillant") || lower.includes("vivac") || lower.includes("intens")) return "brillante" as const;
-      return "media" as const;
+      if (lower.includes("soft") || lower.includes("morbid") || lower.includes("tenu") || lower.includes("muted")) return "soft" as const;
+      if (lower.includes("bright") || lower.includes("brillant") || lower.includes("vivac") || lower.includes("intens")) return "bright" as const;
+      return "medium" as const;
     }).optional(),
   }),
   /** Ragionamento dettagliato: spiega il PERCHÉ della classificazione */

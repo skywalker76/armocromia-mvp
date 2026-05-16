@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { useTranslations } from "@/lib/i18n/translations-context";
 
 interface ConfirmModalProps {
   open: boolean;
@@ -23,11 +24,15 @@ export default function ConfirmModal({
   onConfirm,
   title,
   message,
-  confirmLabel = "Conferma",
-  cancelLabel = "Annulla",
+  confirmLabel,
+  cancelLabel,
   variant = "default",
   loading = false,
 }: ConfirmModalProps) {
+  const { t } = useTranslations("app.confirmModal");
+  const { t: tDelete } = useTranslations("app.delete");
+  const resolvedConfirm = confirmLabel ?? t("defaultConfirm");
+  const resolvedCancel = cancelLabel ?? t("defaultCancel");
   const modalRef = useRef<HTMLDivElement>(null);
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -111,7 +116,7 @@ export default function ConfirmModal({
             disabled={loading}
             className="flex-1 rounded-full border border-accent/20 px-5 py-3 text-sm font-medium text-ink transition-all hover:bg-cream-dark hover:border-accent/30 disabled:opacity-50"
           >
-            {cancelLabel}
+            {resolvedCancel}
           </button>
           <button
             type="button"
@@ -129,10 +134,10 @@ export default function ConfirmModal({
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Eliminazione…
+                {tDelete("deleting")}
               </span>
             ) : (
-              confirmLabel
+              resolvedConfirm
             )}
           </button>
         </div>

@@ -24,6 +24,14 @@
     "terms": {
       "title": "Terms of Service",
       "description": "Armocromia terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability."
+    },
+    "dashboard": {
+      "title": "Dashboard — Armocromia",
+      "description": "Your personal panel to manage your color analysis."
+    },
+    "dossier": {
+      "titleTemplate": "Dossier #{id} — Armocromia",
+      "description": "Your personalized color dossier."
     }
   },
   "marketing": {
@@ -216,6 +224,249 @@
       "copyrightSuffix": "Antigravity — All rights reserved"
     },
     "mobileCta": "Create your dossier — €29"
+  },
+  "app": {
+    "errors": {
+      "notAuthenticated": "You must be signed in",
+      "invalidInput": "Invalid input",
+      "aiUnavailable": "The AI analysis service is temporarily unavailable. Please try again in a few minutes.",
+      "rateLimit": "Too many requests in progress. Please wait a moment and try again.",
+      "genericPipeline": "Something went wrong during the analysis. Please try again.",
+      "deleteGeneric": "Error while deleting",
+      "dossierNotFound": "Dossier not found",
+      "notAuthorized": "Not authorized",
+      "uploadTooLarge": "The photo must be at most {mb}MB",
+      "uploadInvalidImage": "Please select a valid image"
+    },
+    "uploadValidation": {
+      "selectPhoto": "Please select a photo",
+      "emptyFile": "The file is empty",
+      "maxSize": "The photo must be at most 10MB",
+      "invalidFormat": "Unsupported format. Use JPEG, PNG or WebP",
+      "notesTooLong": "Notes can be at most 500 characters"
+    },
+    "nav": {
+      "menuTitle": "Menu",
+      "dashboard": "Dashboard",
+      "home": "Home",
+      "logout": "Sign out",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "defaultUser": "User"
+    },
+    "dashboard": {
+      "greetingMorning": "Good morning",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "countSingular": "You have 1 completed dossier",
+      "countPlural": "You have {count} completed dossiers",
+      "pendingSuffix": "{count} in progress",
+      "pendingTitleSingular": "A dossier is being processed…",
+      "pendingTitlePlural": "{count} dossiers being processed…",
+      "pendingBody": "Our AI is generating your personalized dossier. Reload the page in a few moments.",
+      "failedTitleSingular": "One analysis did not complete",
+      "failedTitlePlural": "{count} failed analyses",
+      "failedBody": "You can delete them and try again by uploading a new photo.",
+      "failedItemPrefix": "Dossier #",
+      "failedClassifiedAs": "classified as {season}",
+      "yourDossiersTitle": "Your dossiers",
+      "newAnalysisHeadingNew": "Start your color analysis",
+      "newAnalysisHeadingAgain": "New color analysis",
+      "newAnalysisBodyNew": "Upload a portrait photo and our AI will create a personalized visual dossier with palette, outfits and tailored advice for you.",
+      "newAnalysisBodyAgain": "Upload a new photo to discover more pairings and personalized palettes.",
+      "footerBranding": "Armocromia AI · Powered by Antigravity"
+    },
+    "dossierPage": {
+      "breadcrumbDashboard": "Dashboard",
+      "breadcrumbCurrent": "Dossier #{id}",
+      "heroEyebrow": "Armocromia · Your color profile",
+      "analysisTitle": "Your analysis",
+      "reasoningTitle": "Why this season flatters you",
+      "reasoningGoodTitle": "Colors that flatter you",
+      "reasoningAvoidTitle": "Colors to avoid",
+      "metalsTitle": "Recommended metals",
+      "tipsTitle": "Practical tips",
+      "looksTitle": "Looks in harmony",
+      "downloadCta": "Download your dossier",
+      "footerGenerated": "Generated on {date} · Armocromia AI by Antigravity",
+      "attrUndertone": "Undertone",
+      "attrValue": "Value",
+      "attrIntensity": "Intensity",
+      "attrContrast": "Contrast",
+      "attrSkinTone": "Skin tone",
+      "attrHairColor": "Hair",
+      "attrEyeColor": "Eyes",
+      "imageAlt": "Dossier {season}"
+    },
+    "palette": {
+      "yourColorsTitle": "Your colors",
+      "yourColorsHint": "Click a color to copy the hex code",
+      "baseTitle": "Base colors",
+      "neutralsTitle": "Neutrals",
+      "accentsTitle": "Accents",
+      "avoidTitle": "Colors to avoid",
+      "avoidHint": "These colors can dull your complexion",
+      "copied": "Copied!"
+    },
+    "uploader": {
+      "dragHere": "Drag your photo here",
+      "browseFiles": "browse files",
+      "orBrowse": "or",
+      "maxSize": "Max {mb}MB",
+      "photoReady": "Photo ready for analysis",
+      "changePhoto": "Change photo",
+      "previewAlt": "Photo preview",
+      "takePhoto": "Take a photo",
+      "chooseMode": "Choose the type of analysis",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "E.g. My hair is dyed, my natural color is brown",
+      "analyzing": "Analyzing...",
+      "generateCta": "{icon} Generate {mode} ✨",
+      "creatingDossier": "We're creating your personalized dossier",
+      "aiAnalyzing": "Our AI is analyzing your photo…",
+      "errorTitle": "Something went wrong",
+      "successTitle": "Analysis complete!",
+      "successBody": "Your color dossier is ready. Redirecting now…"
+    },
+    "stepper": {
+      "photoUploaded": "Photo uploaded",
+      "analyzing": "Analyzing",
+      "generating": "Generating dossier",
+      "ready": "Dossier ready"
+    },
+    "card": {
+      "viewDetail": "View detail →",
+      "openDossier": "Open dossier",
+      "downloadPng": "Download PNG",
+      "timeNow": "Just now",
+      "timeMinutes": "{n} min ago",
+      "timeHours": "{n}h ago",
+      "timeYesterday": "Yesterday",
+      "timeDays": "{n} days ago",
+      "timeWeeks": "{n} wks ago"
+    },
+    "delete": {
+      "deleteAria": "Delete dossier",
+      "deleteTitle": "Delete dossier",
+      "deleteText": "Delete",
+      "deleteFull": "Delete dossier",
+      "confirmMessage": "You are about to permanently delete dossier {label}. This action is irreversible and all associated data will be lost.",
+      "confirmCta": "Delete permanently",
+      "cancelCta": "Cancel",
+      "deleting": "Deleting…",
+      "successToast": "Dossier deleted successfully"
+    },
+    "toast": {
+      "close": "Close"
+    },
+    "confirmModal": {
+      "defaultConfirm": "Confirm",
+      "defaultCancel": "Cancel"
+    },
+    "dossierReady": {
+      "title": "Your dossier is ready!",
+      "body": "Our AI has completed the analysis. Discover your season and your ideal palette.",
+      "viewCta": "View Dossier →"
+    },
+    "analysisModes": {
+      "infografica": {
+        "label": "Full Infographic",
+        "icon": "📊",
+        "description": "Detailed color analysis with palette, visual comparison and practical tips"
+      },
+      "lookbook": {
+        "label": "Look Book",
+        "icon": "🎨",
+        "description": "4-6 complete outfits with your photo, each with matched color palette"
+      },
+      "guardaroba": {
+        "label": "Ideal Wardrobe",
+        "icon": "👔",
+        "description": "Grid of essential pieces (jacket, shirt, pants, accessories) in your colors"
+      }
+    }
+  },
+  "ai": {
+    "values": {
+      "undertone": {
+        "warm": "Warm",
+        "cool": "Cool",
+        "neutral": "Neutral"
+      },
+      "contrast": {
+        "low": "Low",
+        "medium-low": "Medium-low",
+        "medium": "Medium",
+        "medium-high": "Medium-high",
+        "high": "High"
+      },
+      "value": {
+        "light": "Light",
+        "medium": "Medium",
+        "dark": "Dark"
+      },
+      "intensity": {
+        "soft": "Soft",
+        "medium": "Medium",
+        "bright": "Bright"
+      }
+    }
+  },
+  "palette": {
+    "primavera-chiara": {
+      "displayName": "Light Spring",
+      "description": "Bright and delicate colors, like the light of a spring morning. Warm, light hues with a yellow-peach undertone."
+    },
+    "primavera-calda": {
+      "displayName": "Warm Spring",
+      "description": "Rich, golden colors, like the afternoon sun. Warm, saturated hues with a golden undertone."
+    },
+    "primavera-brillante": {
+      "displayName": "Bright Spring",
+      "description": "Vivid, high-contrast colors, like tropical flowers in the sun. Warm, bright hues, maximum saturation."
+    },
+    "estate-chiara": {
+      "displayName": "Light Summer",
+      "description": "Pastel and delicate colors, like a hazy summer sky. Cool, light hues with a rosy undertone."
+    },
+    "estate-fredda": {
+      "displayName": "Cool Summer",
+      "description": "Cool and refined colors, like a sunset over the sea. Blue-rose hues with medium intensity and a cool undertone."
+    },
+    "estate-tenue": {
+      "displayName": "Soft Summer",
+      "description": "Soft and blended colors, like summer mist. Muted, dusty hues with a cool-neutral undertone."
+    },
+    "autunno-tenue": {
+      "displayName": "Soft Autumn",
+      "description": "Soft and earthy colors, like autumn leaves in the haze. Warm and muted hues, natural elegance."
+    },
+    "autunno-caldo": {
+      "displayName": "Warm Autumn",
+      "description": "Rich and earthy colors, like foliage at sunset. Warm, medium hues — the quintessence of autumn."
+    },
+    "autunno-profondo": {
+      "displayName": "Deep Autumn",
+      "description": "Intense and deep colors, like an autumn forest at twilight. Warm, dark and dramatic hues."
+    },
+    "inverno-profondo": {
+      "displayName": "Deep Winter",
+      "description": "Intense and dramatic colors, like a starry winter night. High contrast, cool and deep hues."
+    },
+    "inverno-freddo": {
+      "displayName": "Cool Winter",
+      "description": "Glacial and refined colors, like ice and crystals. Cool blue-rose hues with high saturation."
+    },
+    "inverno-brillante": {
+      "displayName": "Bright Winter",
+      "description": "Vivid, highest-contrast colors, like ice crystals in the sun. Pure, sharp and brilliant colors."
+    }
+  },
+  "metals": {
+    "oro-giallo": "Yellow gold",
+    "oro-rosa": "Rose gold",
+    "argento": "Silver",
+    "platino": "Platinum"
   },
   "auth": {
     "login": {

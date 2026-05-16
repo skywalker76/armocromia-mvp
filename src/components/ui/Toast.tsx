@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { useTranslations } from "@/lib/i18n/translations-context";
 
 export type ToastType = "success" | "error" | "info";
 
@@ -46,6 +47,7 @@ const BG: Record<ToastType, string> = {
  * Container toast — montare UNA VOLTA nel layout root.
  */
 export default function ToastContainer() {
+  const { t } = useTranslations("app.toast");
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ export default function ToastContainer() {
           <button
             onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
             className="ml-2 text-muted-light hover:text-ink transition-colors"
-            aria-label="Chiudi"
+            aria-label={t("close")}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />

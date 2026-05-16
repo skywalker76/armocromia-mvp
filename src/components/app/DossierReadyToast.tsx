@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLocale } from "@/lib/i18n/locale-context";
+import { useTranslations } from "@/lib/i18n/translations-context";
+import { localePath } from "@/lib/i18n/config";
 
 /**
  * DossierReadyToast — Premium In-App Notification
@@ -23,6 +26,9 @@ export default function DossierReadyToast({
   dossierId = "new",
   autoDismissMs = 8000,
 }: DossierReadyToastProps) {
+  const locale = useLocale();
+  const { t } = useTranslations("app.dossierReady");
+  const dossierHref = localePath(locale, `/dossier/${dossierId}`);
   const [isVisible, setIsVisible] = useState(false);
   const [isRendered, setIsRendered] = useState(false);
 
@@ -92,20 +98,20 @@ export default function DossierReadyToast({
 
         {/* Content */}
         <div className="flex-1 pt-0.5">
-          <h4 className="font-serif text-lg font-medium text-ink">Il tuo dossier è pronto!</h4>
+          <h4 className="font-serif text-lg font-medium text-ink">{t("title")}</h4>
           <p className="mt-1 text-sm text-muted">
-            L'IA ha completato l'analisi. Scopri la tua stagione e la tua palette ideale.
+            {t("body")}
           </p>
           <div className="mt-3 flex gap-3">
-            <Link 
-              href={`/dashboard/dossier/${dossierId}`}
+            <Link
+              href={dossierHref}
               className="text-sm font-semibold text-accent hover:text-accent-hover transition-colors touch-bounce"
               onClick={() => {
                 setIsVisible(false);
                 setTimeout(onClose, 400);
               }}
             >
-              Visualizza Dossier →
+              {t("viewCta")}
             </Link>
           </div>
         </div>

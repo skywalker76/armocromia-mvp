@@ -3,10 +3,17 @@
 import { useActionState, useRef, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
-import { UPLOAD_CONSTANTS, ANALYSIS_MODES } from "@/lib/armocromia/schemas";
+import { UPLOAD_CONSTANTS, ANALYSIS_MODES, type AnalysisMode } from "@/lib/armocromia/schemas";
 import { useLocale } from "@/lib/i18n/locale-context";
+import { useTranslations } from "@/lib/i18n/translations-context";
 import { localePath } from "@/lib/i18n/config";
 import ProgressStepper from "./ProgressStepper";
+
+interface ModeCopy {
+  label: string;
+  icon: string;
+  description: string;
+}
 
 /**
  * Componente upload foto premium con drag-and-drop, anteprima, e invocazione AI.
@@ -19,12 +26,15 @@ const initialState: AnalyzePhotoState = { status: "idle" };
 
 export default function PhotoUploader() {
   const locale = useLocale();
+  const { t } = useTranslations("app.uploader");
+  const { t: tErr } = useTranslations("app.errors");
+  const { raw: rawMode } = useTranslations("app.analysisModes");
   const [state, formAction, isPending] = useActionState(analyzePhoto, initialState);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [selectedMode, setSelectedMode] = useState<string>("infografica");
+  const [selectedMode, setSelectedMode] = useState<AnalysisMode>("infografica");
   const [userNotes, setUserNotes] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -47,14 +57,14 @@ export default function PhotoUploader() {
     if (!selected) return;
 
     if (selected.size > UPLOAD_CONSTANTS.maxFileSize) {
-      alert(`La foto deve essere al massimo ${UPLOAD_CONSTANTS.maxFileSizeMB}MB`);
+      alert(tErr("uploadTooLarge", { mb: UPLOAD_CONSTANTS.maxFileSizeMB }));
       return;
     }
     // Why: lato client accettiamo qualsiasi image/* (incluso HEIC iOS) per non
     // bloccare il picker mobile. Il browser di norma converte HEIC→JPEG durante
     // l'upload, e il server valida comunque con lo schema Zod.
     if (!selected.type.startsWith("image/")) {
-      alert("Seleziona un'immagine valida");
+      alert(tErr("uploadInvalidImage"));
       return;
     }
 
@@ -116,9 +126,10 @@ export default function PhotoUploader() {
       formData.append("photo", file);
       formData.append("analysisMode", selectedMode);
       formData.append("userNotes", userNotes);
+      formData.append("locale", locale);
       formAction(formData);
     },
-    [file, selectedMode, userNotes, isPending, formAction]
+    [file, selectedMode, userNotes, isPending, formAction, locale]
   );
 
   // Successo → redirect automatico dopo breve delay
@@ -135,9 +146,9 @@ export default function PhotoUploader() {
             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
           </svg>
         </div>
-        <h3 className="font-serif text-xl text-ink">Analisi completata!</h3>
+        <h3 className="font-serif text-xl text-ink">{t("successTitle")}</h3>
         <p className="mt-2 text-muted">
-          Il tuo dossier cromatico è pronto. Reindirizzamento in corso…
+          {t("successBody")}
         </p>
         {/* Progress bar */}
         <div className="mt-4 mx-auto h-1 w-32 overflow-hidden rounded-full bg-success/20">
@@ -155,10 +166,10 @@ export default function PhotoUploader() {
           <ProgressStepper currentStep={currentStep} />
           <div className="mt-5 text-center">
             <p className="text-sm text-ink font-medium">
-              Stiamo creando il tuo dossier personalizzato
+              {t("creatingDossier")}
             </p>
             <p className="mt-1 text-xs text-muted animate-pulse-soft">
-              L&apos;intelligenza artificiale sta analizzando la tua foto…
+              {t("aiAnalyzing")}
             </p>
           </div>
           {/* Indeterminate progress bar */}
@@ -175,7 +186,7 @@ export default function PhotoUploader() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
           </svg>
           <div>
-            <p className="font-medium text-ink">Qualcosa è andato storto</p>
+            <p className="font-medium text-ink">{t("errorTitle")}</p>
             <p className="mt-0.5 text-muted">{state.error}</p>
           </div>
         </div>
@@ -216,7 +227,7 @@ export default function PhotoUploader() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={preview}
-                    alt="Anteprima foto"
+                    alt={t("previewAlt")}
                     className="h-full w-full object-cover"
                   />
                   {/* Success indicator */}
@@ -228,7 +239,7 @@ export default function PhotoUploader() {
                 </div>
                 <div className="flex flex-col items-center gap-2 sm:items-start">
                   <p className="font-medium text-ink">{fileName}</p>
-                  <p className="text-sm text-success">Foto pronta per l&apos;analisi</p>
+                  <p className="text-sm text-success">{t("photoReady")}</p>
                   <button
                     type="button"
                     onClick={(e) => {
@@ -237,7 +248,7 @@ export default function PhotoUploader() {
                     }}
                     className="mt-1 text-sm font-medium text-muted-light hover:text-danger transition-colors"
                   >
-                    Cambia foto
+                    {t("changePhoto")}
                   </button>
                 </div>
               </div>
@@ -265,13 +276,13 @@ export default function PhotoUploader() {
                 </div>
                 <div className="text-center">
                   <p className="font-medium text-ink">
-                    Trascina qui la tua foto
+                    {t("dragHere")}
                   </p>
                   <p className="mt-1.5 text-sm text-muted">
-                    oppure <span className="text-accent font-medium cursor-pointer hover:underline">sfoglia i file</span>
+                    {t("orBrowse")} <span className="text-accent font-medium cursor-pointer hover:underline">{t("browseFiles")}</span>
                   </p>
                   <p className="mt-4 text-xs text-muted-light">
-                    Max {UPLOAD_CONSTANTS.maxFileSizeMB}MB
+                    {t("maxSize", { mb: UPLOAD_CONSTANTS.maxFileSizeMB })}
                   </p>
                 </div>
               </div>
@@ -290,7 +301,7 @@ export default function PhotoUploader() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
                 </svg>
-                Scatta una foto
+                {t("takePhoto")}
                 <input
                   ref={cameraInputRef}
                   type="file"
@@ -307,34 +318,37 @@ export default function PhotoUploader() {
           {preview && (
             <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
               <label className="block text-sm font-medium text-ink mb-3">
-                Scegli il tipo di analisi
+                {t("chooseMode")}
               </label>
               <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
-                {ANALYSIS_MODES.map((mode) => (
-                  <button
-                    key={mode.value}
-                    type="button"
-                    onClick={() => setSelectedMode(mode.value)}
-                    className={`
-                      relative rounded-xl border-2 p-4 text-left transition-all duration-200
-                      ${selectedMode === mode.value
-                        ? "border-accent bg-accent/5 shadow-md ring-1 ring-accent/20"
-                        : "border-accent/8 bg-white hover:border-accent/20 hover:bg-accent/[0.02]"
-                      }
-                    `}
-                  >
-                    {selectedMode === mode.value && (
-                      <div className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent">
-                        <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                      </div>
-                    )}
-                    <span className="text-2xl">{mode.icon}</span>
-                    <p className="mt-2 font-medium text-ink text-sm">{mode.label}</p>
-                    <p className="mt-1 text-xs text-muted leading-relaxed">{mode.description}</p>
-                  </button>
-                ))}
+                {ANALYSIS_MODES.map((mode) => {
+                  const copy = rawMode<ModeCopy>(mode.value);
+                  return (
+                    <button
+                      key={mode.value}
+                      type="button"
+                      onClick={() => setSelectedMode(mode.value)}
+                      className={`
+                        relative rounded-xl border-2 p-4 text-left transition-all duration-200
+                        ${selectedMode === mode.value
+                          ? "border-accent bg-accent/5 shadow-md ring-1 ring-accent/20"
+                          : "border-accent/8 bg-white hover:border-accent/20 hover:bg-accent/[0.02]"
+                        }
+                      `}
+                    >
+                      {selectedMode === mode.value && (
+                        <div className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent">
+                          <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                          </svg>
+                        </div>
+                      )}
+                      <span className="text-2xl">{copy.icon}</span>
+                      <p className="mt-2 font-medium text-ink text-sm">{copy.label}</p>
+                      <p className="mt-1 text-xs text-muted leading-relaxed">{copy.description}</p>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -343,14 +357,14 @@ export default function PhotoUploader() {
           {preview && (
             <div className="animate-slide-up" style={{ animationDelay: "0.15s" }}>
               <label htmlFor="userNotes" className="block text-sm font-medium text-ink mb-2">
-                Note (opzionale)
+                {t("notesLabel")}
               </label>
               <input
                 id="userNotes"
                 type="text"
                 value={userNotes}
                 onChange={(e) => setUserNotes(e.target.value)}
-                placeholder="Es. Ho i capelli tinti, il colore naturale è castano"
+                placeholder={t("notesPlaceholder")}
                 maxLength={500}
                 className="w-full rounded-xl border border-accent/15 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted-light focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 transition-all"
               />
@@ -365,7 +379,12 @@ export default function PhotoUploader() {
               className="w-full rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg animate-slide-up"
               style={{ animationDelay: "0.2s" }}
             >
-              {isPending ? "Analisi in corso..." : `${ANALYSIS_MODES.find(m => m.value === selectedMode)?.icon} Genera ${ANALYSIS_MODES.find(m => m.value === selectedMode)?.label} ✨`}
+              {isPending
+                ? t("analyzing")
+                : t("generateCta", {
+                    icon: rawMode<ModeCopy>(selectedMode).icon,
+                    mode: rawMode<ModeCopy>(selectedMode).label,
+                  })}
             </button>
           )}
         </form>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useLocale } from "@/lib/i18n/locale-context";
+import { useTranslations } from "@/lib/i18n/translations-context";
 import { localePath } from "@/lib/i18n/config";
 
 interface NavBarProps {
@@ -15,6 +16,7 @@ interface NavBarProps {
  */
 export default function NavBar({ email }: NavBarProps) {
   const locale = useLocale();
+  const { t } = useTranslations("app.nav");
   const dashboardHref = localePath(locale, "/dashboard");
   const homeHref = localePath(locale, "/");
   const [scrolled, setScrolled] = useState(false);
@@ -23,7 +25,7 @@ export default function NavBar({ email }: NavBarProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const initial = email ? email.charAt(0).toUpperCase() : "U";
-  const displayName = email ? email.split("@")[0] : "Utente";
+  const displayName = email ? email.split("@")[0] : t("defaultUser");
 
   // Scroll detection
   useEffect(() => {
@@ -130,7 +132,7 @@ export default function NavBar({ email }: NavBarProps) {
                     <svg className="h-4 w-4 text-muted-light" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
-                    Dashboard
+                    {t("dashboard")}
                   </a>
                 </div>
                 <div className="border-t border-accent/8 pt-1">
@@ -142,7 +144,7 @@ export default function NavBar({ email }: NavBarProps) {
                       <svg className="h-4 w-4 text-muted-light" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                       </svg>
-                      Esci
+                      {t("logout")}
                     </button>
                   </form>
                 </div>
@@ -158,7 +160,7 @@ export default function NavBar({ email }: NavBarProps) {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-accent/5"
-              aria-label="Apri menu"
+              aria-label={t("openMenu")}
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
@@ -187,11 +189,11 @@ export default function NavBar({ email }: NavBarProps) {
           <div className="absolute inset-x-0 top-0 rounded-b-3xl bg-white shadow-xl animate-slide-down">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-accent/8">
-              <span className="font-serif text-lg text-ink">Menu</span>
+              <span className="font-serif text-lg text-ink">{t("menuTitle")}</span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-cream transition-colors"
-                aria-label="Chiudi menu"
+                aria-label={t("closeMenu")}
               >
                 <svg className="h-5 w-5 text-ink" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -220,7 +222,7 @@ export default function NavBar({ email }: NavBarProps) {
                 <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                 </svg>
-                <span className="font-medium">Dashboard</span>
+                <span className="font-medium">{t("dashboard")}</span>
               </a>
               <a
                 href={homeHref}
@@ -230,7 +232,7 @@ export default function NavBar({ email }: NavBarProps) {
                 <svg className="h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
                 </svg>
-                <span className="font-medium">Home</span>
+                <span className="font-medium">{t("home")}</span>
               </a>
             </nav>
 
@@ -244,7 +246,7 @@ export default function NavBar({ email }: NavBarProps) {
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
                   </svg>
-                  <span className="font-medium">Esci</span>
+                  <span className="font-medium">{t("logout")}</span>
                 </button>
               </form>
             </div>

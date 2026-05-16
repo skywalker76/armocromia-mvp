@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "@/lib/i18n/translations-context";
+
 /**
  * Stepper visivo per il progresso dell'analisi cromatica.
  *
@@ -19,19 +21,16 @@ interface ProgressStepperProps {
   error?: boolean;
 }
 
-const STEPS = [
-  "Foto caricata",
-  "Analisi in corso",
-  "Generazione dossier",
-  "Dossier pronto",
-];
+const STEP_KEYS = ["photoUploaded", "analyzing", "generating", "ready"] as const;
 
 export default function ProgressStepper({
   currentStep,
   error = false,
 }: ProgressStepperProps) {
-  const steps: Step[] = STEPS.map((label, i) => ({
-    label,
+  const { t } = useTranslations("app.stepper");
+
+  const steps: Step[] = STEP_KEYS.map((key, i) => ({
+    label: t(key),
     status: error && i === currentStep
       ? "error"
       : i < currentStep

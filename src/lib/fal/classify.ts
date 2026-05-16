@@ -11,66 +11,100 @@ import {
  *
  * Why: usiamo un Vision LLM per analizzare incarnato, capelli e occhi.
  * Il prompt è strutturato per restituire JSON parsabile.
+ *
+ * Strategia multilingua (Step 5):
+ * - Valori enum (undertone/contrast/value/intensity) → SEMPRE chiavi EN stabili
+ *   (warm/cool/neutral, low/medium/high, ecc.). L'UI fa lookup nel dizionario.
+ * - Testi liberi (skinTone, whyTheseColors, practicalTips...) → AI genera nel
+ *   locale dell'utente (parametro). Evita traduzione automatica scadente.
  */
 
-const CLASSIFICATION_PROMPT = `Sei un esperto analista cromatico specializzato nel sistema "Armocromia" a 12 sotto-stagioni. Stai analizzando la foto ritratto di una persona (uomo o donna) per creare il suo profilo cromatico completo.
+type ClassifyLocale = "it" | "en" | "es";
 
-Analizza attentamente:
-1. **Incarnato**: sottotono caldo (dorato/pesca), freddo (rosato/blu) o neutro? Chiaro, medio o scuro?
-2. **Capelli**: colore naturale? Riflessi caldi o freddi? Intensità?
-3. **Occhi**: colore? Caldi o freddi? Brillantezza?
-4. **Sottotono generale**: caldo (golden/yellow/peach) o freddo (pink/blue/olive) o neutro?
-5. **Contrasto naturale**: differenza tra pelle, capelli e occhi (basso / medio-basso / medio / medio-alto / alto)?
-6. **Valore**: il soggetto è complessivamente chiaro, medio o scuro?
-7. **Intensità**: i colori naturali del soggetto sono morbidi/desaturati, medi o brillanti/saturati?
+const LANGUAGE_NAME: Record<ClassifyLocale, string> = {
+  it: "Italian",
+  en: "English",
+  es: "Spanish",
+};
 
-Classifica in ESATTAMENTE UNA sotto-stagione:
+const NOTES_LABEL: Record<ClassifyLocale, string> = {
+  it: "Note dal soggetto",
+  en: "Subject's notes",
+  es: "Notas del sujeto",
+};
+
+function buildPrompt(locale: ClassifyLocale): string {
+  const lang = LANGUAGE_NAME[locale];
+  return `You are an expert color analyst specialized in the "Armocromia" 12 sub-season system. You are analyzing a portrait photo of a person (man or woman) to build their complete color profile.
+
+Carefully analyze:
+1. **Skin tone**: warm undertone (golden/peach), cool (pink/blue) or neutral? Light, medium or dark?
+2. **Hair**: natural color? Warm or cool highlights? Intensity?
+3. **Eyes**: color? Warm or cool? Brightness?
+4. **Overall undertone**: warm (golden/yellow/peach) or cool (pink/blue/olive) or neutral?
+5. **Natural contrast**: difference between skin, hair and eyes (low / medium-low / medium / medium-high / high)?
+6. **Value**: is the subject overall light, medium or dark?
+7. **Intensity**: are the subject's natural colors soft/muted, medium or bright/saturated?
+
+Classify into EXACTLY ONE sub-season (use these IDs verbatim, do not translate):
 - primavera-chiara, primavera-calda, primavera-brillante
 - estate-chiara, estate-fredda, estate-tenue
 - autunno-tenue, autunno-caldo, autunno-profondo
 - inverno-profondo, inverno-freddo, inverno-brillante
 
-Poi spiega il RAGIONAMENTO: perché quei colori valorizzano e perché altri penalizzano.
-Fornisci consigli pratici e suggerimenti di look.
+Then explain the REASONING: why those colors flatter and why others don't.
+Provide practical tips and look suggestions.
 
-RISPONDI SOLO CON JSON VALIDO (no markdown, no code fences):
+CRITICAL OUTPUT RULES:
+- All free-text fields (skinTone, hairColor, eyeColor, whyTheseColors, whyNotOthers, practicalTips, lookSuggestions) MUST be written in ${lang}.
+- The enum fields (undertone, contrast, value, intensity) MUST be in English using these EXACT lowercase keys (do NOT translate):
+  - undertone: "warm" | "cool" | "neutral"
+  - contrast: "low" | "medium-low" | "medium" | "medium-high" | "high"
+  - value: "light" | "medium" | "dark"
+  - intensity: "soft" | "medium" | "bright"
+- subSeason MUST be one of the kebab-case Italian IDs listed above (kept stable across languages as data keys).
+
+REPLY ONLY WITH VALID JSON (no markdown, no code fences):
 {
   "subSeason": "<sub-season-id>",
   "confidence": <0.0-1.0>,
   "analysis": {
-    "skinTone": "<descrizione dettagliata in italiano dell'incarnato>",
-    "hairColor": "<descrizione dettagliata in italiano dei capelli>",
-    "eyeColor": "<descrizione dettagliata in italiano degli occhi>",
-    "undertone": "<caldo|freddo|neutro>",
-    "contrast": "<basso|medio-basso|medio|medio-alto|alto>",
-    "value": "<chiaro|medio|scuro>",
-    "intensity": "<morbida|media|brillante>"
+    "skinTone": "<detailed description in ${lang}>",
+    "hairColor": "<detailed description in ${lang}>",
+    "eyeColor": "<detailed description in ${lang}>",
+    "undertone": "<warm|cool|neutral>",
+    "contrast": "<low|medium-low|medium|medium-high|high>",
+    "value": "<light|medium|dark>",
+    "intensity": "<soft|medium|bright>"
   },
   "reasoning": {
-    "whyTheseColors": "<2-3 frasi in italiano che spiegano perché i colori della stagione identificata valorizzano il soggetto, riferendosi alle caratteristiche analizzate>",
-    "whyNotOthers": "<2-3 frasi in italiano che spiegano perché i colori opposti (troppo freddi/caldi, troppo brillanti/spenti) penalizzano il soggetto>",
+    "whyTheseColors": "<2-3 sentences in ${lang} explaining why the identified season's colors flatter the subject, referencing the analyzed traits>",
+    "whyNotOthers": "<2-3 sentences in ${lang} explaining why opposite colors (too cool/warm, too bright/muted) penalize the subject>",
     "practicalTips": [
-      "<consiglio pratico 1 in italiano>",
-      "<consiglio pratico 2 in italiano>",
-      "<consiglio pratico 3 in italiano>",
-      "<consiglio pratico 4 in italiano>"
+      "<practical tip 1 in ${lang}>",
+      "<practical tip 2 in ${lang}>",
+      "<practical tip 3 in ${lang}>",
+      "<practical tip 4 in ${lang}>"
     ],
     "lookSuggestions": [
-      { "name": "<nome look>", "colors": "<combinazione colori>", "description": "<breve descrizione>" },
-      { "name": "<nome look>", "colors": "<combinazione colori>", "description": "<breve descrizione>" },
-      { "name": "<nome look>", "colors": "<combinazione colori>", "description": "<breve descrizione>" },
-      { "name": "<nome look>", "colors": "<combinazione colori>", "description": "<breve descrizione>" }
+      { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" },
+      { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" },
+      { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" },
+      { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" }
     ]
   }
 }`;
+}
 
 export async function classifyPhoto(
   photoUrl: string,
-  userNotes?: string
+  userNotes?: string,
+  locale: ClassifyLocale = "it"
 ): Promise<ClassificationResultParsed> {
+  const basePrompt = buildPrompt(locale);
   const prompt = userNotes
-    ? `${CLASSIFICATION_PROMPT}\n\nNote dal soggetto: "${userNotes}"`
-    : CLASSIFICATION_PROMPT;
+    ? `${basePrompt}\n\n${NOTES_LABEL[locale]}: "${userNotes}"`
+    : basePrompt;
 
   const result = await fal.subscribe("fal-ai/any-llm/vision", {
     input: {

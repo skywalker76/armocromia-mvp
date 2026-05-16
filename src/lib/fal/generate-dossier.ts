@@ -18,10 +18,37 @@ function buildDossierPrompt(
   // Extract values
   const a = analysis.analysis;
   const r = analysis.reasoning;
-  const undertoneLabel = a.undertone === "caldo" ? "caldo" : a.undertone === "freddo" ? "freddo" : "neutro";
-  const valueLabel = a.value ?? "medio";
-  const intensityLabel = a.intensity ?? "soft";
-  const contrastLabel = a.contrast ?? "medio";
+  // Why: dopo Step 5 il schema Zod normalizza gli enum verso chiavi EN
+  // stabili (warm/cool/neutral, light/medium/dark, soft/medium/bright,
+  // low/medium-low/medium/medium-high/high). Qui mappiamo verso label IT
+  // perché il prompt-immagine GPT Image è italiano. Localizzare il PNG
+  // generato è un follow-up oltre Step 5.
+  const UNDERTONE_IT: Record<typeof a.undertone, string> = {
+    warm: "caldo",
+    cool: "freddo",
+    neutral: "neutro",
+  };
+  const VALUE_IT: Record<NonNullable<typeof a.value>, string> = {
+    light: "chiaro",
+    medium: "medio",
+    dark: "scuro",
+  };
+  const INTENSITY_IT: Record<NonNullable<typeof a.intensity>, string> = {
+    soft: "morbida",
+    medium: "media",
+    bright: "brillante",
+  };
+  const CONTRAST_IT: Record<typeof a.contrast, string> = {
+    low: "basso",
+    "medium-low": "medio-basso",
+    medium: "medio",
+    "medium-high": "medio-alto",
+    high: "alto",
+  };
+  const undertoneLabel = UNDERTONE_IT[a.undertone];
+  const valueLabel = a.value ? VALUE_IT[a.value] : "medio";
+  const intensityLabel = a.intensity ? INTENSITY_IT[a.intensity] : "media";
+  const contrastLabel = CONTRAST_IT[a.contrast];
   
   const seasonName = palette.displayName.toUpperCase();
   const avoidColors = palette.avoidColors.map((c) => c.name).slice(0, 4).join(", ");

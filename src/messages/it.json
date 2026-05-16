@@ -24,6 +24,14 @@
     "terms": {
       "title": "Termini di Servizio",
       "description": "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità."
+    },
+    "dashboard": {
+      "title": "Dashboard — Armocromia",
+      "description": "Il tuo pannello personale per gestire l'analisi cromatica."
+    },
+    "dossier": {
+      "titleTemplate": "Dossier #{id} — Armocromia",
+      "description": "Il tuo dossier cromatico personalizzato."
     }
   },
   "marketing": {
@@ -216,6 +224,249 @@
       "copyrightSuffix": "Antigravity — Tutti i diritti riservati"
     },
     "mobileCta": "Crea il tuo dossier — €29"
+  },
+  "app": {
+    "errors": {
+      "notAuthenticated": "Devi effettuare il login",
+      "invalidInput": "Input non valido",
+      "aiUnavailable": "Il servizio di analisi AI è momentaneamente non disponibile. Riprova tra qualche minuto.",
+      "rateLimit": "Troppe richieste in corso. Attendi qualche istante e riprova.",
+      "genericPipeline": "Si è verificato un errore durante l'analisi. Riprova.",
+      "deleteGeneric": "Errore durante l'eliminazione",
+      "dossierNotFound": "Dossier non trovato",
+      "notAuthorized": "Non autorizzato",
+      "uploadTooLarge": "La foto deve essere al massimo {mb}MB",
+      "uploadInvalidImage": "Seleziona un'immagine valida"
+    },
+    "uploadValidation": {
+      "selectPhoto": "Seleziona una foto",
+      "emptyFile": "Il file è vuoto",
+      "maxSize": "La foto deve essere al massimo 10MB",
+      "invalidFormat": "Formato non supportato. Usa JPEG, PNG o WebP",
+      "notesTooLong": "Le note possono essere al massimo 500 caratteri"
+    },
+    "nav": {
+      "menuTitle": "Menu",
+      "dashboard": "Dashboard",
+      "home": "Home",
+      "logout": "Esci",
+      "openMenu": "Apri menu",
+      "closeMenu": "Chiudi menu",
+      "defaultUser": "Utente"
+    },
+    "dashboard": {
+      "greetingMorning": "Buongiorno",
+      "greetingAfternoon": "Buon pomeriggio",
+      "greetingEvening": "Buonasera",
+      "countSingular": "Hai 1 dossier completato",
+      "countPlural": "Hai {count} dossier completati",
+      "pendingSuffix": "{count} in elaborazione",
+      "pendingTitleSingular": "Un dossier è in elaborazione…",
+      "pendingTitlePlural": "{count} dossier in elaborazione…",
+      "pendingBody": "L'intelligenza artificiale sta generando il tuo dossier personalizzato. Ricarica la pagina tra qualche istante.",
+      "failedTitleSingular": "Un'analisi non è andata a buon fine",
+      "failedTitlePlural": "{count} analisi non riuscite",
+      "failedBody": "Puoi eliminarle e riprovare caricando una nuova foto.",
+      "failedItemPrefix": "Dossier #",
+      "failedClassifiedAs": "classificato come {season}",
+      "yourDossiersTitle": "I tuoi dossier",
+      "newAnalysisHeadingNew": "Inizia la tua analisi cromatica",
+      "newAnalysisHeadingAgain": "Nuova analisi cromatica",
+      "newAnalysisBodyNew": "Carica una foto ritratto e l'intelligenza artificiale creerà un dossier visivo personalizzato con palette, outfit e consigli su misura per te.",
+      "newAnalysisBodyAgain": "Carica una nuova foto per scoprire altri abbinamenti e palette personalizzate.",
+      "footerBranding": "Armocromia AI · Powered by Antigravity"
+    },
+    "dossierPage": {
+      "breadcrumbDashboard": "Dashboard",
+      "breadcrumbCurrent": "Dossier #{id}",
+      "heroEyebrow": "Armocromia · Il tuo profilo cromatico",
+      "analysisTitle": "La tua analisi",
+      "reasoningTitle": "Perché questa stagione ti valorizza",
+      "reasoningGoodTitle": "Colori che ti valorizzano",
+      "reasoningAvoidTitle": "Colori da evitare",
+      "metalsTitle": "Metalli consigliati",
+      "tipsTitle": "Consigli pratici",
+      "looksTitle": "Idee di look in armonia",
+      "downloadCta": "Scarica il tuo dossier",
+      "footerGenerated": "Generato il {date} · Armocromia AI by Antigravity",
+      "attrUndertone": "Sottotono",
+      "attrValue": "Valore",
+      "attrIntensity": "Intensità",
+      "attrContrast": "Contrasto",
+      "attrSkinTone": "Incarnato",
+      "attrHairColor": "Capelli",
+      "attrEyeColor": "Occhi",
+      "imageAlt": "Dossier {season}"
+    },
+    "palette": {
+      "yourColorsTitle": "I tuoi colori",
+      "yourColorsHint": "Clicca su un colore per copiare il codice hex",
+      "baseTitle": "Colori base",
+      "neutralsTitle": "Neutri",
+      "accentsTitle": "Accenti",
+      "avoidTitle": "Colori da evitare",
+      "avoidHint": "Questi colori possono spegnere il tuo incarnato",
+      "copied": "Copiato!"
+    },
+    "uploader": {
+      "dragHere": "Trascina qui la tua foto",
+      "browseFiles": "sfoglia i file",
+      "orBrowse": "oppure",
+      "maxSize": "Max {mb}MB",
+      "photoReady": "Foto pronta per l'analisi",
+      "changePhoto": "Cambia foto",
+      "previewAlt": "Anteprima foto",
+      "takePhoto": "Scatta una foto",
+      "chooseMode": "Scegli il tipo di analisi",
+      "notesLabel": "Note (opzionale)",
+      "notesPlaceholder": "Es. Ho i capelli tinti, il colore naturale è castano",
+      "analyzing": "Analisi in corso...",
+      "generateCta": "{icon} Genera {mode} ✨",
+      "creatingDossier": "Stiamo creando il tuo dossier personalizzato",
+      "aiAnalyzing": "L'intelligenza artificiale sta analizzando la tua foto…",
+      "errorTitle": "Qualcosa è andato storto",
+      "successTitle": "Analisi completata!",
+      "successBody": "Il tuo dossier cromatico è pronto. Reindirizzamento in corso…"
+    },
+    "stepper": {
+      "photoUploaded": "Foto caricata",
+      "analyzing": "Analisi in corso",
+      "generating": "Generazione dossier",
+      "ready": "Dossier pronto"
+    },
+    "card": {
+      "viewDetail": "Vedi dettaglio →",
+      "openDossier": "Apri dossier",
+      "downloadPng": "Scarica PNG",
+      "timeNow": "Adesso",
+      "timeMinutes": "{n} min fa",
+      "timeHours": "{n}h fa",
+      "timeYesterday": "Ieri",
+      "timeDays": "{n} giorni fa",
+      "timeWeeks": "{n} sett. fa"
+    },
+    "delete": {
+      "deleteAria": "Elimina dossier",
+      "deleteTitle": "Elimina dossier",
+      "deleteText": "Elimina",
+      "deleteFull": "Elimina dossier",
+      "confirmMessage": "Stai per eliminare definitivamente il dossier {label}. Questa azione è irreversibile e tutti i dati associati verranno persi.",
+      "confirmCta": "Elimina definitivamente",
+      "cancelCta": "Annulla",
+      "deleting": "Eliminazione…",
+      "successToast": "Dossier eliminato con successo"
+    },
+    "toast": {
+      "close": "Chiudi"
+    },
+    "confirmModal": {
+      "defaultConfirm": "Conferma",
+      "defaultCancel": "Annulla"
+    },
+    "dossierReady": {
+      "title": "Il tuo dossier è pronto!",
+      "body": "L'IA ha completato l'analisi. Scopri la tua stagione e la tua palette ideale.",
+      "viewCta": "Visualizza Dossier →"
+    },
+    "analysisModes": {
+      "infografica": {
+        "label": "Infografica Completa",
+        "icon": "📊",
+        "description": "Analisi cromatica dettagliata con palette, confronto visivo e consigli pratici"
+      },
+      "lookbook": {
+        "label": "Look Book",
+        "icon": "🎨",
+        "description": "4-6 outfit completi con la tua foto, ciascuno con palette colori abbinata"
+      },
+      "guardaroba": {
+        "label": "Guardaroba Ideale",
+        "icon": "👔",
+        "description": "Griglia di capi essenziali (giacca, camicia, pantaloni, accessori) nei tuoi colori"
+      }
+    }
+  },
+  "ai": {
+    "values": {
+      "undertone": {
+        "warm": "Caldo",
+        "cool": "Freddo",
+        "neutral": "Neutro"
+      },
+      "contrast": {
+        "low": "Basso",
+        "medium-low": "Medio-basso",
+        "medium": "Medio",
+        "medium-high": "Medio-alto",
+        "high": "Alto"
+      },
+      "value": {
+        "light": "Chiaro",
+        "medium": "Medio",
+        "dark": "Scuro"
+      },
+      "intensity": {
+        "soft": "Morbida",
+        "medium": "Media",
+        "bright": "Brillante"
+      }
+    }
+  },
+  "palette": {
+    "primavera-chiara": {
+      "displayName": "Primavera Chiara",
+      "description": "Colori luminosi e delicati, come la luce del mattino primaverile. Tonalità calde e chiare con sottotono giallo-pesca."
+    },
+    "primavera-calda": {
+      "displayName": "Primavera Calda",
+      "description": "Colori ricchi e dorati, come il sole del pomeriggio. Tonalità calde e saturate con sottotono dorato."
+    },
+    "primavera-brillante": {
+      "displayName": "Primavera Brillante",
+      "description": "Colori vividi e ad alto contrasto, come fiori tropicali al sole. Tonalità calde e brillanti, saturazione massima."
+    },
+    "estate-chiara": {
+      "displayName": "Estate Chiara",
+      "description": "Colori pastello e delicati, come un cielo estivo velato. Tonalità fredde e leggere con sottotono rosato."
+    },
+    "estate-fredda": {
+      "displayName": "Estate Fredda",
+      "description": "Colori freddi e raffinati, come il tramonto sul mare. Tonalità blu-rosate con intensità media e sottotono freddo."
+    },
+    "estate-tenue": {
+      "displayName": "Estate Tenue",
+      "description": "Colori morbidi e sfumati, come nebbia estiva. Tonalità desaturate e polverose con sottotono freddo-neutro."
+    },
+    "autunno-tenue": {
+      "displayName": "Autunno Tenue",
+      "description": "Colori morbidi e terrosi, come foglie autunnali nella foschia. Tonalità calde e desaturate, eleganza naturale."
+    },
+    "autunno-caldo": {
+      "displayName": "Autunno Caldo",
+      "description": "Colori ricchi e terrosi, come il foliage al tramonto. Tonalità calde e medie, la quintessenza dell'autunno."
+    },
+    "autunno-profondo": {
+      "displayName": "Autunno Profondo",
+      "description": "Colori intensi e profondi, come un bosco d'autunno al crepuscolo. Tonalità calde, scure e drammatiche."
+    },
+    "inverno-profondo": {
+      "displayName": "Inverno Profondo",
+      "description": "Colori intensi e drammatici, come una notte stellata d'inverno. Alto contrasto, tonalità fredde e profonde."
+    },
+    "inverno-freddo": {
+      "displayName": "Inverno Freddo",
+      "description": "Colori glaciali e raffinati, come ghiaccio e cristalli. Tonalità fredde blu-rosate con alta saturazione."
+    },
+    "inverno-brillante": {
+      "displayName": "Inverno Brillante",
+      "description": "Colori vividi e ad altissimo contrasto, come cristalli di ghiaccio al sole. Colori puri, netti e brillanti."
+    }
+  },
+  "metals": {
+    "oro-giallo": "Oro giallo",
+    "oro-rosa": "Oro rosa",
+    "argento": "Argento",
+    "platino": "Platino"
   },
   "auth": {
     "login": {

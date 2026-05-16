@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import type { SeasonPalette } from "@/lib/armocromia/types";
+import { useTranslations } from "@/lib/i18n/translations-context";
 
 /**
  * Griglia interattiva dei colori della palette.
@@ -15,6 +16,7 @@ interface PaletteGridProps {
 }
 
 export default function PaletteGrid({ palette }: PaletteGridProps) {
+  const { t } = useTranslations("app.palette");
   const [copiedHex, setCopiedHex] = useState<string | null>(null);
 
   const copyHex = useCallback(async (hex: string) => {
@@ -36,14 +38,14 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
     <div className="space-y-8">
       {/* I tuoi colori */}
       <div className="rounded-2xl border border-accent/10 bg-white p-8 shadow-sm">
-        <h2 className="font-serif text-xl text-ink mb-6">I tuoi colori</h2>
-        <p className="text-sm text-muted mb-6">Clicca su un colore per copiare il codice hex</p>
+        <h2 className="font-serif text-xl text-ink mb-6">{t("yourColorsTitle")}</h2>
+        <p className="text-sm text-muted mb-6">{t("yourColorsHint")}</p>
 
         {/* Base */}
         {baseColors.length > 0 && (
           <div className="mb-6">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-light mb-3">
-              Colori base
+              {t("baseTitle")}
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
               {baseColors.map((color) => (
@@ -52,6 +54,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
                   hex={color.hex}
                   name={color.name}
                   isCopied={copiedHex === color.hex}
+                  copiedLabel={t("copied")}
                   onCopy={copyHex}
                 />
               ))}
@@ -63,7 +66,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
         {neutralColors.length > 0 && (
           <div className="mb-6">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-light mb-3">
-              Neutri
+              {t("neutralsTitle")}
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
               {neutralColors.map((color) => (
@@ -72,6 +75,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
                   hex={color.hex}
                   name={color.name}
                   isCopied={copiedHex === color.hex}
+                  copiedLabel={t("copied")}
                   onCopy={copyHex}
                 />
               ))}
@@ -83,7 +87,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
         {accentColors.length > 0 && (
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-light mb-3">
-              Accenti
+              {t("accentsTitle")}
             </h3>
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
               {accentColors.map((color) => (
@@ -92,6 +96,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
                   hex={color.hex}
                   name={color.name}
                   isCopied={copiedHex === color.hex}
+                  copiedLabel={t("copied")}
                   onCopy={copyHex}
                 />
               ))}
@@ -102,9 +107,9 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
 
       {/* Colori da evitare */}
       <div className="rounded-2xl border border-red-100 bg-red-50/30 p-8">
-        <h2 className="font-serif text-xl text-ink mb-4">Colori da evitare</h2>
+        <h2 className="font-serif text-xl text-ink mb-4">{t("avoidTitle")}</h2>
         <p className="text-sm text-muted mb-6">
-          Questi colori possono spegnere il tuo incarnato
+          {t("avoidHint")}
         </p>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
           {palette.avoidColors.map((color) => (
@@ -113,6 +118,7 @@ export default function PaletteGrid({ palette }: PaletteGridProps) {
               hex={color.hex}
               name={color.name}
               isCopied={copiedHex === color.hex}
+              copiedLabel={t("copied")}
               onCopy={copyHex}
               isAvoid
             />
@@ -128,12 +134,14 @@ function ColorSwatch({
   hex,
   name,
   isCopied,
+  copiedLabel,
   onCopy,
   isAvoid = false,
 }: {
   hex: string;
   name: string;
   isCopied: boolean;
+  copiedLabel: string;
   onCopy: (hex: string) => void;
   isAvoid?: boolean;
 }) {
@@ -158,7 +166,7 @@ function ColorSwatch({
         {/* Copied feedback */}
         {isCopied && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/40 animate-in fade-in duration-200">
-            <span className="text-xs font-semibold text-white">Copiato!</span>
+            <span className="text-xs font-semibold text-white">{copiedLabel}</span>
           </div>
         )}
 

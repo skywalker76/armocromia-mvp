@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
+import { getTranslations } from "@/lib/i18n/server";
+import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 
 /** Pipeline GPT Image 2 /edit richiede 60-180s. Massimo consentito su Vercel Pro = 300. */
 export const maxDuration = 300;
@@ -14,9 +16,24 @@ export const maxDuration = 300;
  */
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Dashboard — Armocromia",
-  description: "Il tuo pannello personale per gestire l'analisi cromatica.",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "metadata.dashboard");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
+
+const INTL_LOCALE: Record<Locale, string> = {
+  it: "it-IT",
+  en: "en-US",
+  es: "es-ES",
 };
 
 /**
@@ -26,7 +43,17 @@ export const metadata: Metadata = {
  * e genera signed URLs per le immagini.
  * L'utente è già autenticato grazie al layout guard di (app).
  */
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale: Locale = isValidLocale(lang) ? lang : defaultLocale;
+  const { t } = await getTranslations(locale, "app.dashboard");
+  const { t: tCommon } = await getTranslations(locale, "app");
+  const { t: tPalette } = await getTranslations(locale, "palette");
+
   const supabase = await createClient();
 
   const {
@@ -36,6 +63,7 @@ export default async function DashboardPage() {
   // Safety net: marca come 'failed' i dossier rimasti in processing/generating
   // da più di 5 minuti (sintomo di funzione killata da Vercel timeout).
   // Why: senza questo, l'utente vedrebbe "in elaborazione" all'infinito.
+  // eslint-disable-next-line react-hooks/purity
   const stuckCutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString();
   await supabase
     .from("dossiers")
@@ -77,12 +105,23 @@ export default async function DashboardPage() {
     })
   );
 
-  const displayName = user?.email ? user.email.split("@")[0] : "Utente";
+  const displayName = user?.email ? user.email.split("@")[0] : tCommon("nav.defaultUser");
 
   // Greeting dinamico
   const hour = new Date().getHours();
   const greeting =
-    hour < 12 ? "Buongiorno" : hour < 18 ? "Buon pomeriggio" : "Buonasera";
+    hour < 12
+      ? t("greetingMorning")
+      : hour < 18
+        ? t("greetingAfternoon")
+        : t("greetingEvening");
+
+  const dateFmt = new Intl.DateTimeFormat(INTL_LOCALE[locale], {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <div className="px-6 py-10 sm:py-14">
@@ -98,10 +137,10 @@ export default async function DashboardPage() {
           {hasDossiers && (
             <p className="mt-3 text-muted">
               {completedDossiers.length === 1
-                ? "Hai 1 dossier completato"
-                : `Hai ${completedDossiers.length} dossier completati`}
+                ? t("countSingular")
+                : t("countPlural", { count: completedDossiers.length })}
               {pendingDossiers.length > 0 &&
-                ` · ${pendingDossiers.length} in elaborazione`}
+                ` · ${t("pendingSuffix", { count: pendingDossiers.length })}`}
             </p>
           )}
         </div>
@@ -116,13 +155,12 @@ export default async function DashboardPage() {
               </div>
               <p className="font-medium text-ink">
                 {pendingDossiers.length === 1
-                  ? "Un dossier è in elaborazione…"
-                  : `${pendingDossiers.length} dossier in elaborazione…`}
+                  ? t("pendingTitleSingular")
+                  : t("pendingTitlePlural", { count: pendingDossiers.length })}
               </p>
             </div>
             <p className="mt-2 text-sm text-muted">
-              L&apos;intelligenza artificiale sta generando il tuo dossier
-              personalizzato. Ricarica la pagina tra qualche istante.
+              {t("pendingBody")}
             </p>
           </div>
         )}
@@ -136,24 +174,22 @@ export default async function DashboardPage() {
               </svg>
               <p className="font-medium text-ink">
                 {failedDossiers.length === 1
-                  ? "Un'analisi non è andata a buon fine"
-                  : `${failedDossiers.length} analisi non riuscite`}
+                  ? t("failedTitleSingular")
+                  : t("failedTitlePlural", { count: failedDossiers.length })}
               </p>
             </div>
             <p className="mt-2 text-sm text-muted">
-              Puoi eliminarle e riprovare caricando una nuova foto.
+              {t("failedBody")}
             </p>
 
             {/* Lista dei dossier falliti con bottone elimina */}
             <ul className="mt-5 divide-y divide-error/10 rounded-xl border border-error/10 bg-white/60">
               {failedDossiers.map((d) => {
-                const seasonLabel = d.classified_season?.replace("-", " ");
-                const dateStr = new Date(d.created_at).toLocaleString("it-IT", {
-                  day: "numeric",
-                  month: "short",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
+                const seasonKey = d.classified_season ?? "";
+                const seasonLabel = seasonKey
+                  ? tPalette(`${seasonKey}.displayName`)
+                  : "";
+                const dateStr = dateFmt.format(new Date(d.created_at));
                 return (
                   <li
                     key={d.id}
@@ -161,10 +197,10 @@ export default async function DashboardPage() {
                   >
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-ink">
-                        Dossier #{d.id}
+                        {t("failedItemPrefix")}{d.id}
                         {seasonLabel && (
-                          <span className="ml-2 text-xs font-normal text-muted capitalize">
-                            (classificato come {seasonLabel})
+                          <span className="ml-2 text-xs font-normal text-muted">
+                            ({t("failedClassifiedAs", { season: seasonLabel })})
                           </span>
                         )}
                       </p>
@@ -174,7 +210,7 @@ export default async function DashboardPage() {
                     </div>
                     <DeleteDossierButton
                       dossierId={d.id}
-                      seasonLabel={seasonLabel ?? `#${d.id}`}
+                      seasonLabel={seasonLabel || `#${d.id}`}
                       variant="icon"
                     />
                   </li>
@@ -188,7 +224,7 @@ export default async function DashboardPage() {
         {completedDossiers.length > 0 && (
           <div className="mb-14">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-serif text-xl text-ink">I tuoi dossier</h2>
+              <h2 className="font-serif text-xl text-ink">{t("yourDossiersTitle")}</h2>
               <span className="rounded-full bg-accent/8 px-3 py-1 text-xs font-semibold text-accent">
                 {completedDossiers.length}
               </span>
@@ -212,14 +248,10 @@ export default async function DashboardPage() {
           <div className="mx-auto mb-6 h-1 w-12 rounded-full bg-gradient-to-r from-accent-light to-accent" />
           <div className="mb-6 text-center">
             <h2 className="font-serif text-2xl text-ink">
-              {hasDossiers
-                ? "Nuova analisi cromatica"
-                : "Inizia la tua analisi cromatica"}
+              {hasDossiers ? t("newAnalysisHeadingAgain") : t("newAnalysisHeadingNew")}
             </h2>
             <p className="mt-3 mx-auto max-w-lg text-muted leading-relaxed">
-              {hasDossiers
-                ? "Carica una nuova foto per scoprire altri abbinamenti e palette personalizzate."
-                : "Carica una foto ritratto e l'intelligenza artificiale creerà un dossier visivo personalizzato con palette, outfit e consigli su misura per te."}
+              {hasDossiers ? t("newAnalysisBodyAgain") : t("newAnalysisBodyNew")}
             </p>
           </div>
           <PhotoUploader />
@@ -228,7 +260,7 @@ export default async function DashboardPage() {
         {/* ── Footer branding ── */}
         <div className="mt-14 text-center">
           <p className="text-xs text-muted-light/60 tracking-wide">
-            Armocromia AI · Powered by Antigravity
+            {t("footerBranding")}
           </p>
         </div>
       </div>
