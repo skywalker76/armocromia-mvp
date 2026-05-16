@@ -1,3 +1,447 @@
 {
-  "_comment": "Step 1: placeholder. Filled in Step 4."
+  "metadata": {
+    "root": {
+      "titleDefault": "Armocromia — Los colores que te hacen brillar",
+      "titleTemplate": "%s | Armocromia",
+      "description": "Descubre tu análisis cromático personal con un dossier visual profesional. Paleta de colores personalizada, outfits y maquillaje a medida.",
+      "ogTitle": "Armocromia — Los colores que te hacen brillar",
+      "ogDescription": "Sube una foto y recibe un dossier visual profesional con paleta, outfits y consejos a medida. Resultado en 90 segundos gracias a la IA.",
+      "twitterTitle": "Armocromia — Los colores que te hacen brillar",
+      "twitterDescription": "Análisis cromático con IA en 90 segundos. Paleta, outfits y consejos a medida para tu estación.",
+      "ogLocale": "es_ES"
+    },
+    "marketing": {
+      "description": "Descubre tu análisis cromático personal con un dossier visual profesional. Paleta de colores, sugerencias de outfit y consejos a medida generados por inteligencia artificial."
+    },
+    "login": {
+      "title": "Acceder",
+      "description": "Accede a tu dossier de Armocromia. Login sin contraseña mediante código OTP por email."
+    },
+    "privacy": {
+      "title": "Política de Privacidad",
+      "description": "Aviso de privacidad de Armocromia: tratamiento de fotos y datos personales, base jurídica, retención 24h, derechos GDPR."
+    },
+    "terms": {
+      "title": "Términos del Servicio",
+      "description": "Términos y condiciones de Armocromia: objeto del servicio, precio €29, derecho de desistimiento 14 días, limitaciones de responsabilidad."
+    }
+  },
+  "marketing": {
+    "hero": {
+      "eyebrow": "Análisis cromático personalizado",
+      "titleBefore": "Descubre los colores que",
+      "titleHighlight": "te realzan",
+      "lead": "Sube una foto y recibe un dossier visual profesional: paleta de colores a medida, combinaciones de outfit y consejos cromáticos creados especialmente para ti por nuestra tecnología avanzada.",
+      "cta": "Crea tu dossier",
+      "priceAmount": "€29",
+      "priceNote": "pago único · Satisfacción o reembolso en 14 días",
+      "socialProofBold": "Cientos de dossiers",
+      "socialProofRest": "generados",
+      "badgeResult": "Otoño Cálido",
+      "badgeStatus": "Análisis completado",
+      "heroImageAlt": "Ejemplo de dossier cromático — estación Otoño con paleta de colores personalizada"
+    },
+    "trustBar": {
+      "items": [
+        { "icon": "🎨", "text": "12 sub-estaciones cromáticas" },
+        { "icon": "✨", "text": "Visión IA avanzada" },
+        { "icon": "⚡", "text": "Resultado en ~90 segundos" },
+        { "icon": "🔒", "text": "Foto eliminada en 24h" },
+        { "icon": "👤", "text": "Para mujer y hombre" },
+        { "icon": "💎", "text": "Pago único, tuyo para siempre" }
+      ]
+    },
+    "showcase": {
+      "eyebrow": "Lo que recibirás",
+      "title": "Un dossier que habla el lenguaje de los colores",
+      "lead": "Cada dossier es único: la IA analiza tu piel, tu cabello y tus ojos para crear una guía cromática hecha a medida para ti.",
+      "paletteLabel": "Paleta de colores",
+      "includesLabel": "El dossier incluye",
+      "swipeHint": "Desliza para navegar",
+      "cta": "Descubre tu estación",
+      "imageAltPrefix": "Dossier de ejemplo",
+      "dotAriaPrefix": "Ir a la estación",
+      "demos": {
+        "spring": {
+          "name": "Primavera",
+          "subtitle": "Luminosidad y frescura",
+          "features": [
+            "Paleta fresca y vibrante",
+            "Oro amarillo y rosa",
+            "Outfits en coral y melocotón"
+          ]
+        },
+        "summer": {
+          "name": "Verano",
+          "subtitle": "Delicada, fría y apagada",
+          "features": [
+            "Paleta suave y empolvada",
+            "Plata y oro blanco",
+            "Outfits en lavanda y gris perla"
+          ]
+        },
+        "autumn": {
+          "name": "Otoño",
+          "subtitle": "Tonos cálidos y envolventes",
+          "features": [
+            "Paleta tierra y especiada",
+            "Oros cálidos y bronce",
+            "Outfits en coñac y camel"
+          ]
+        },
+        "winter": {
+          "name": "Invierno",
+          "subtitle": "Contrastes marcados y definidos",
+          "features": [
+            "Paleta fría y brillante",
+            "Plata y platino",
+            "Outfits en azul y negro puro"
+          ]
+        }
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "Cómo funciona",
+      "title": "Tres pasos hacia tus colores",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Sube una foto",
+          "description": "Hazte un selfie con luz natural, sin filtros. La IA necesita ver los colores reales de tu piel, cabello y ojos.",
+          "tip": "Luz natural, fondo neutro"
+        },
+        {
+          "number": "02",
+          "title": "La IA analiza tus colores",
+          "description": "En unos 90 segundos, nuestra tecnología de visión avanzada examina el subtono, el valor, la intensidad y el contraste para clasificarte en una de las 12 sub-estaciones cromáticas.",
+          "tip": "Análisis automático, sin esperas"
+        },
+        {
+          "number": "03",
+          "title": "Recibe tu dossier",
+          "description": "Un dossier visual profesional con paleta personalizada, combinaciones de outfit para cada ocasión, consejos de maquillaje y guía de los metales ideales.",
+          "tip": "Descargable en alta calidad"
+        }
+      ]
+    },
+    "seasons": {
+      "eyebrow": "Las 4 estaciones",
+      "title": "¿Qué estación eres?",
+      "lead": "Cada persona tiene una paleta natural única. Descubre tu estación cromática y transforma la forma en que eliges los colores.",
+      "undertoneLabel": "Subtono",
+      "metalsLabel": "Metales",
+      "discoverPrefix": "Descubre si eres",
+      "swipeHint": "Desliza para explorar",
+      "list": {
+        "spring": {
+          "name": "Primavera",
+          "tagline": "Luminosa, cálida y vivaz",
+          "undertone": "Cálido dorado",
+          "metals": "Oro amarillo, Oro rosa"
+        },
+        "summer": {
+          "name": "Verano",
+          "tagline": "Delicada, fría y apagada",
+          "undertone": "Frío rosado",
+          "metals": "Plata, Oro blanco"
+        },
+        "autumn": {
+          "name": "Otoño",
+          "tagline": "Rica, cálida y profunda",
+          "undertone": "Cálido dorado",
+          "metals": "Oro amarillo, Bronce, Cobre"
+        },
+        "winter": {
+          "name": "Invierno",
+          "tagline": "Marcada, fría y contrastada",
+          "undertone": "Frío azulado",
+          "metals": "Plata, Platino"
+        }
+      }
+    },
+    "valueProp": {
+      "feature1": {
+        "title": "Tu rostro, tus colores",
+        "description": "La IA no se limita a clasificarte en una categoría. Analiza en profundidad el subtono, el valor, el contraste y la intensidad de tu piel para identificar la sub-estación exacta entre las 12 disponibles.",
+        "bullets": [
+          "Análisis de piel, cabello y ojos",
+          "Clasificación en 12 sub-estaciones",
+          "Explicación detallada del porqué"
+        ],
+        "resultLabel": "Resultado",
+        "resultValue": "Otoño Cálido",
+        "attrs": [
+          { "label": "Subtono", "value": "Cálido" },
+          { "label": "Valor", "value": "Medio-oscuro" },
+          { "label": "Intensidad", "value": "Media" },
+          { "label": "Contraste", "value": "Bajo" }
+        ]
+      },
+      "feature2": {
+        "title": "Outfits en armonía",
+        "description": "No solo una lista de colores: recibes combinaciones concretas para cada ocasión. Desde el look de oficina al fin de semana, cada sugerencia está pensada para tu paleta personal.",
+        "bullets": [
+          "6 ideas de look para distintas ocasiones",
+          "Combinaciones de colores específicas",
+          "Consejos prácticos para el armario"
+        ],
+        "looks": [
+          { "name": "Business", "colors": "Navy + Crema" },
+          { "name": "Casual", "colors": "Terracota + Arena" },
+          { "name": "Noche", "colors": "Burdeos + Oro" },
+          { "name": "Fin de semana", "colors": "Verde oliva + Beige" },
+          { "name": "Smart", "colors": "Coñac + Marfil" },
+          { "name": "Sport", "colors": "Óxido + Piedra" }
+        ]
+      }
+    },
+    "finalCta": {
+      "eyebrow": "¿Lista para descubrir tus colores?",
+      "title": "Tu dossier cromático te espera",
+      "lead": "Una foto. Dos minutos. Un dossier profesional que cambiará la forma en que eliges los colores, para siempre.",
+      "cta": "Descubre tu estación",
+      "subnote": "Sin suscripción · Pago único · Satisfacción o reembolso",
+      "trustIndicators": [
+        "Foto eliminada en 24 horas",
+        "Resultado en 90 segundos",
+        "Descarga inmediata"
+      ]
+    },
+    "footer": {
+      "brand": "Armocromia",
+      "tagline": "Powered by Antigravity",
+      "privacy": "Política de Privacidad",
+      "terms": "Términos del Servicio",
+      "contact": "Contacto",
+      "copyrightSuffix": "Antigravity — Todos los derechos reservados"
+    },
+    "mobileCta": "Crea tu dossier — €29"
+  },
+  "auth": {
+    "login": {
+      "brandLink": "Armocromia",
+      "successTitle": "¡Acceso realizado!",
+      "successMessage": "Redirigiendo al panel…",
+      "otpTitle": "Introduce el código",
+      "otpLeadBefore": "Hemos enviado un código de {length} dígitos a",
+      "otpDigitLabel": "Dígito {index} de {length}",
+      "otpVerifying": "Verificando…",
+      "otpInvalidCode": "Código no válido.",
+      "otpNetworkError": "Error de red. Inténtalo de nuevo.",
+      "resendIn": "Reenviar código en {seconds}s",
+      "resendCta": "¿No has recibido el código? Reenviar",
+      "changeEmail": "← Cambiar email",
+      "emailTitle": "Accede a tu dossier",
+      "emailLeadLine1": "Introduce tu email y recibirás un código de acceso.",
+      "emailLeadLine2": "Sin contraseñas que recordar.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "submitSending": "Enviando…",
+      "submitCta": "Enviar código de acceso",
+      "footerLine": "¿Aún no tienes una cuenta?",
+      "footerNote": "Se creará automáticamente al primer acceso.",
+      "genericError": "Algo ha salido mal.",
+      "networkError": "Error de red. Inténtalo de nuevo en unos segundos."
+    }
+  },
+  "legal": {
+    "common": {
+      "brand": "Armocromia",
+      "backHome": "← Volver al inicio",
+      "footerBrand": "Armocromia",
+      "footerTagline": "Powered by Antigravity",
+      "footerPrivacy": "Política de Privacidad",
+      "footerTerms": "Términos del Servicio",
+      "footerContact": "Contacto",
+      "lastUpdatedLabel": "Última actualización:",
+      "lastUpdated": "15 de mayo de 2026"
+    },
+    "privacy": {
+      "metaTitle": "Política de Privacidad",
+      "metaDescription": "Aviso de privacidad de Armocromia: tratamiento de fotos y datos personales, base jurídica, retención 24h, derechos GDPR.",
+      "eyebrow": "Aviso",
+      "title": "Política de Privacidad",
+      "intro": [
+        "El presente aviso describe cómo Armocromia (en adelante también &quot;nosotros&quot; o &quot;el Servicio&quot;) trata los datos personales de los usuarios que acceden al sitio <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">armocromia-mvp-nine.vercel.app</a> y utilizan el servicio de análisis cromático con IA.",
+        "El tratamiento se realiza de conformidad con el <strong>Reglamento (UE) 2016/679 (GDPR)</strong>, el Decreto Legislativo italiano 196/2003 modificado por el Decreto 101/2018 y — para los usuarios residentes fuera de la Unión Europea — con la normativa aplicable (CCPA para California, UK GDPR, LGPD en Brasil, PIPEDA en Canadá)."
+      ],
+      "sec1": {
+        "heading": "1. Responsable del tratamiento",
+        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>",
+        "p2": "Para cualquier solicitud relativa al tratamiento de tus datos personales, escríbenos a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>."
+      },
+      "sec2": {
+        "heading": "2. Categorías de datos recogidos",
+        "intro": "Tratamos las siguientes categorías de datos personales:",
+        "items": [
+          "<strong>Dirección de email</strong>: necesaria para autenticarte mediante código OTP y para enviarte comunicaciones de servicio (recibo de compra, notificaciones de dossier listo).",
+          "<strong>Fotografía del rostro</strong>: la imagen que subes para el análisis cromático constituye un <strong>dato biométrico</strong> de acuerdo con el art. 9 GDPR (categoría especial). Es procesada por la inteligencia artificial para extraer información sobre piel, cabello y ojos, y se <strong>elimina automáticamente en un plazo de 24 horas</strong> desde la subida.",
+          "<strong>Resultado del análisis (dossier)</strong>: la clasificación cromática, la paleta y los consejos generados. Se conservan para permitirte consultar y descargar tu dossier mientras tu cuenta esté activa.",
+          "<strong>Datos de pago</strong>: gestionados directamente por Stripe (véase § 6). No almacenamos números de tarjeta ni credenciales bancarias — recibimos únicamente el ID de transacción y el resultado.",
+          "<strong>Datos técnicos</strong>: dirección IP, user agent, marcas de tiempo de las solicitudes, cookies de sesión necesarias para el funcionamiento del login. No utilizamos cookies de perfilado ni cookies de terceros para publicidad."
+        ]
+      },
+      "sec3": {
+        "heading": "3. Finalidades y base jurídica",
+        "tableHeadPurpose": "Finalidad",
+        "tableHeadBasis": "Base jurídica",
+        "rows": [
+          { "purpose": "Prestación del servicio (análisis de la foto, generación del dossier)", "basis": "Ejecución de un contrato (art. 6.1.b GDPR) <strong>+ consentimiento explícito</strong> para los datos biométricos (art. 9.2.a GDPR)" },
+          { "purpose": "Autenticación y gestión de la cuenta", "basis": "Ejecución de un contrato (art. 6.1.b)" },
+          { "purpose": "Facturación y cumplimiento fiscal", "basis": "Obligación legal (art. 6.1.c)" },
+          { "purpose": "Seguridad, antifraude, logs técnicos", "basis": "Interés legítimo (art. 6.1.f) — prevención de abusos" }
+        ],
+        "after": "El consentimiento para el tratamiento de tu foto como dato biométrico se recoge en el momento de la subida, antes del envío a la IA. Puedes <strong>retirar el consentimiento en cualquier momento</strong> eliminando tu cuenta o solicitando la eliminación por email."
+      },
+      "sec4": {
+        "heading": "4. Plazo de conservación",
+        "items": [
+          "<strong>Fotografía original</strong>: eliminada automáticamente en un plazo de 24 horas desde la subida mediante un proceso programado. No se conserva copia de seguridad más allá de este plazo.",
+          "<strong>Dossier generado y paleta</strong>: conservados mientras tu cuenta esté activa. Puedes eliminarlos individualmente desde el panel en cualquier momento.",
+          "<strong>Cuenta y email</strong>: eliminados a tu solicitud o tras 24 meses de inactividad (con aviso por email 30 días antes).",
+          "<strong>Datos fiscales</strong>: conservados durante 10 años según obligación legal italiana (art. 2220 Código Civil).",
+          "<strong>Logs de seguridad</strong>: conservados durante 90 días y luego eliminados."
+        ]
+      },
+      "sec5": {
+        "heading": "5. Métodos de tratamiento y seguridad",
+        "p1": "Los datos se tratan con herramientas informáticas y se custodian en servidores protegidos, con medidas técnicas y organizativas adecuadas para garantizar la confidencialidad, integridad y disponibilidad (cifrado en tránsito mediante TLS 1.2+, cifrado en reposo del almacenamiento de archivos, autenticación sin contraseña con códigos OTP temporales, Row-Level Security a nivel de base de datos, headers HTTP de seguridad). No se realiza ningún tratamiento manual ni decisión automatizada que produzca efectos jurídicos significativos sobre el usuario (el análisis cromático tiene naturaleza puramente informativa)."
+      },
+      "sec6": {
+        "heading": "6. Destinatarios de los datos (subencargados)",
+        "intro": "Para prestar el servicio nos apoyamos en los siguientes proveedores (subencargados del tratamiento según el art. 28 GDPR):",
+        "tableHeadProvider": "Proveedor",
+        "tableHeadRole": "Rol",
+        "tableHeadLocation": "Sede",
+        "rows": [
+          { "provider": "Supabase", "role": "Base de datos, autenticación, almacenamiento de fotos/dossiers", "location": "UE (Fráncfort)" },
+          { "provider": "fal.ai", "role": "Análisis IA de la imagen (Google Gemini Vision)", "location": "EE.UU. — SCC adoptadas" },
+          { "provider": "Vercel", "role": "Hosting de la aplicación web", "location": "EE.UU. — SCC adoptadas" },
+          { "provider": "Stripe", "role": "Procesamiento de pagos, facturación, Stripe Tax", "location": "EE.UU. / Irlanda" }
+        ],
+        "after": "Las transferencias fuera de la UE se realizan sobre la base de las <strong>Cláusulas Contractuales Tipo (SCC)</strong> aprobadas por la Comisión Europea mediante Decisión 2021/914. fal.ai y Vercel han firmado Acuerdos de Tratamiento de Datos que prohíben el uso de los datos para entrenar modelos de IA."
+      },
+      "sec7": {
+        "heading": "7. Tus derechos",
+        "intro": "Como interesado, tienes derecho a:",
+        "items": [
+          "<strong>Acceso</strong> (art. 15 GDPR): obtener una copia de tus datos.",
+          "<strong>Rectificación</strong> (art. 16): corregir datos inexactos.",
+          "<strong>Supresión / derecho al olvido</strong> (art. 17): eliminar la cuenta y todos los datos asociados.",
+          "<strong>Limitación</strong> (art. 18): solicitar la suspensión del tratamiento.",
+          "<strong>Portabilidad</strong> (art. 20): recibir tus datos en un formato estructurado (JSON).",
+          "<strong>Oposición</strong> (art. 21): oponerte a tratamientos basados en el interés legítimo.",
+          "<strong>Retirada del consentimiento</strong> en cualquier momento, sin perjuicio de la licitud de los tratamientos previos.",
+          "<strong>Reclamación</strong> ante la Agencia Española de Protección de Datos (<a href=\"https://www.aepd.es\" target=\"_blank\" rel=\"noopener\" class=\"text-accent hover:underline\">aepd.es</a>) o la autoridad de tu Estado de residencia."
+        ],
+        "after": "Para ejercer tus derechos escríbenos a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Responderemos en un plazo de 30 días."
+      },
+      "sec8": {
+        "heading": "8. Residentes en California (CCPA / CPRA)",
+        "p1": "Si resides en California, tienes derechos adicionales en virtud de la California Consumer Privacy Act: conocer las categorías de información personal recogidas, solicitar su eliminación, oponerte a la venta o el intercambio (puntualizamos: <strong>no vendemos ni compartimos tus datos personales</strong>)."
+      },
+      "sec9": {
+        "heading": "9. Menores",
+        "p1": "El Servicio está destinado a usuarios de al menos 16 años. No recogemos intencionadamente datos de menores; si tenemos conocimiento de una cuenta atribuible a un menor, la eliminamos de inmediato."
+      },
+      "sec10": {
+        "heading": "10. Modificaciones del presente aviso",
+        "p1": "Podremos actualizar este aviso en caso de cambios técnicos, normativos u organizativos. Las modificaciones sustanciales se comunicarán por email con al menos 30 días de antelación. La fecha de la última actualización se indica al inicio."
+      },
+      "callout": {
+        "lead": "<strong class=\"text-ink\">¿Tienes preguntas?</strong> Escríbenos a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Te responderemos en un plazo de 5 días laborables."
+      }
+    },
+    "terms": {
+      "metaTitle": "Términos del Servicio",
+      "metaDescription": "Términos y condiciones de Armocromia: objeto del servicio, precio €29, derecho de desistimiento 14 días, limitaciones de responsabilidad.",
+      "eyebrow": "Condiciones de uso",
+      "title": "Términos del Servicio",
+      "intro": "Los presentes Términos del Servicio (en adelante los &quot;Términos&quot;) regulan el acceso y el uso del servicio Armocromia (en adelante el &quot;Servicio&quot;) prestado por Antigravity. Al utilizar el Servicio aceptas íntegramente estos Términos. Si no los aceptas, no utilices el Servicio.",
+      "sec1": {
+        "heading": "1. Proveedor",
+        "p1": "El Servicio es prestado por <strong>Antigravity</strong>, contactable en la dirección de email <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>. Para solicitudes de soporte y reembolsos: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
+      },
+      "sec2": {
+        "heading": "2. Objeto del Servicio",
+        "p1": "Armocromia es un servicio digital de análisis cromático personalizado. El usuario sube una fotografía propia y recibe un <strong>dossier visual</strong> generado por inteligencia artificial que incluye: clasificación en una de las 12 sub-estaciones cromáticas, paleta de colores recomendada, sugerencias de outfit y consejos prácticos.",
+        "p2": "El dossier tiene naturaleza <strong>informativa y de entretenimiento</strong> y <strong>no constituye asesoramiento profesional de imagen, estilismo, moda ni médico</strong>. La inteligencia artificial puede cometer errores: los resultados deben valorarse con espíritu crítico."
+      },
+      "sec3": {
+        "heading": "3. Requisitos y capacidad para contratar",
+        "p1": "Para utilizar el Servicio debes tener <strong>al menos 16 años</strong> y poseer la capacidad legal para celebrar contratos vinculantes en tu país de residencia. Estás obligado a facilitar una dirección de email válida y a mantener confidenciales las credenciales de acceso."
+      },
+      "sec4": {
+        "heading": "4. Cuenta y responsabilidad de las credenciales",
+        "p1": "El acceso se realiza mediante dirección de email y código OTP de un solo uso enviado por email (autenticación sin contraseña). Eres responsable de la seguridad de tu buzón de email y de toda actividad realizada con tu cuenta. En caso de sospecha de acceso no autorizado, contáctanos de inmediato."
+      },
+      "sec5": {
+        "heading": "5. Precio, IVA y pago",
+        "items": [
+          "El precio del Servicio es de <strong>{price}</strong>, pago único por dossier generado. Sin suscripción, sin cargos recurrentes.",
+          "El precio incluye el IVA cuando sea aplicable. Para los usuarios residentes en la Unión Europea, el IVA se aplica al tipo del país de residencia mediante el régimen <strong>OSS (One-Stop-Shop)</strong>. Para los usuarios de EE.UU., cuando proceda, se aplica el sales tax del estado de residencia.",
+          "El pago es gestionado por <strong>Stripe Payments Europe Ltd</strong> mediante checkout seguro. Aceptamos las principales tarjetas de crédito/débito. No almacenamos números de tarjeta en nuestros servidores.",
+          "El recibo de la compra se envía por email y puede descargarse desde tu cuenta en cualquier momento."
+        ]
+      },
+      "sec6": {
+        "heading": "6. Derecho de desistimiento — Reembolso en {refundDays} días",
+        "highlight": "<strong>Tienes derecho a un reembolso íntegro en un plazo de {refundDays} días desde la fecha de compra, sin necesidad de aportar ningún motivo.</strong>",
+        "p1": "Para ejercer el derecho de desistimiento basta con escribir a <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a> indicando la dirección de email asociada a la compra. El reembolso se acreditará en el método de pago original en un plazo de 5 días laborables desde la recepción de la solicitud.",
+        "p2": "Conforme al art. 59 del Código del Consumo italiano (Decreto Legislativo 206/2005) y a la Directiva UE 2011/83, el proveedor de un servicio digital podría excluir el derecho de desistimiento una vez que el servicio ha sido ejecutado. <strong>Nosotros renunciamos a invocar esa excepción</strong>: el reembolso en un plazo de {refundDays} días está garantizado incluso si ya has visualizado y descargado el dossier."
+      },
+      "sec7": {
+        "heading": "7. Propiedad intelectual",
+        "items": [
+          "El <strong>dossier generado es de tu propiedad</strong> para uso personal. Puedes descargarlo, imprimirlo y compartirlo con amigos y profesionales del sector de la moda.",
+          "<strong>No puedes</strong> revender, sublicenciar ni utilizar el dossier con fines comerciales (p. ej. consultorías a terceros remuneradas) sin nuestro consentimiento por escrito.",
+          "El software, el diseño del sitio, los prompts de IA, los gráficos de las infografías y las plantillas de salida permanecen como propiedad exclusiva nuestra.",
+          "Conservas la plena titularidad de la fotografía subida. Concedes a Antigravity una licencia limitada, gratuita y temporal (máximo 24 horas) con el único fin de procesarla con la IA y generar el dossier. No utilizamos tu foto para entrenar modelos de IA ni la vendemos a terceros."
+        ]
+      },
+      "sec8": {
+        "heading": "8. Comportamiento del usuario",
+        "intro": "Está prohibido:",
+        "items": [
+          "subir fotografías de terceros sin su consentimiento explícito (puede constituir vulneración de la privacidad y de la normativa biométrica);",
+          "subir contenidos ilegales, obscenos, violentos, discriminatorios o que vulneren derechos de terceros;",
+          "intentar vulnerar la seguridad del Servicio, acceder a datos de otros usuarios, realizar ingeniería inversa o scraping automatizado;",
+          "utilizar el Servicio con fines ilícitos o fraudulentos, incluido el chargeback abusivo tras haber recibido y utilizado el dossier."
+        ],
+        "after": "Nos reservamos el derecho de suspender o cerrar las cuentas que infrinjan estos Términos, sin perjuicio del derecho al reembolso del Servicio aún no prestado."
+      },
+      "sec9": {
+        "heading": "9. Limitaciones de responsabilidad",
+        "items": [
+          "El Servicio se presta &quot;<strong>tal cual</strong>&quot; (&quot;as-is&quot;). Aunque nos esforzamos por garantizar calidad y continuidad, no garantizamos que el Servicio sea ininterrumpido o esté libre de errores.",
+          "El análisis cromático generado por la IA es subjetivo y probabilístico. No garantizamos que la clasificación coincida con análisis realizados por consultores de imagen profesionales.",
+          "Nuestra responsabilidad total frente a ti, por cualquier causa, está limitada al importe efectivamente abonado por el Servicio en los últimos 12 meses.",
+          "En la medida permitida por la ley, excluimos la responsabilidad por daños indirectos, lucro cesante, pérdida de datos o interrupción de la actividad derivados del uso del Servicio.",
+          "Nada en estos Términos excluye o limita la responsabilidad prevista por la normativa imperativa aplicable en protección del consumidor (p. ej. daños personales, dolo o culpa grave)."
+        ]
+      },
+      "sec10": {
+        "heading": "10. Fuerza mayor",
+        "p1": "No seremos responsables de retrasos o falta de ejecución del Servicio causados por eventos fuera de nuestro control razonable, incluyendo pero no limitándose a: caídas de los proveedores cloud (Vercel, Supabase), suspensión de las API de IA de terceros (fal.ai, Google Gemini), ataques informáticos, catástrofes naturales, actos gubernamentales."
+      },
+      "sec11": {
+        "heading": "11. Modificaciones de los Términos",
+        "p1": "Podremos actualizar los presentes Términos por motivos técnicos, normativos u organizativos. Las modificaciones sustanciales se comunicarán por email con al menos 30 días de antelación. El uso continuado del Servicio tras la entrada en vigor de las modificaciones constituye aceptación de las mismas. Si no aceptas las nuevas condiciones, puedes cancelar la cuenta en cualquier momento."
+      },
+      "sec12": {
+        "heading": "12. Ley aplicable y jurisdicción",
+        "p1": "Los presentes Términos se rigen por la <strong>ley italiana</strong>.",
+        "p2": "Para las controversias con consumidores residentes en la Unión Europea, se aplican de forma inderogable las normas de protección del consumidor del país de residencia, cuando sean más favorables. El fuero competente es el del consumidor.",
+        "p3": "Para las controversias con usuarios no consumidores (p. ej. compras empresariales), el fuero exclusivo es el de Roma, Italia.",
+        "p4": "La Comisión Europea pone a disposición una plataforma de <strong>resolución de litigios en línea (ODR)</strong>: <a href=\"https://ec.europa.eu/consumers/odr\" target=\"_blank\" rel=\"noopener\" class=\"text-accent hover:underline\">ec.europa.eu/consumers/odr</a>."
+      },
+      "sec13": {
+        "heading": "13. Disposiciones finales",
+        "p1": "Si alguna cláusula de los presentes Términos fuera declarada nula o ineficaz, las cláusulas restantes seguirán siendo plenamente válidas y eficaces. La tolerancia de una parte respecto al incumplimiento de la otra no constituye renuncia a los derechos previstos en los presentes Términos."
+      },
+      "callout": {
+        "lead": "<strong class=\"text-ink\">¿Necesitas ayuda o un reembolso?</strong> Escríbenos a <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>. Respuesta en 24 horas laborables."
+      }
+    }
+  }
 }
