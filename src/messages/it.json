@@ -1,3 +1,193 @@
 {
-  "_comment": "Step 1: placeholder vuoto. Step 2 popola le chiavi estratte dall'UI."
+  "marketing": {
+    "hero": {
+      "eyebrow": "Analisi cromatica personalizzata",
+      "titleBefore": "Scopri i colori che",
+      "titleHighlight": "ti valorizzano",
+      "lead": "Carica una tua foto e ricevi un dossier visivo professionale: palette colori su misura, abbinamenti outfit e consigli cromatici creati apposta per te dalla nostra tecnologia avanzata.",
+      "cta": "Crea il tuo dossier",
+      "priceAmount": "€29",
+      "priceNote": "una tantum · Soddisfatti o rimborsati 14 giorni",
+      "socialProofBold": "Centinaia di dossier",
+      "socialProofRest": "generati",
+      "badgeResult": "Autunno Caldo",
+      "badgeStatus": "Analisi completata",
+      "heroImageAlt": "Esempio di dossier cromatico — stagione Autunno con palette colori personalizzata"
+    },
+    "trustBar": {
+      "items": [
+        { "icon": "🎨", "text": "12 sotto-stagioni cromatiche" },
+        { "icon": "✨", "text": "Visione AI avanzata" },
+        { "icon": "⚡", "text": "Risultato in ~90 secondi" },
+        { "icon": "🔒", "text": "Foto cancellata in 24h" },
+        { "icon": "👤", "text": "Per uomo e donna" },
+        { "icon": "💎", "text": "Pagamento unico, tuo per sempre" }
+      ]
+    },
+    "showcase": {
+      "eyebrow": "Cosa riceverai",
+      "title": "Un dossier che parla il linguaggio dei colori",
+      "lead": "Ogni dossier è unico: l'AI analizza il tuo incarnato, i tuoi capelli e i tuoi occhi per creare una guida cromatica su misura.",
+      "paletteLabel": "Palette colori",
+      "includesLabel": "Il dossier include",
+      "swipeHint": "Scorri per navigare",
+      "cta": "Scopri la tua stagione",
+      "imageAltPrefix": "Dossier di esempio",
+      "dotAriaPrefix": "Vai alla stagione",
+      "demos": {
+        "spring": {
+          "name": "Primavera",
+          "subtitle": "Luminosità e freschezza",
+          "features": [
+            "Palette fresca e vivace",
+            "Oro giallo e rosa",
+            "Outfit in corallo e pesca"
+          ]
+        },
+        "summer": {
+          "name": "Estate",
+          "subtitle": "Delicata, fredda e smorzata",
+          "features": [
+            "Palette soft e polverosa",
+            "Argento e oro bianco",
+            "Outfit in lavanda e grigio perla"
+          ]
+        },
+        "autumn": {
+          "name": "Autunno",
+          "subtitle": "Tonalità calde e avvolgenti",
+          "features": [
+            "Palette terra e speziata",
+            "Ori caldi e bronzo",
+            "Outfit in cognac e cammello"
+          ]
+        },
+        "winter": {
+          "name": "Inverno",
+          "subtitle": "Contrasti netti e definiti",
+          "features": [
+            "Palette fredda e brillante",
+            "Argento e platino",
+            "Outfit in blu e nero puro"
+          ]
+        }
+      }
+    },
+    "howItWorks": {
+      "eyebrow": "Come funziona",
+      "title": "Tre passi verso i tuoi colori",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Carica una foto",
+          "description": "Scatta un selfie con luce naturale, senza filtri. L'AI ha bisogno di vedere i colori reali del tuo incarnato, capelli e occhi.",
+          "tip": "Luce naturale, sfondo neutro"
+        },
+        {
+          "number": "02",
+          "title": "L'AI analizza i tuoi colori",
+          "description": "In circa 90 secondi, la nostra tecnologia di visione avanzata analizza sottotono, valore, intensità e contrasto per classificarti in una delle 12 sotto-stagioni cromatiche.",
+          "tip": "Analisi automatica, senza attese"
+        },
+        {
+          "number": "03",
+          "title": "Ricevi il tuo dossier",
+          "description": "Un dossier visivo professionale con palette personalizzata, abbinamenti outfit per ogni occasione, consigli makeup e guida ai metalli ideali.",
+          "tip": "Scaricabile in alta qualità"
+        }
+      ]
+    },
+    "seasons": {
+      "eyebrow": "Le 4 stagioni",
+      "title": "Quale stagione sei?",
+      "lead": "Ogni persona ha una palette naturale unica. Scopri la tua stagione cromatica e trasforma il modo in cui scegli i colori.",
+      "undertoneLabel": "Sottotono",
+      "metalsLabel": "Metalli",
+      "discoverPrefix": "Scopri se sei",
+      "swipeHint": "Scorri per scoprire",
+      "list": {
+        "spring": {
+          "name": "Primavera",
+          "tagline": "Luminosa, calda e vivace",
+          "undertone": "Caldo dorato",
+          "metals": "Oro giallo, Oro rosa"
+        },
+        "summer": {
+          "name": "Estate",
+          "tagline": "Delicata, fredda e smorzata",
+          "undertone": "Freddo rosato",
+          "metals": "Argento, Oro bianco"
+        },
+        "autumn": {
+          "name": "Autunno",
+          "tagline": "Ricco, caldo e profondo",
+          "undertone": "Caldo dorato",
+          "metals": "Oro giallo, Bronzo, Rame"
+        },
+        "winter": {
+          "name": "Inverno",
+          "tagline": "Deciso, freddo e contrastato",
+          "undertone": "Freddo bluastro",
+          "metals": "Argento, Platino"
+        }
+      }
+    },
+    "valueProp": {
+      "feature1": {
+        "title": "Il tuo volto, i tuoi colori",
+        "description": "L'AI non si limita a classificarti in una categoria. Analizza in profondità sottotono, valore, contrasto e intensità del tuo incarnato per individuare la sotto-stagione esatta tra le 12 disponibili.",
+        "bullets": [
+          "Analisi di incarnato, capelli e occhi",
+          "Classificazione in 12 sotto-stagioni",
+          "Spiegazione dettagliata del perché"
+        ],
+        "resultLabel": "Risultato",
+        "resultValue": "Autunno Caldo",
+        "attrs": [
+          { "label": "Sottotono", "value": "Caldo" },
+          { "label": "Valore", "value": "Medio-scuro" },
+          { "label": "Intensità", "value": "Media" },
+          { "label": "Contrasto", "value": "Basso" }
+        ]
+      },
+      "feature2": {
+        "title": "Outfit in armonia",
+        "description": "Non solo una lista di colori: ricevi combinazioni concrete per ogni occasione. Dal look business al weekend, ogni suggerimento è pensato per la tua palette personale.",
+        "bullets": [
+          "6 idee di look per diverse occasioni",
+          "Combinazioni colori specifiche",
+          "Consigli pratici per il guardaroba"
+        ],
+        "looks": [
+          { "name": "Business", "colors": "Navy + Crema" },
+          { "name": "Casual", "colors": "Terracotta + Sabbia" },
+          { "name": "Sera", "colors": "Bordeaux + Oro" },
+          { "name": "Weekend", "colors": "Verde oliva + Beige" },
+          { "name": "Smart", "colors": "Cognac + Avorio" },
+          { "name": "Sport", "colors": "Ruggine + Pietra" }
+        ]
+      }
+    },
+    "finalCta": {
+      "eyebrow": "Pronto a scoprire i tuoi colori?",
+      "title": "Il tuo dossier cromatico ti aspetta",
+      "lead": "Una foto. Due minuti. Un dossier professionale che cambierà il modo in cui scegli i colori, per sempre.",
+      "cta": "Scopri la tua stagione",
+      "subnote": "Nessun abbonamento · Un pagamento unico · Soddisfatti o rimborsati",
+      "trustIndicators": [
+        "Foto cancellata in 24 ore",
+        "Risultato in 90 secondi",
+        "Download immediato"
+      ]
+    },
+    "footer": {
+      "brand": "Armocromia",
+      "tagline": "Powered by Antigravity",
+      "privacy": "Privacy Policy",
+      "terms": "Termini di Servizio",
+      "contact": "Contatti",
+      "copyrightSuffix": "Antigravity — Tutti i diritti riservati"
+    },
+    "mobileCta": "Crea il tuo dossier — €29"
+  }
 }

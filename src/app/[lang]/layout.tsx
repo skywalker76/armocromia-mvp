@@ -3,7 +3,9 @@ import { Playfair_Display, Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { LocaleProvider } from "@/lib/i18n/locale-context";
-import { isValidLocale, locales } from "@/lib/i18n/config";
+import { TranslationsProvider } from "@/lib/i18n/translations-context";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { defaultLocale, isValidLocale, locales } from "@/lib/i18n/config";
 
 /**
  * Font Playfair Display — serif editoriale per titoli.
@@ -121,13 +123,21 @@ export default async function RootLayout({
   // di renderizzare in italiano in silenzio — più chiaro per debug.
   if (!isValidLocale(lang)) notFound();
 
+  const dict = await getDictionary(lang);
+  const fallbackDict =
+    lang === defaultLocale ? dict : await getDictionary(defaultLocale);
+
   return (
     <html
       lang={lang}
       className={`${playfairDisplay.variable} ${inter.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-        <LocaleProvider locale={lang}>{children}</LocaleProvider>
+        <LocaleProvider locale={lang}>
+          <TranslationsProvider dict={dict} fallbackDict={fallbackDict}>
+            {children}
+          </TranslationsProvider>
+        </LocaleProvider>
         {/* Service Worker registration — only in production */}
         <script
           dangerouslySetInnerHTML={{
