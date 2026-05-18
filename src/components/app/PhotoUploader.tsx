@@ -174,6 +174,30 @@ export default function PhotoUploader() {
 
   return (
     <div className="space-y-8 scroll-mt-6">
+      {/* Sticky banner in cima al viewport — feedback IMMEDIATO durante la
+          pipeline. Non dipende da router.refresh() (che viene accodato
+          finché la transition useActionState non termina). Posizionato
+          sotto la NavBar (top-16) e visibile sempre, anche se l'utente
+          scrolla. */}
+      {isPending && (
+        <div className="fixed inset-x-0 top-16 z-30 border-b border-warning/30 bg-warning-light/95 shadow-md backdrop-blur-sm animate-slide-down">
+          <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
+            <div className="relative flex h-3 w-3 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-warning opacity-75" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-warning" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-ink">
+                {t("creatingDossier")}
+              </p>
+              <p className="mt-0.5 truncate text-xs text-muted">
+                {t("aiAnalyzing")}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
       {isPending && (
         <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
