@@ -44,4 +44,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# audit/test screenshots (local only)
+audit-*.png
+cookie-*.png
+i18n-*.png
+prod-*.png
+test-final-*.png
+
+# playwright MCP local data
+.playwright-mcp/
+
 .vercel
