@@ -243,6 +243,7 @@
       "emptyFile": "El archivo está vacío",
       "maxSize": "La foto debe tener un máximo de 10MB",
       "invalidFormat": "Formato no admitido. Usa JPEG, PNG o WebP",
+      "heicNotSupported": "El formato HEIC del iPhone no es compatible. Ve a Ajustes > Cámara > Formatos > selecciona \"Más compatible\", luego vuelve a tomar la foto. O sube un JPG desde la galería.",
       "notesTooLong": "Las notas pueden tener un máximo de 500 caracteres"
     },
     "nav": {

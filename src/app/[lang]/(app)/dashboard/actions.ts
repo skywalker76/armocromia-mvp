@@ -10,6 +10,13 @@ import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 
 /**
+ * Why: la pipeline Vision + GPT Image 2 richiede 60-180s. Le Server Action di
+ * Next.js NON ereditano sempre il maxDuration del page caller — esportarlo qui
+ * garantisce che Vercel non killi la funzione a 60s di default.
+ */
+export const maxDuration = 300;
+
+/**
  * Stato ritornato dalla Server Action per feedback al client.
  *
  * Why: il pattern action-state permette al Client Component di
@@ -66,6 +73,35 @@ export async function analyzePhoto(
   const rawFile = formData.get("photo");
   const rawNotes = formData.get("userNotes");
   const rawMode = formData.get("analysisMode");
+
+  // Log file metadata per diagnostica mobile (visibile nei Vercel logs).
+  // Why: senza questo è impossibile distinguere HEIC iPhone da PNG corrotto da
+  // file truncato da rete instabile. Niente PII, solo type/size/name.
+  if (rawFile instanceof File) {
+    console.log(
+      `[analyzePhoto] incoming file user=${user.id} type=${rawFile.type} size=${rawFile.size} name=${rawFile.name}`
+    );
+  } else {
+    console.warn(`[analyzePhoto] photo field non è un File: ${typeof rawFile}`);
+  }
+
+  // Pre-check HEIC iPhone PRIMA di Zod: Safari iOS spesso invia image/heic o
+  // image/heif quando il sistema non ha convertito automaticamente. Il messaggio
+  // generico "formato non supportato" non aiuta — diamo istruzioni iPhone-specifiche.
+  if (rawFile instanceof File) {
+    const t = rawFile.type.toLowerCase();
+    const n = rawFile.name.toLowerCase();
+    const isHeic =
+      t === "image/heic" ||
+      t === "image/heif" ||
+      t === "image/heic-sequence" ||
+      t === "image/heif-sequence" ||
+      n.endsWith(".heic") ||
+      n.endsWith(".heif");
+    if (isHeic) {
+      return { status: "error", error: tValidation("heicNotSupported") };
+    }
+  }
 
   const parsed = uploadPhotoSchema.safeParse({
     file: rawFile,
