@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 import ToastContainer from "@/components/ui/Toast";
 import NavBar from "@/components/app/NavBar";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
@@ -30,10 +31,12 @@ export default async function AppLayout({
     redirect(localePath(locale, "/auth/login"));
   }
 
+  const userIsAdmin = isAdmin(user.email);
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Premium Navbar */}
-      <NavBar email={user.email ?? ""} />
+      <NavBar email={user.email ?? ""} isAdmin={userIsAdmin} />
 
       {/* Content */}
       <main className="flex-1">{children}</main>

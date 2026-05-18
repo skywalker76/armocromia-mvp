@@ -38,18 +38,33 @@ export default function PhotoUploader() {
   const [userNotes, setUserNotes] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
-  // "Genera" l'utente è scrollato in basso. Quando isPending diventa true il
-  // form sparisce e il ProgressStepper appare in cima al container — ma fuori
-  // dal viewport. Scrollare on-pending elimina il "nulla succede" percepito.
+  // Why: il PhotoUploader sta in fondo alla dashboard. Quando isPending
+  // diventa true, scrolliamo TUTTA la pagina in cima così l'utente vede il
+  // banner "Dossier in elaborazione" del Server Component (più visibile dello
+  // stepper locale, e dimostra che il backend sta lavorando).
   useEffect(() => {
     if (isPending) {
-      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [isPending]);
+
+  // Polling: finché la Server Action è in volo, ogni 10s rifacciamo refresh
+  // del Server Component dashboard. Così il banner "in elaborazione" appare
+  // entro 1.5s dal click, e quando la pipeline completa il dossier compare
+  // automaticamente nella griglia senza reload manuale.
+  useEffect(() => {
+    if (!isPending) return;
+
+    const initial = setTimeout(() => router.refresh(), 1500);
+    const interval = setInterval(() => router.refresh(), 10000);
+
+    return () => {
+      clearTimeout(initial);
+      clearInterval(interval);
+    };
+  }, [isPending, router]);
 
   const currentStep = isPending ? 2 : state.status === "success" ? 4 : 0;
 
@@ -116,11 +131,10 @@ export default function PhotoUploader() {
       e.preventDefault();
       if (!file || isPending) return;
 
-      // Feedback immediato: scrolla subito al container così l'utente vede
-      // il ProgressStepper apparire al posto del form. Non aspettiamo
-      // l'effetto su isPending per evitare il "vuoto" percepito tra click
-      // e re-render React.
-      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Feedback immediato: scrolla subito in cima alla pagina così
+      // l'utente vede l'header dashboard apparire mentre il banner
+      // "in elaborazione" si materializza al primo refresh.
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
       const formData = new FormData();
       formData.append("photo", file);
@@ -159,7 +173,7 @@ export default function PhotoUploader() {
   }
 
   return (
-    <div ref={containerRef} className="space-y-8 scroll-mt-6">
+    <div className="space-y-8 scroll-mt-6">
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
       {isPending && (
         <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
