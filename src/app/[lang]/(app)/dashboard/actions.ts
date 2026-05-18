@@ -181,7 +181,13 @@ export async function analyzePhoto(
 
     // ── 5. Genera dossier visivo con GPT Image 2 ──
     const palette = getPaletteBySubSeason(classification.subSeason);
-    const dossierImageUrl = await generateDossierImage(palette, classification, signedUrl.signedUrl, analysisMode as DossierMode);
+    const dossierImageUrl = await generateDossierImage(
+      palette,
+      classification,
+      signedUrl.signedUrl,
+      analysisMode as DossierMode,
+      locale
+    );
 
     // ── 6. Scarica e upload dossier su Supabase Storage (con retry) ──
     const dossierResponse = await fetch(dossierImageUrl);
