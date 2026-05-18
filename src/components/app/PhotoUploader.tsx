@@ -46,9 +46,13 @@ export default function PhotoUploader() {
   const router = useRouter();
 
   // Smonta submitting quando la Server Action restituisce un risultato.
+  // Min display time 3s: evita flicker se la Server Action torna error
+  // istantaneamente (es. validazione fallita) e l'utente non riesce a
+  // vedere che il click ha avuto effetto.
   useEffect(() => {
     if (state.status === "success" || state.status === "error") {
-      setSubmitting(false);
+      const t = setTimeout(() => setSubmitting(false), 3000);
+      return () => clearTimeout(t);
     }
   }, [state.status]);
 
@@ -178,26 +182,36 @@ export default function PhotoUploader() {
 
   return (
     <div className="space-y-8 scroll-mt-6">
-      {/* Sticky banner in cima al viewport — feedback IMMEDIATO durante la
-          pipeline. Non dipende da router.refresh() (che viene accodato
-          finché la transition useActionState non termina). Posizionato
-          sotto la NavBar (top-16) e visibile sempre, anche se l'utente
-          scrolla. */}
+      {/* Overlay full-screen — feedback impossibile da non vedere durante
+          la pipeline. Bloccante, centrato, z-50 sopra qualunque altro
+          elemento UI (compresa la NavBar). */}
       {inFlight && (
-        <div className="fixed inset-x-0 top-16 z-30 border-b border-warning/30 bg-warning-light/95 shadow-md backdrop-blur-sm animate-slide-down">
-          <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
-            <div className="relative flex h-3 w-3 shrink-0">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-warning opacity-75" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-warning" />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 backdrop-blur-sm animate-fade-in"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="mx-4 max-w-md rounded-2xl bg-white p-8 text-center shadow-2xl ring-1 ring-accent/10 animate-scale-in">
+            {/* Spinner animato */}
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+              <div className="h-10 w-10 rounded-full border-4 border-accent/20 border-t-accent animate-spin" />
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-ink">
-                {t("creatingDossier")}
-              </p>
-              <p className="mt-0.5 truncate text-xs text-muted">
-                {t("aiAnalyzing")}
-              </p>
+            <h3 className="font-serif text-xl text-ink">
+              {t("creatingDossier")}
+            </h3>
+            <p className="mt-2 text-sm text-muted leading-relaxed">
+              {t("aiAnalyzing")}
+            </p>
+            {/* Progress bar indeterminate */}
+            <div className="mt-5 h-1 overflow-hidden rounded-full bg-accent/10">
+              <div
+                className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-light to-accent"
+                style={{ animation: "progress-indeterminate 2s ease-in-out infinite" }}
+              />
             </div>
+            <p className="mt-4 text-xs text-muted-light">
+              ⏱️ 2-3 min
+            </p>
           </div>
         </div>
       )}
