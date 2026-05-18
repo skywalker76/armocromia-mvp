@@ -124,27 +124,30 @@ export default function PhotoUploader() {
   // può assegnare programmaticamente input.files (DataTransfer bloccato), quindi
   // costruiamo la FormData manualmente dallo stato React e la passiamo a
   // formAction() — pattern supportato da useActionState e cross-browser.
+  const triggerSubmit = useCallback(() => {
+    if (!file || inFlight) return;
+
+    // Stato locale subito a true → banner appare ANCHE se isPending tarda.
+    setSubmitting(true);
+
+    // Feedback immediato: scrolla subito in cima. Usiamo "auto" su mobile
+    // perché iOS Safari ha bug con behavior:"smooth" durante form submit.
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    const formData = new FormData();
+    formData.append("photo", file);
+    formData.append("analysisMode", selectedMode);
+    formData.append("userNotes", userNotes);
+    formData.append("locale", locale);
+    formAction(formData);
+  }, [file, selectedMode, userNotes, inFlight, formAction, locale]);
+
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!file || inFlight) return;
-
-      // Stato locale subito a true → banner appare ANCHE se isPending tarda.
-      setSubmitting(true);
-
-      // Feedback immediato: scrolla subito in cima alla pagina così
-      // l'utente vede l'header dashboard apparire mentre il banner
-      // "in elaborazione" si materializza al primo refresh.
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      const formData = new FormData();
-      formData.append("photo", file);
-      formData.append("analysisMode", selectedMode);
-      formData.append("userNotes", userNotes);
-      formData.append("locale", locale);
-      formAction(formData);
+      triggerSubmit();
     },
-    [file, selectedMode, userNotes, inFlight, formAction, locale]
+    [triggerSubmit]
   );
 
   // Successo → redirect automatico dopo breve delay
@@ -410,10 +413,13 @@ export default function PhotoUploader() {
             </div>
           )}
 
-          {/* Submit */}
+          {/* Submit — type="button" + onClick diretto. Bypassa il form
+              onSubmit, che su iOS Safari a volte non scatta correttamente
+              quando il form ha solo un file input hidden. */}
           {preview && (
             <button
-              type="submit"
+              type="button"
+              onClick={triggerSubmit}
               disabled={inFlight || !file}
               className="w-full rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg animate-slide-up"
               style={{ animationDelay: "0.2s" }}
