@@ -36,37 +36,35 @@ export default function PhotoUploader() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<AnalysisMode>("infografica");
   const [userNotes, setUserNotes] = useState<string>("");
+  // Why: stato locale indipendente da isPending. In Next 16 + React 19
+  // useActionState's isPending può tardare ad arrivare al client (transition
+  // streaming). Tracciamo "submitting" a mano: settato al click, smontato
+  // quando arriva una risposta dalla Server Action (success o error).
+  const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  // Why: il PhotoUploader sta in fondo alla dashboard. Quando isPending
-  // diventa true, scrolliamo TUTTA la pagina in cima così l'utente vede il
-  // banner "Dossier in elaborazione" del Server Component (più visibile dello
-  // stepper locale, e dimostra che il backend sta lavorando).
+  // Smonta submitting quando la Server Action restituisce un risultato.
   useEffect(() => {
-    if (isPending) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (state.status === "success" || state.status === "error") {
+      setSubmitting(false);
     }
-  }, [isPending]);
+  }, [state.status]);
 
-  // Polling: finché la Server Action è in volo, ogni 10s rifacciamo refresh
-  // del Server Component dashboard. Così il banner "in elaborazione" appare
-  // entro 1.5s dal click, e quando la pipeline completa il dossier compare
-  // automaticamente nella griglia senza reload manuale.
+  // Stato unificato: il banner appare sia se isPending è true (caso ideale)
+  // sia se submitting è true (fallback se isPending non si propaga al client).
+  const inFlight = isPending || submitting;
+
+  // Polling: finché la pipeline è in volo, rifresca la dashboard ogni 10s
+  // così quando la Server Action completa il dossier appare nella griglia.
   useEffect(() => {
-    if (!isPending) return;
-
-    const initial = setTimeout(() => router.refresh(), 1500);
+    if (!inFlight) return;
     const interval = setInterval(() => router.refresh(), 10000);
+    return () => clearInterval(interval);
+  }, [inFlight, router]);
 
-    return () => {
-      clearTimeout(initial);
-      clearInterval(interval);
-    };
-  }, [isPending, router]);
-
-  const currentStep = isPending ? 2 : state.status === "success" ? 4 : 0;
+  const currentStep = inFlight ? 2 : state.status === "success" ? 4 : 0;
 
   const handleFile = useCallback((selected: File | null) => {
     if (!selected) return;
@@ -129,7 +127,10 @@ export default function PhotoUploader() {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!file || isPending) return;
+      if (!file || inFlight) return;
+
+      // Stato locale subito a true → banner appare ANCHE se isPending tarda.
+      setSubmitting(true);
 
       // Feedback immediato: scrolla subito in cima alla pagina così
       // l'utente vede l'header dashboard apparire mentre il banner
@@ -143,7 +144,7 @@ export default function PhotoUploader() {
       formData.append("locale", locale);
       formAction(formData);
     },
-    [file, selectedMode, userNotes, isPending, formAction, locale]
+    [file, selectedMode, userNotes, inFlight, formAction, locale]
   );
 
   // Successo → redirect automatico dopo breve delay
@@ -179,7 +180,7 @@ export default function PhotoUploader() {
           finché la transition useActionState non termina). Posizionato
           sotto la NavBar (top-16) e visibile sempre, anche se l'utente
           scrolla. */}
-      {isPending && (
+      {inFlight && (
         <div className="fixed inset-x-0 top-16 z-30 border-b border-warning/30 bg-warning-light/95 shadow-md backdrop-blur-sm animate-slide-down">
           <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
             <div className="relative flex h-3 w-3 shrink-0">
@@ -199,7 +200,7 @@ export default function PhotoUploader() {
       )}
 
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
-      {isPending && (
+      {inFlight && (
         <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
           <ProgressStepper currentStep={currentStep} />
           <div className="mt-5 text-center">
@@ -231,7 +232,7 @@ export default function PhotoUploader() {
       )}
 
       {/* Form upload */}
-      {!isPending && (
+      {!inFlight && (
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Drop zone */}
           <div
@@ -413,11 +414,11 @@ export default function PhotoUploader() {
           {preview && (
             <button
               type="submit"
-              disabled={isPending || !file}
+              disabled={inFlight || !file}
               className="w-full rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg animate-slide-up"
               style={{ animationDelay: "0.2s" }}
             >
-              {isPending
+              {inFlight
                 ? t("analyzing")
                 : t("generateCta", {
                     icon: rawMode<ModeCopy>(selectedMode).icon,
