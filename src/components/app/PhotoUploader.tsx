@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState, useCallback, useEffect } from "react";
+import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
 import { UPLOAD_CONSTANTS, ANALYSIS_MODES, type AnalysisMode } from "@/lib/armocromia/schemas";
@@ -131,8 +132,11 @@ export default function PhotoUploader() {
   const triggerSubmit = useCallback(() => {
     if (!file || inFlight) return;
 
-    // Stato locale subito a true → banner appare ANCHE se isPending tarda.
-    setSubmitting(true);
+    // CRITICAL: flushSync forza il render sincrono di submitting=true PRIMA
+    // che formAction() apra la transition di useActionState. Senza questo,
+    // React 19 assorbe l'update dentro la stessa transition e l'overlay
+    // appare solo a server action completata — quando ormai è troppo tardi.
+    flushSync(() => setSubmitting(true));
 
     // Feedback immediato: scrolla subito in cima. Usiamo "auto" su mobile
     // perché iOS Safari ha bug con behavior:"smooth" durante form submit.
