@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState, useCallback, useEffect } from "react";
-import { flushSync } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
 import { UPLOAD_CONSTANTS, ANALYSIS_MODES, type AnalysisMode } from "@/lib/armocromia/schemas";
@@ -42,9 +42,14 @@ export default function PhotoUploader() {
   // streaming). Tracciamo "submitting" a mano: settato al click, smontato
   // quando arriva una risposta dalla Server Action (success o error).
   const [submitting, setSubmitting] = useState(false);
+  // Why: createPortal richiede document.body — non disponibile in SSR.
+  // Guard di mount per renderizzare il Portal solo lato client.
+  const [mounted, setMounted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  useEffect(() => setMounted(true), []);
 
   // Smonta submitting quando la Server Action restituisce un risultato.
   // Min display time 3s: evita flicker se la Server Action torna error
@@ -186,10 +191,11 @@ export default function PhotoUploader() {
 
   return (
     <div className="space-y-8 scroll-mt-6">
-      {/* Overlay full-screen — feedback impossibile da non vedere durante
-          la pipeline. Bloccante, centrato, z-50 sopra qualunque altro
-          elemento UI (compresa la NavBar). */}
-      {inFlight && (
+      {/* Overlay full-screen — renderato via Portal su document.body per
+          evitare che ancestor con transform/filter (es. animate-slide-up
+          sul container "Nuova analisi cromatica") creino un containing
+          block che rompe position: fixed. */}
+      {inFlight && mounted && createPortal(
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 backdrop-blur-sm animate-fade-in"
           role="status"
@@ -217,7 +223,8 @@ export default function PhotoUploader() {
               ⏱️ 2-3 min
             </p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
