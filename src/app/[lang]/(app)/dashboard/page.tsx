@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
+import FloatingUploadButton from "@/components/app/FloatingUploadButton";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 
@@ -220,6 +221,21 @@ export default async function DashboardPage({
           </div>
         )}
 
+        {/* ── Nuova analisi ── */}
+        <div id="new-analysis-section" className="mb-14 rounded-2xl border border-accent/8 bg-white p-8 shadow-xs animate-slide-up">
+          {/* Decorative accent line */}
+          <div className="mx-auto mb-6 h-1 w-12 rounded-full bg-gradient-to-r from-accent-light to-accent" />
+          <div className="mb-6 text-center">
+            <h2 className="font-serif text-2xl text-ink">
+              {hasDossiers ? t("newAnalysisHeadingAgain") : t("newAnalysisHeadingNew")}
+            </h2>
+            <p className="mt-3 mx-auto max-w-lg text-muted leading-relaxed">
+              {hasDossiers ? t("newAnalysisBodyAgain") : t("newAnalysisBodyNew")}
+            </p>
+          </div>
+          <PhotoUploader />
+        </div>
+
         {/* ── Dossier completati — Grid ── */}
         {completedDossiers.length > 0 && (
           <div className="mb-14">
@@ -242,21 +258,6 @@ export default async function DashboardPage({
           </div>
         )}
 
-        {/* ── Nuova analisi ── */}
-        <div className="rounded-2xl border border-accent/8 bg-white p-8 shadow-xs animate-slide-up">
-          {/* Decorative accent line */}
-          <div className="mx-auto mb-6 h-1 w-12 rounded-full bg-gradient-to-r from-accent-light to-accent" />
-          <div className="mb-6 text-center">
-            <h2 className="font-serif text-2xl text-ink">
-              {hasDossiers ? t("newAnalysisHeadingAgain") : t("newAnalysisHeadingNew")}
-            </h2>
-            <p className="mt-3 mx-auto max-w-lg text-muted leading-relaxed">
-              {hasDossiers ? t("newAnalysisBodyAgain") : t("newAnalysisBodyNew")}
-            </p>
-          </div>
-          <PhotoUploader />
-        </div>
-
         {/* ── Footer branding ── */}
         <div className="mt-14 text-center">
           <p className="text-xs text-muted-light/60 tracking-wide">
@@ -264,6 +265,8 @@ export default async function DashboardPage({
           </p>
         </div>
       </div>
+
+      <FloatingUploadButton targetId="new-analysis-section" />
     </div>
   );
 }
