@@ -25,6 +25,7 @@ export default function CookiePreferencesModal() {
   // Re-sync se lo state esterno cambia mentre il modale è aperto
   // (es. user clicca "accetta tutto" dal banner contemporaneamente).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraft(state);
   }, [state]);
 

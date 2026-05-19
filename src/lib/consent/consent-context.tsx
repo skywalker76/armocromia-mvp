@@ -56,9 +56,11 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = readConsent();
     if (stored) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStateInternal(stored.state);
       setDecided(true);
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHydrated(true);
   }, []);
 

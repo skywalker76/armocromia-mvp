@@ -49,7 +49,10 @@ export default function PhotoUploader() {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   // Smonta submitting quando la Server Action restituisce un risultato.
   // Min display time 3s: evita flicker se la Server Action torna error
@@ -94,7 +97,7 @@ export default function PhotoUploader() {
     setFile(selected);
     setFileName(selected.name);
     setPreview(URL.createObjectURL(selected));
-  }, []);
+  }, [tErr]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {

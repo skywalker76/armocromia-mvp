@@ -8,6 +8,8 @@ import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossi
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { waitUntil } from "@vercel/functions";
+
 
 /**
  * Stato ritornato dalla Server Action per feedback al client.
@@ -191,83 +193,106 @@ export async function analyzePhoto(
       throw new Error("Failed to generate signed URL for photo");
     }
 
-    // ── 4. Classifica con Vision AI ──
-    const classification = await classifyPhoto(
-      signedUrl.signedUrl,
-      userNotes || undefined,
-      locale
-    );
+    // ── 4-7. Task in background (non bloccante) ──
+    waitUntil((async () => {
+      try {
+        // ── 4. Classifica con Vision AI ──
+        const classification = await classifyPhoto(
+          signedUrl.signedUrl,
+          userNotes || undefined,
+          locale
+        );
 
-    // Aggiorna dossier con risultato classificazione
-    await supabase
-      .from("dossiers")
-      .update({
-        status: "generating",
-        classified_season: classification.subSeason,
-        classification_result: classification,
-      })
-      .eq("id", dossierId);
+        // Aggiorna dossier con risultato classificazione
+        await supabase
+          .from("dossiers")
+          .update({
+            status: "generating",
+            classified_season: classification.subSeason,
+            classification_result: classification,
+          })
+          .eq("id", dossierId);
 
-    // ── 5. Genera dossier visivo con GPT Image 2 ──
-    const palette = getPaletteBySubSeason(classification.subSeason);
-    const dossierImageUrl = await generateDossierImage(
-      palette,
-      classification,
-      signedUrl.signedUrl,
-      analysisMode as DossierMode,
-      locale
-    );
+        // ── 5. Genera dossier visivo con GPT Image 2 ──
+        const palette = getPaletteBySubSeason(classification.subSeason);
+        const dossierImageUrl = await generateDossierImage(
+          palette,
+          classification,
+          signedUrl.signedUrl,
+          analysisMode as DossierMode,
+          locale
+        );
 
-    // ── 6. Scarica e upload dossier su Supabase Storage (con retry) ──
-    const dossierResponse = await fetch(dossierImageUrl);
-    if (!dossierResponse.ok) {
-      throw new Error("Failed to download generated dossier image");
-    }
-    const dossierBuffer = Buffer.from(await dossierResponse.arrayBuffer());
-    const dossierPath = `${user.id}/${dossierId}.png`;
+        // ── 6. Scarica e upload dossier su Supabase Storage (con retry) ──
+        const dossierResponse = await fetch(dossierImageUrl);
+        if (!dossierResponse.ok) {
+          throw new Error("Failed to download generated dossier image");
+        }
+        const dossierBuffer = Buffer.from(await dossierResponse.arrayBuffer());
+        const dossierPath = `${user.id}/${dossierId}.png`;
 
-    let dossierUploadError: Error | null = null;
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      const { error } = await supabase.storage
-        .from("dossiers")
-        .upload(dossierPath, dossierBuffer, {
-          contentType: "image/png",
-          upsert: true,
-        });
+        let dossierUploadError: Error | null = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          const { error } = await supabase.storage
+            .from("dossiers")
+            .upload(dossierPath, dossierBuffer, {
+              contentType: "image/png",
+              upsert: true,
+            });
 
-      if (!error) {
-        dossierUploadError = null;
-        break;
+          if (!error) {
+            dossierUploadError = null;
+            break;
+          }
+          console.warn(`[analyzePhoto Background] Dossier upload attempt ${attempt}/3 failed:`, error.message);
+          dossierUploadError = new Error(error.message);
+          if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
+        }
+
+        if (dossierUploadError) {
+          throw new Error(
+            `Dossier storage upload failed after 3 attempts: ${dossierUploadError.message}`
+          );
+        }
+
+        // ── 7. Aggiorna dossier → completed ──
+        await supabase
+          .from("dossiers")
+          .update({
+            status: "completed",
+            generated_dossier_path: dossierPath,
+          })
+          .eq("id", dossierId);
+
+      } catch (backgroundErr) {
+        console.error("[analyzePhoto Background] Pipeline failed:", backgroundErr);
+        
+        // Segna il dossier come fallito se esiste
+        if (dossierId) {
+          await supabase
+            .from("dossiers")
+            .update({ 
+              status: "failed",
+              error_message: backgroundErr instanceof Error ? backgroundErr.message : String(backgroundErr)
+            })
+            .eq("id", dossierId);
+        }
       }
-      console.warn(`[analyzePhoto] Dossier upload attempt ${attempt}/3 failed:`, error.message);
-      dossierUploadError = new Error(error.message);
-      if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
-    }
+    })());
 
-    if (dossierUploadError) {
-      throw new Error(
-        `Dossier storage upload failed after 3 attempts: ${dossierUploadError.message}`
-      );
-    }
-
-    // ── 7. Aggiorna dossier → completed ──
-    await supabase
-      .from("dossiers")
-      .update({
-        status: "completed",
-        generated_dossier_path: dossierPath,
-      })
-      .eq("id", dossierId);
-
+    // Ritorna immediatamente: la UI è libera, il dossier è in coda.
     return { status: "success", dossierId };
   } catch (err) {
-    console.error("[analyzePhoto] Pipeline failed:", err);
+    console.error("[analyzePhoto] Upload/Init failed:", err);
 
     // Segna il dossier come fallito se esiste
     if (dossierId) {
       await supabase
         .from("dossiers")
-        .update({ status: "failed" })
+        .update({ 
+          status: "failed",
+          error_message: err instanceof Error ? err.message : String(err)
+        })
         .eq("id", dossierId);
     }
 

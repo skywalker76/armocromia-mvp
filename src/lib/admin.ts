@@ -13,7 +13,7 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 /** Restituisce true se l'email è nella lista ADMIN_EMAILS (env var). */
 export function isAdmin(email: string | null | undefined): boolean {
   if (!email) return false;
-  const raw = process.env.ADMIN_EMAILS ?? "";
+  const raw = (process.env.ADMIN_EMAILS ?? "").replace(/['"]/g, "");
   const allowed = raw
     .split(",")
     .map((e) => e.trim().toLowerCase())

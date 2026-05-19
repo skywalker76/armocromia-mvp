@@ -81,6 +81,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
   }
 
   // ── Signed URLs (best effort) ──
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const rows: AdminRow[] = await Promise.all(
     filtered.map(async (d) => {

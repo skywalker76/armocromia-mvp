@@ -1,0 +1,53 @@
+﻿{
+    "value":  [
+                  {
+                      "id":  67,
+                      "classification_result":  {
+                                                    "analysis":  {
+                                                                     "value":  "dark",
+                                                                     "contrast":  "medium-high",
+                                                                     "eyeColor":  "Gli occhi sono di un marrone scuro, quasi nero, con una brillantezza non eccessiva ma profonda. Il colore è caldo e intenso, senza accenti freddi o troppo chiari.",
+                                                                     "skinTone":  "La pelle presenta un tono medio-scuro con un sottotono chiaramente caldo/olivastro, virando verso un color pesca ramato. Nonostante la possibile esposizione al sole, il sottotono prevalente è caldo.",
+                                                                     "hairColor":  "I capelli sono di un castano scuro, quasi nero, con una presenza evidente di fili grigi o bianchi che si mescolano alla colorazione più scura, aggiungendo un certo contrasto freddo ma la base è calda. La barba presenta lo stesso tono scuro con accenni di grigio.",
+                                                                     "intensity":  "medium",
+                                                                     "undertone":  "warm"
+                                                                 },
+                                                    "reasoning":  {
+                                                                      "whyNotOthers":  "Colori troppo chiari e delicati lo sbiadirebbero, non riuscendo a sostenere la sua intensità. Colori troppo freddi o troppo vivaci e brillanti stonerebbero con il suo sottotono caldo e profondo, rendendolo spento o sovraccarico. Ad esempio, un rosa shocking o un azzurro neon accentuerebbero le imperfezioni e toglierebbero luminosità al viso.",
+                                                                      "practicalTips":  [
+                                                                                            "Prediligi capi superiori in tonalità profonde e calde come il verde bottiglia, il ruggine, il bordeaux, il terra di Siena e il marrone cioccolato.",
+                                                                                            "Evita colori pastello troppo chiari o tonalità fredde come il blu elettrico o il rosa confetto, che potrebbero appiattire il tuo incarnato.",
+                                                                                            "Per gli accessori, scegli metalli come l\u0027oro giallo, l\u0027oro rosato o il bronzo. Pietre come il topazio, l\u0027ambra o il granato enfatizzeranno i tuoi colori naturali.",
+                                                                                            "Per un tocco di colore, osa con delle cravatte o foulard con stampe che contengano i tuoi colori, come fantasie paisley o floreali, ma sempre in tonalità smorzate e profonde."
+                                                                                        ],
+                                                                      "whyTheseColors":  "I colori dell\u0027Autunno Profondo si armonizzano perfettamente con il sottotono caldo e profondo della pelle, il castano scuro dei capelli e il marrone intenso degli occhi. I colori terrosi, vibranti e ricchi che caratterizzano questa stagione, come i verdi profondi, i marroni caldi, i bordeaux e i viola melanzana, esaltano la sua naturale intensità e il valore profondo, donando un aspetto raffinato e sofisticato.",
+                                                                      "lookSuggestions":  [
+                                                                                              {
+                                                                                                  "name":  "Eleganza Naturale",
+                                                                                                  "colors":  "Marrone cioccolato, Verde oliva scuro, Oro antico",
+                                                                                                  "description":  "Una giacca in velluto color cioccolato, una camicia verde oliva scuro e accessori in oro antico per un look ricercato e che esalta la profondità dei tuoi colori naturali."
+                                                                                              },
+                                                                                              {
+                                                                                                  "name":  "Casual Moderno",
+                                                                                                  "colors":  "Bordeaux, Beige caldo, Blu notte (caldo)",
+                                                                                                  "description":  "Un maglione bordeaux abbinato a pantaloni chino beige caldo e una giacca leggera blu notte con un sottotono caldo, ideale per il tempo libero."
+                                                                                              },
+                                                                                              {
+                                                                                                  "name":  "Formalità Accogliente",
+                                                                                                  "colors":  "Verde smeraldo scuro, Ruggine, Nero caldo",
+                                                                                                  "description":  "Un abito in lana color verde smeraldo scuro con una cravatta o un fazzoletto da taschino color ruggine. Il nero caldo può essere usato per scarpe o cinture, preferendo tonalità meno aggressive del nero puro."
+                                                                                              },
+                                                                                              {
+                                                                                                  "name":  "Look da Sera Distinto",
+                                                                                                  "colors":  "Viola melanzana, Bronzo, Crema",
+                                                                                                  "description":  "Una camicia viola melanzana sotto un blazer color crema o beige scuro, con dettagli in bronzo per un tocco di luce caldo e sofisticato."
+                                                                                              }
+                                                                                          ]
+                                                                  },
+                                                    "subSeason":  "autunno-profondo",
+                                                    "confidence":  0.9
+                                                }
+                  }
+              ],
+    "Count":  1
+}

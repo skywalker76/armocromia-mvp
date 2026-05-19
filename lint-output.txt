@@ -1,0 +1,118 @@
+﻿
+> armocromia-mvp@0.1.0 lint
+> eslint
+
+
+C:\Antigravity\armocromia-mvp\public\sw.js
+  1:7   warning  'CACHE_NAME' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  3:35  warning  'event' is defined but never used                @typescript-eslint/no-unused-vars
+
+C:\Antigravity\armocromia-mvp\src\app\[lang]\(app)\admin\AdminTable.tsx
+  4:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Antigravity\armocromia-mvp\src\app\[lang]\(app)\admin\page.tsx
+  84:15  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Antigravity\armocromia-mvp\src\app\[lang]\(app)\admin\page.tsx:84:15
+  82 |
+  83 |   // ÔöÇÔöÇ Signed URLs (best effort) ÔöÇÔöÇ
+> 84 |   const now = Date.now();
+     |               ^^^^^^^^^^ Cannot call impure function
+  85 |   const rows: AdminRow[] = await Promise.all(
+  86 |     filtered.map(async (d) => {
+  87 |       let photoUrl: string | null = null;  react-hooks/purity
+
+C:\Antigravity\armocromia-mvp\src\components\app\DossierCard.tsx
+  81:18  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Antigravity\armocromia-mvp\src\components\app\DossierCard.tsx:81:18
+  79 |
+  80 |   const timeAgo = (dateStr: string): string => {
+> 81 |     const diff = Date.now() - new Date(dateStr).getTime();
+     |                  ^^^^^^^^^^ Cannot call impure function
+  82 |     const mins = Math.floor(diff / 60000);
+  83 |     if (mins < 1) return t("timeNow");
+  84 |     if (mins < 60) return t("timeMinutes", { n: mins });  react-hooks/purity
+
+C:\Antigravity\armocromia-mvp\src\components\app\DossierReadyToast.tsx
+  37:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Antigravity\armocromia-mvp\src\components\app\DossierReadyToast.tsx:37:7
+  35 |   useEffect(() => {
+  36 |     if (isOpen) {
+> 37 |       setIsRendered(true);
+     |       ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |       
+  39 |       // Trigger haptic feedback when opening
+  40 |       if (typeof navigator !== "undefined" && navigator.vibrate) {  react-hooks/set-state-in-effect
+
+C:\Antigravity\armocromia-mvp\src\components\app\PhotoUploader.tsx
+  52:19  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Antigravity\armocromia-mvp\src\components\app\PhotoUploader.tsx:52:19
+  50 |   const router = useRouter();
+  51 |
+> 52 |   useEffect(() => setMounted(true), []);
+     |                   ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  53 |
+  54 |   // Smonta submitting quando la Server Action restituisce un risultato.
+  55 |   // Min display time 3s: evita flicker se la Server Action torna error  react-hooks/set-state-in-effect
+  97:6   warning  React Hook useCallback has a missing dependency: 'tErr'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/exhaustive-deps
+
+C:\Antigravity\armocromia-mvp\src\components\consent\CookiePreferencesModal.tsx
+  28:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Antigravity\armocromia-mvp\src\components\consent\CookiePreferencesModal.tsx:28:5
+  26 |   // (es. user clicca "accetta tutto" dal banner contemporaneamente).
+  27 |   useEffect(() => {
+> 28 |     setDraft(state);
+     |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |   }, [state]);
+  30 |
+  31 |   // Lock body scroll + Escape to close  react-hooks/set-state-in-effect
+
+C:\Antigravity\armocromia-mvp\src\lib\consent\consent-context.tsx
+  59:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Antigravity\armocromia-mvp\src\lib\consent\consent-context.tsx:59:7
+  57 |     const stored = readConsent();
+  58 |     if (stored) {
+> 59 |       setStateInternal(stored.state);
+     |       ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  60 |       setDecided(true);
+  61 |     }
+  62 |     setHydrated(true);  react-hooks/set-state-in-effect
+
+C:\Antigravity\armocromia-mvp\test-llava.js
+  1:17  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Ô£û 11 problems (7 errors, 4 warnings)
+
