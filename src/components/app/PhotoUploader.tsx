@@ -51,6 +51,14 @@ export default function PhotoUploader() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dossierReady, setDossierReady] = useState(false);
   const [dossierFailed, setDossierFailed] = useState(false);
+  const [resolvedDossierId, setResolvedDossierId] = useState<number | null>(null);
+
+  // Sincronizza resolvedDossierId con l'id ritornato dalla Server Action appena disponibile
+  useEffect(() => {
+    if (state.dossierId) {
+      setResolvedDossierId(state.dossierId);
+    }
+  }, [state.dossierId]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -222,8 +230,9 @@ export default function PhotoUploader() {
   // Polling ogni 5s tramite Supabase (max 4 minuti = 48 tentativi).
 
   useEffect(() => {
-    if (state.status !== "success" || !state.dossierId) return;
+    if (state.status !== "success") return;
 
+    const targetId = state.dossierId ? String(state.dossierId) : "latest";
     let cancelled = false;
     let attempts = 0;
     const MAX_ATTEMPTS = 48; // 48 × 5s = 4 minuti
@@ -232,15 +241,25 @@ export default function PhotoUploader() {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
         try {
-          // Aggiunto parametro cache-buster univoco ?t= per garantire l'esclusione di qualsiasi caching edge/browser
-          const res = await fetch(`/api/dossier-status/${state.dossierId}?t=${Date.now()}`, { cache: "no-store" });
+          // Bypassa la cache a livello Edge/CDN usando POST anziché GET
+          const res = await fetch(`/api/dossier-status/${targetId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            cache: "no-store"
+          });
           if (!res.ok) {
+            console.error(`[PhotoUploader Polling] Status check returned non-ok status: ${res.status}`);
             await new Promise(r => setTimeout(r, 5000));
             continue;
           }
           const data = await res.json();
           if (!cancelled) {
             setDossierStatus(data.status);
+            if (data.id) {
+              setResolvedDossierId(data.id);
+            }
           }
           if (data.status === "completed") {
             if (!cancelled) setDossierReady(true);
@@ -253,8 +272,8 @@ export default function PhotoUploader() {
             }
             return;
           }
-        } catch {
-          // Network error — riprova
+        } catch (err) {
+          console.error("[PhotoUploader Polling] Exception thrown in polling fetch loop:", err);
         }
         await new Promise(r => setTimeout(r, 5000));
       }
@@ -271,10 +290,10 @@ export default function PhotoUploader() {
 
   // Redirect solo quando il dossier è pronto
   useEffect(() => {
-    if (dossierReady && state.dossierId) {
-      router.push(localePath(locale, `/dossier/${state.dossierId}`));
+    if (dossierReady && resolvedDossierId) {
+      router.push(localePath(locale, `/dossier/${resolvedDossierId}`));
     }
-  }, [dossierReady, state.dossierId, router, locale]);
+  }, [dossierReady, resolvedDossierId, router, locale]);
 
   if (state.status === "success" && !dossierReady && !dossierFailed) {
     // Ancora in elaborazione — mostra stepper + timer
