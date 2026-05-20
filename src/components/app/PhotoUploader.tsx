@@ -3,7 +3,7 @@
 import { useActionState, useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { createPortal, flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
-import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
+import { analyzePhoto, checkDossierStatus, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
 import { UPLOAD_CONSTANTS, ANALYSIS_MODES, type AnalysisMode } from "@/lib/armocromia/schemas";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { useTranslations } from "@/lib/i18n/translations-context";
@@ -227,12 +227,20 @@ export default function PhotoUploader() {
   // Successo dalla Server Action → il record è creato ma la pipeline AI
   // è in background (waitUntil). Dobbiamo aspettare che diventi "completed"
   // prima di fare redirect, altrimenti la pagina dossier → 404.
-  // Polling ogni 5s tramite Supabase (max 4 minuti = 48 tentativi).
+  // Polling ogni 5s tramite Server Action (max 4 minuti = 48 tentativi).
+
+  // Why: usiamo referenze per traduzioni e callbacks per evitare che cambiamenti
+  // referenziali estranei (es. tErr ricreata ad ogni render) provochino il reset
+  // e la cancellazione continua del loop di polling ad ogni tick del timer!
+  const tErrRef = useRef(tErr);
+  useEffect(() => {
+    tErrRef.current = tErr;
+  }, [tErr]);
 
   useEffect(() => {
     if (state.status !== "success") return;
 
-    const targetId = state.dossierId ? String(state.dossierId) : "latest";
+    const targetId = state.dossierId ? state.dossierId : "latest";
     let cancelled = false;
     let attempts = 0;
     const MAX_ATTEMPTS = 48; // 48 × 5s = 4 minuti
@@ -241,53 +249,51 @@ export default function PhotoUploader() {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
         try {
-          // Bypassa la cache a livello Edge/CDN usando GET con un parametro temporale univoco
-          const res = await fetch(`/api/dossier-status/${targetId}?t=${Date.now()}`, {
-            method: "GET",
-            headers: {
-              "Cache-Control": "no-cache",
-              "Pragma": "no-cache"
-            },
-            cache: "no-store"
-          });
-          if (!res.ok) {
-            console.error(`[PhotoUploader Polling] Status check returned non-ok status: ${res.status}`);
+          // Utilizza la Server Action checkDossierStatus al posto della fetch ad API route
+          // per evitare al 100% qualsiasi caching del browser/CDN e problemi di auth dei cookie.
+          const data = await checkDossierStatus(targetId);
+          
+          if (!data) {
+            console.warn(`[PhotoUploader Polling] Dossier not found or unauthorized for ID: ${targetId}`);
             await new Promise(r => setTimeout(r, 5000));
             continue;
           }
-          const data = await res.json();
+
           if (!cancelled) {
             setDossierStatus(data.status);
             if (data.id) {
               setResolvedDossierId(data.id);
             }
           }
+
           if (data.status === "completed") {
             if (!cancelled) setDossierReady(true);
             return;
           }
+
           if (data.status === "failed") {
             if (!cancelled) {
-              setErrorMessage(data.error_message || tErr("genericPipeline"));
+              setErrorMessage(data.error_message || tErrRef.current("genericPipeline"));
               setDossierFailed(true);
             }
             return;
           }
         } catch (err) {
-          console.error("[PhotoUploader Polling] Exception thrown in polling fetch loop:", err);
+          console.error("[PhotoUploader Polling] Exception thrown in polling loop:", err);
         }
         await new Promise(r => setTimeout(r, 5000));
       }
+
       // Timeout
       if (!cancelled) {
-        setErrorMessage(tErr("timeout"));
+        setErrorMessage(tErrRef.current("timeout"));
         setDossierFailed(true);
       }
     };
 
     poll();
     return () => { cancelled = true; };
-  }, [state.status, state.dossierId, tErr]);
+  }, [state.status, state.dossierId]);
 
   // Redirect solo quando il dossier è pronto
   useEffect(() => {

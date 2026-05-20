@@ -407,3 +407,53 @@ export async function deleteDossier(
   }
 }
 
+/**
+ * Server Action — verifica lo stato di un dossier specifico per il polling client-side.
+ *
+ * Why: le Server Actions usano POST, non risentono del caching di rete/Next.js,
+ * e trasmettono in modo affidabile i cookie di autenticazione dell'utente su Vercel.
+ */
+export async function checkDossierStatus(
+  dossierId: number | "latest"
+): Promise<{ id?: number; status: string; error_message?: string | null } | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return null;
+  }
+
+  let dossier;
+  if (dossierId === "latest") {
+    const { data } = await supabase
+      .from("dossiers")
+      .select("id, status, error_message")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    dossier = data;
+  } else {
+    const { data } = await supabase
+      .from("dossiers")
+      .select("id, status, error_message")
+      .eq("id", dossierId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    dossier = data;
+  }
+
+  if (!dossier) {
+    return null;
+  }
+
+  return {
+    id: dossier.id,
+    status: dossier.status,
+    error_message: dossier.error_message,
+  };
+}
+
+
