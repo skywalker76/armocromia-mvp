@@ -227,7 +227,7 @@ export default function PhotoUploader() {
   // Successo dalla Server Action → il record è creato ma la pipeline AI
   // è in background (waitUntil). Dobbiamo aspettare che diventi "completed"
   // prima di fare redirect, altrimenti la pagina dossier → 404.
-  // Polling ogni 5s tramite Server Action (max 4 minuti = 48 tentativi).
+  // Polling ogni 5s tramite Server Action (max 10 minuti = 120 tentativi).
 
   // Why: usiamo referenze per traduzioni e callbacks per evitare che cambiamenti
   // referenziali estranei (es. tErr ricreata ad ogni render) provochino il reset
@@ -243,7 +243,7 @@ export default function PhotoUploader() {
     const targetId = state.dossierId ? state.dossierId : "latest";
     let cancelled = false;
     let attempts = 0;
-    const MAX_ATTEMPTS = 48; // 48 × 5s = 4 minuti
+    const MAX_ATTEMPTS = 120; // 120 × 5s = 10 minuti
 
     const poll = async () => {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
