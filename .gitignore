@@ -55,3 +55,4 @@ test-final-*.png
 .playwright-mcp/
 
 .vercel
+.env*.local

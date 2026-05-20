@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState, useCallback, useEffect } from "react";
+import { useActionState, useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { createPortal, flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { analyzePhoto, type AnalyzePhotoState } from "@/app/[lang]/(app)/dashboard/actions";
@@ -37,6 +37,7 @@ export default function PhotoUploader() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<AnalysisMode>("infografica");
   const [userNotes, setUserNotes] = useState<string>("");
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   // Why: stato locale indipendente da isPending. In Next 16 + React 19
   // useActionState's isPending può tardare ad arrivare al client (transition
   // streaming). Tracciamo "submitting" a mano: settato al click, smontato
@@ -47,12 +48,55 @@ export default function PhotoUploader() {
   const [mounted, setMounted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
+
+  // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
+  // "Genera" l'utente è scrollato in basso. Quando isPending diventa true il
+  // form sparisce e il ProgressStepper appare in cima al container — ma fuori
+  // dal viewport. Scrollare on-pending elimina il "nulla succede" percepito.
+  useEffect(() => {
+    if (isPending) {
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isPending]);
+
+  // Timer: conta i secondi trascorsi durante l'elaborazione per pilotare
+  // la progressione dello stepper e mostrare il tempo all'utente.
+  // Si resetta quando isPending torna false (fine action o errore).
+  useEffect(() => {
+    if (!isPending) {
+      setElapsedSeconds(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isPending]);
+
+  // Why: la pipeline reale ha tempi riconoscibili — upload (2-5s),
+  // classificazione Vision (10-30s), generazione GPT Image 2 (60-180s).
+  // Simuliamo la progressione dello stepper in modo realistico.
+  const currentStep = useMemo(() => {
+    if (state.status === "success") return 4;
+    if (!isPending) return 0;
+    if (elapsedSeconds < 3) return 1;   // "Foto caricata" → done
+    if (elapsedSeconds < 30) return 2;  // "Analisi in corso" → active
+    return 3;                            // "Generazione dossier" → active
+  }, [isPending, elapsedSeconds, state.status]);
+
+  // Messaggio di fase contestuale — cambia con lo step attivo
+  const phaseMessage = useMemo(() => {
+    if (elapsedSeconds < 3) return t("waitPhase1");
+    if (elapsedSeconds < 30) return t("waitPhase2");
+    return t("waitPhase3");
+  }, [elapsedSeconds, t]);
 
   // Smonta submitting quando la Server Action restituisce un risultato.
   // Min display time 3s: evita flicker se la Server Action torna error
@@ -76,8 +120,6 @@ export default function PhotoUploader() {
     const interval = setInterval(() => router.refresh(), 10000);
     return () => clearInterval(interval);
   }, [inFlight, router]);
-
-  const currentStep = inFlight ? 2 : state.status === "success" ? 4 : 0;
 
   const handleFile = useCallback((selected: File | null) => {
     if (!selected) return;
@@ -193,7 +235,7 @@ export default function PhotoUploader() {
   }
 
   return (
-    <div className="space-y-8 scroll-mt-6">
+    <div ref={containerRef} className="space-y-8 scroll-mt-6">
       {/* Overlay full-screen — renderato via Portal su document.body per
           evitare che ancestor con transform/filter (es. animate-slide-up
           sul container "Nuova analisi cromatica") creino un containing
@@ -213,7 +255,7 @@ export default function PhotoUploader() {
               {t("creatingDossier")}
             </h3>
             <p className="mt-2 text-sm text-muted leading-relaxed">
-              {t("aiAnalyzing")}
+              {phaseMessage}
             </p>
             {/* Progress bar indeterminate */}
             <div className="mt-5 h-1 overflow-hidden rounded-full bg-accent/10">
@@ -223,7 +265,7 @@ export default function PhotoUploader() {
               />
             </div>
             <p className="mt-4 text-xs text-muted-light">
-              ⏱️ 2-3 min
+              ⏱️ {elapsedSeconds}s
             </p>
           </div>
         </div>,
@@ -231,15 +273,15 @@ export default function PhotoUploader() {
       )}
 
       {/* Progress Stepper — visibile solo durante l'elaborazione */}
-      {inFlight && (
+      {isPending && (
         <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
-          <ProgressStepper currentStep={currentStep} />
+          <ProgressStepper currentStep={currentStep} elapsedSeconds={elapsedSeconds} />
           <div className="mt-5 text-center">
             <p className="text-sm text-ink font-medium">
               {t("creatingDossier")}
             </p>
-            <p className="mt-1 text-xs text-muted animate-pulse-soft">
-              {t("aiAnalyzing")}
+            <p key={phaseMessage} className="mt-1 text-xs text-muted animate-fade-in">
+              {phaseMessage}
             </p>
           </div>
           {/* Indeterminate progress bar */}

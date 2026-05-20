@@ -1,12 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useTranslations } from "@/lib/i18n/translations-context";
 
 /**
  * Stepper visivo per il progresso dell'analisi cromatica.
  *
- * Why: feedback visivo essenziale per un'operazione che dura 15-30s.
- * Ogni step ha un'icona animata che comunica lo stato.
+ * Why: feedback visivo essenziale per un'operazione che dura 60-180s.
+ * Ogni step ha un'icona animata che comunica lo stato, un timer
+ * e messaggi che ruotano per tenere l'utente ingaggiato.
  */
 
 type StepStatus = "pending" | "active" | "done" | "error";
@@ -18,16 +20,38 @@ interface Step {
 
 interface ProgressStepperProps {
   currentStep: number;
+  elapsedSeconds: number;
   error?: boolean;
 }
 
 const STEP_KEYS = ["photoUploaded", "analyzing", "generating", "ready"] as const;
 
+/** Formatta secondi in mm:ss per display leggibile. */
+function formatElapsed(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
 export default function ProgressStepper({
   currentStep,
+  elapsedSeconds,
   error = false,
 }: ProgressStepperProps) {
   const { t } = useTranslations("app.stepper");
+  const { raw: rawTips } = useTranslations("app.uploader");
+
+  // Ruota i tips ogni 8 secondi per tenere l'utente ingaggiato durante
+  // l'attesa di 2-3 minuti. L'indice si basa su elapsed, non su un timer
+  // separato, così il cambio è deterministico e non crea effect loop.
+  const tips = rawTips<string[]>("waitTips") ?? [];
+  const [tipIndex, setTipIndex] = useState(0);
+
+  useEffect(() => {
+    if (tips.length === 0) return;
+    const idx = Math.floor(elapsedSeconds / 8) % tips.length;
+    setTipIndex(idx);
+  }, [elapsedSeconds, tips.length]);
 
   const steps: Step[] = STEP_KEYS.map((key, i) => ({
     label: t(key),
@@ -41,65 +65,92 @@ export default function ProgressStepper({
   }));
 
   return (
-    <div className="flex items-center justify-between gap-2">
-      {steps.map((step, i) => (
-        <div key={step.label} className="flex flex-1 items-center">
-          {/* Step indicator */}
-          <div className="flex flex-col items-center gap-2">
-            <div
-              className={`
-                flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold
-                transition-all duration-500 ease-out
-                ${step.status === "done"
-                  ? "bg-green-500 text-white shadow-lg shadow-green-500/30"
-                  : step.status === "active"
-                    ? "bg-accent text-white shadow-lg shadow-accent/30 animate-pulse"
-                    : step.status === "error"
-                      ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
-                      : "bg-cream-dark text-muted"
-                }
-              `}
-            >
-              {step.status === "done" ? (
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                </svg>
-              ) : step.status === "error" ? (
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              ) : step.status === "active" ? (
-                <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" />
-                </svg>
-              ) : (
-                <span>{i + 1}</span>
-              )}
-            </div>
-            <span
-              className={`text-xs font-medium text-center leading-tight max-w-[80px]
-                ${step.status === "active" ? "text-accent" :
-                  step.status === "done" ? "text-green-600" :
-                  step.status === "error" ? "text-red-600" :
-                  "text-muted-light"}
-              `}
-            >
-              {step.label}
-            </span>
-          </div>
-
-          {/* Connector line */}
-          {i < steps.length - 1 && (
-            <div className="relative mx-2 h-0.5 flex-1 bg-cream-dark overflow-hidden rounded-full">
+    <div className="space-y-6">
+      {/* ── Step indicators ── */}
+      <div className="flex items-center justify-between gap-2">
+        {steps.map((step, i) => (
+          <div key={step.label} className="flex flex-1 items-center">
+            {/* Step indicator */}
+            <div className="flex flex-col items-center gap-2">
               <div
-                className={`absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out
-                  ${i < currentStep ? "w-full bg-green-500" : "w-0 bg-accent"}
+                className={`
+                  flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold
+                  transition-all duration-500 ease-out
+                  ${step.status === "done"
+                    ? "bg-green-500 text-white shadow-lg shadow-green-500/30"
+                    : step.status === "active"
+                      ? "bg-accent text-white shadow-lg shadow-accent/30 animate-pulse"
+                      : step.status === "error"
+                        ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
+                        : "bg-cream-dark text-muted"
+                  }
                 `}
-              />
+              >
+                {step.status === "done" ? (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                  </svg>
+                ) : step.status === "error" ? (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                ) : step.status === "active" ? (
+                  <svg className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" />
+                  </svg>
+                ) : (
+                  <span>{i + 1}</span>
+                )}
+              </div>
+              <span
+                className={`text-xs font-medium text-center leading-tight max-w-[80px]
+                  ${step.status === "active" ? "text-accent" :
+                    step.status === "done" ? "text-green-600" :
+                    step.status === "error" ? "text-red-600" :
+                    "text-muted-light"}
+                `}
+              >
+                {step.label}
+              </span>
             </div>
-          )}
+
+            {/* Connector line */}
+            {i < steps.length - 1 && (
+              <div className="relative mx-2 h-0.5 flex-1 bg-cream-dark overflow-hidden rounded-full">
+                <div
+                  className={`absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out
+                    ${i < currentStep ? "w-full bg-green-500" : "w-0 bg-accent"}
+                  `}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Timer + stima ── */}
+      <div className="flex items-center justify-center gap-4 text-xs">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/8 px-3 py-1.5 font-mono font-semibold text-accent tabular-nums">
+          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          {formatElapsed(elapsedSeconds)}
+        </span>
+        <span className="text-muted-light">
+          {t("estimatedTime")}
+        </span>
+      </div>
+
+      {/* ── Tip rotante ── */}
+      {tips.length > 0 && elapsedSeconds >= 5 && (
+        <div
+          key={tipIndex}
+          className="mx-auto max-w-md text-center text-xs text-muted leading-relaxed animate-fade-in"
+        >
+          <span className="mr-1.5">💡</span>
+          {tips[tipIndex]}
         </div>
-      ))}
+      )}
     </div>
   );
 }

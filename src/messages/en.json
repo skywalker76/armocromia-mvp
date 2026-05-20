@@ -327,13 +327,25 @@
       "aiAnalyzing": "Our AI is analyzing your photo…",
       "errorTitle": "Something went wrong",
       "successTitle": "Analysis complete!",
-      "successBody": "Your color dossier is ready. Redirecting now…"
+      "successBody": "Your color dossier is ready. Redirecting now…",
+      "waitPhase1": "Uploading your photo…",
+      "waitPhase2": "Our AI is classifying your colors…",
+      "waitPhase3": "Generating your personalized dossier…",
+      "waitTips": [
+        "Did you know? Color analysis originated in the 1940s from Johannes Itten's color theory",
+        "Every person has a unique combination of undertone, value, and contrast",
+        "The right colors enhance your skin and make it look more radiant",
+        "Your color season stays constant over time, even with dyed hair",
+        "The dossier analyzes undertone, value, intensity and contrast of your complexion",
+        "The right metals (gold, silver, bronze) can flatter you as much as the right clothes"
+      ]
     },
     "stepper": {
       "photoUploaded": "Photo uploaded",
       "analyzing": "Analyzing",
       "generating": "Generating dossier",
-      "ready": "Dossier ready"
+      "ready": "Dossier ready",
+      "estimatedTime": "Estimated time: ~2-3 min"
     },
     "card": {
       "viewDetail": "View detail →",

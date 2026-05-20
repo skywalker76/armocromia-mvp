@@ -327,13 +327,25 @@
       "aiAnalyzing": "La inteligencia artificial está analizando tu foto…",
       "errorTitle": "Algo ha salido mal",
       "successTitle": "¡Análisis completado!",
-      "successBody": "Tu dossier cromático está listo. Redirigiendo…"
+      "successBody": "Tu dossier cromático está listo. Redirigiendo…",
+      "waitPhase1": "Subiendo tu foto…",
+      "waitPhase2": "La IA está clasificando tus colores…",
+      "waitPhase3": "Generando tu dossier personalizado…",
+      "waitTips": [
+        "¿Sabías que? El análisis cromático nació en los años 40 de la teoría del color de Johannes Itten",
+        "Cada persona tiene una combinación única de subtono, valor y contraste",
+        "Los colores adecuados realzan tu piel y la hacen parecer más luminosa",
+        "Tu estación cromática permanece constante con el tiempo, incluso con el cabello teñido",
+        "El dossier analiza subtono, valor, intensidad y contraste de tu tez",
+        "Los metales adecuados (oro, plata, bronce) pueden realzarte tanto como la ropa"
+      ]
     },
     "stepper": {
       "photoUploaded": "Foto subida",
       "analyzing": "Analizando",
       "generating": "Generando dossier",
-      "ready": "Dossier listo"
+      "ready": "Dossier listo",
+      "estimatedTime": "Tiempo estimado: ~2-3 min"
     },
     "card": {
       "viewDetail": "Ver detalle →",

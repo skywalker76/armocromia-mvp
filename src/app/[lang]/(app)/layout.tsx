@@ -5,6 +5,9 @@ import ToastContainer from "@/components/ui/Toast";
 import NavBar from "@/components/app/NavBar";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 
+// Force Next.js to render this layout dynamically at runtime on every request
+export const dynamic = "force-dynamic";
+
 /**
  * Layout per l'area autenticata — route group (app).
  *

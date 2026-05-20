@@ -327,13 +327,25 @@
       "aiAnalyzing": "L'intelligenza artificiale sta analizzando la tua foto…",
       "errorTitle": "Qualcosa è andato storto",
       "successTitle": "Analisi completata!",
-      "successBody": "Il tuo dossier cromatico è pronto. Reindirizzamento in corso…"
+      "successBody": "Il tuo dossier cromatico è pronto. Reindirizzamento in corso…",
+      "waitPhase1": "Caricamento della tua foto in corso…",
+      "waitPhase2": "L'IA sta classificando i tuoi colori…",
+      "waitPhase3": "Stiamo generando il tuo dossier personalizzato…",
+      "waitTips": [
+        "Lo sapevi? L'armocromia nasce negli anni '40 dalla teoria dei colori di Johannes Itten",
+        "Ogni persona ha una combinazione unica di sottotono, valore e contrasto",
+        "I colori giusti valorizzano la pelle e la fanno sembrare più luminosa",
+        "La tua stagione cromatica resta costante nel tempo, anche con i capelli tinti",
+        "Il dossier analizza sottotono, valore, intensità e contrasto del tuo incarnato",
+        "I metalli giusti (oro, argento, bronzo) possono valorizzarti tanto quanto i vestiti"
+      ]
     },
     "stepper": {
       "photoUploaded": "Foto caricata",
       "analyzing": "Analisi in corso",
       "generating": "Generazione dossier",
-      "ready": "Dossier pronto"
+      "ready": "Dossier pronto",
+      "estimatedTime": "Tempo stimato: ~2-3 min"
     },
     "card": {
       "viewDetail": "Vedi dettaglio →",
