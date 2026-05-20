@@ -46,6 +46,12 @@ export default function PhotoUploader() {
   // Why: createPortal richiede document.body — non disponibile in SSR.
   // Guard di mount per renderizzare il Portal solo lato client.
   const [mounted, setMounted] = useState(false);
+  // Why: traccia lo stato effettivo ritornato dal database in background.
+  const [dossierStatus, setDossierStatus] = useState<string>("processing");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [dossierReady, setDossierReady] = useState(false);
+  const [dossierFailed, setDossierFailed] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,30 +72,37 @@ export default function PhotoUploader() {
     }
   }, [isPending]);
 
+  // Stato unificato: il banner appare sia se isPending è true (caso ideale)
+  // sia se submitting è true (fallback se isPending non si propaga al client).
+  const inFlight = isPending || submitting;
+
+  // Why: la pipeline è attiva sia mentre la Server Action è in volo (inFlight)
+  // sia mentre stiamo pollingando in background prima che diventi completata/fallita.
+  const isPipelineActive = inFlight || (state.status === "success" && !dossierReady && !dossierFailed);
+
   // Timer: conta i secondi trascorsi durante l'elaborazione per pilotare
   // la progressione dello stepper e mostrare il tempo all'utente.
-  // Si resetta quando isPending torna false (fine action o errore).
+  // Rimane attivo per l'intera durata della pipeline in background.
   useEffect(() => {
-    if (!isPending) {
-      setElapsedSeconds(0);
+    if (!isPipelineActive) {
       return;
     }
     const interval = setInterval(() => {
       setElapsedSeconds((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [isPending]);
+  }, [isPipelineActive]);
 
-  // Why: la pipeline reale ha tempi riconoscibili — upload (2-5s),
-  // classificazione Vision (10-30s), generazione GPT Image 2 (60-180s).
-  // Simuliamo la progressione dello stepper in modo realistico.
+  // Progresso dello stepper basato sullo stato effettivo del dossier
+  // per evitare salti istantanei allo step 4 e timer bloccati.
   const currentStep = useMemo(() => {
-    if (state.status === "success") return 4;
-    if (!isPending) return 0;
-    if (elapsedSeconds < 3) return 1;   // "Foto caricata" → done
-    if (elapsedSeconds < 30) return 2;  // "Analisi in corso" → active
-    return 3;                            // "Generazione dossier" → active
-  }, [isPending, elapsedSeconds, state.status]);
+    if (dossierReady || dossierStatus === "completed") return 4;
+    if (dossierFailed || dossierStatus === "failed") return 3;
+    if (dossierStatus === "generating") return 3;
+    if (dossierStatus === "processing") return 2;
+    if (inFlight) return 1;
+    return 0;
+  }, [inFlight, dossierStatus, dossierReady, dossierFailed]);
 
   // Messaggio di fase contestuale — cambia con lo step attivo
   const phaseMessage = useMemo(() => {
@@ -109,17 +122,12 @@ export default function PhotoUploader() {
     }
   }, [state.status]);
 
-  // Stato unificato: il banner appare sia se isPending è true (caso ideale)
-  // sia se submitting è true (fallback se isPending non si propaga al client).
-  const inFlight = isPending || submitting;
-
-  // Polling: finché la pipeline è in volo, rifresca la dashboard ogni 10s
-  // così quando la Server Action completa il dossier appare nella griglia.
+  // Polling per aggiornare la griglia sullo sfondo mentre la pipeline è attiva
   useEffect(() => {
-    if (!inFlight) return;
+    if (!isPipelineActive) return;
     const interval = setInterval(() => router.refresh(), 10000);
     return () => clearInterval(interval);
-  }, [inFlight, router]);
+  }, [isPipelineActive, router]);
 
   const handleFile = useCallback((selected: File | null) => {
     if (!selected) return;
@@ -212,8 +220,6 @@ export default function PhotoUploader() {
   // è in background (waitUntil). Dobbiamo aspettare che diventi "completed"
   // prima di fare redirect, altrimenti la pagina dossier → 404.
   // Polling ogni 5s tramite Supabase (max 4 minuti = 48 tentativi).
-  const [dossierReady, setDossierReady] = useState(false);
-  const [dossierFailed, setDossierFailed] = useState(false);
 
   useEffect(() => {
     if (state.status !== "success" || !state.dossierId) return;
@@ -226,18 +232,25 @@ export default function PhotoUploader() {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
         try {
-          const res = await fetch(`/api/dossier-status/${state.dossierId}`, { cache: "no-store" });
+          // Aggiunto parametro cache-buster univoco ?t= per garantire l'esclusione di qualsiasi caching edge/browser
+          const res = await fetch(`/api/dossier-status/${state.dossierId}?t=${Date.now()}`, { cache: "no-store" });
           if (!res.ok) {
             await new Promise(r => setTimeout(r, 5000));
             continue;
           }
           const data = await res.json();
+          if (!cancelled) {
+            setDossierStatus(data.status);
+          }
           if (data.status === "completed") {
             if (!cancelled) setDossierReady(true);
             return;
           }
           if (data.status === "failed") {
-            if (!cancelled) setDossierFailed(true);
+            if (!cancelled) {
+              setErrorMessage(data.error_message || tErr("genericPipeline"));
+              setDossierFailed(true);
+            }
             return;
           }
         } catch {
@@ -246,12 +259,15 @@ export default function PhotoUploader() {
         await new Promise(r => setTimeout(r, 5000));
       }
       // Timeout
-      if (!cancelled) setDossierFailed(true);
+      if (!cancelled) {
+        setErrorMessage(tErr("timeout"));
+        setDossierFailed(true);
+      }
     };
 
     poll();
     return () => { cancelled = true; };
-  }, [state.status, state.dossierId]);
+  }, [state.status, state.dossierId, tErr]);
 
   // Redirect solo quando il dossier è pronto
   useEffect(() => {
@@ -290,7 +306,7 @@ export default function PhotoUploader() {
         </svg>
         <div>
           <p className="font-medium text-ink">{t("errorTitle")}</p>
-          <p className="mt-0.5 text-muted">{t("generationFailed")}</p>
+          <p className="mt-0.5 text-muted">{errorMessage || t("generationFailed")}</p>
         </div>
       </div>
     );

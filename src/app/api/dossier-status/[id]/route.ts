@@ -33,7 +33,7 @@ export async function GET(
 
   const { data: dossier } = await supabase
     .from("dossiers")
-    .select("status")
+    .select("status, error_message")
     .eq("id", dossierId)
     .eq("user_id", user.id)
     .single();
@@ -43,7 +43,7 @@ export async function GET(
   }
 
   return NextResponse.json(
-    { status: dossier.status },
+    { status: dossier.status, error_message: dossier.error_message },
     {
       headers: {
         "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",

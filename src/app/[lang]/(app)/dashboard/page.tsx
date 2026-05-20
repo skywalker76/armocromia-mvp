@@ -68,7 +68,10 @@ export default async function DashboardPage({
   const stuckCutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString();
   await supabase
     .from("dossiers")
-    .update({ status: "failed" })
+    .update({ 
+      status: "failed",
+      error_message: "Processo interrotto: superato il limite massimo di tempo (timeout 5 minuti)."
+    })
     .eq("user_id", user!.id)
     .in("status", ["processing", "generating"])
     .lt("created_at", stuckCutoff);

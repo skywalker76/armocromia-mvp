@@ -77,7 +77,10 @@ export async function adminMarkFailed(dossierId: number): Promise<Result> {
   const admin = createAdminClient();
   const { error } = await admin
     .from("dossiers")
-    .update({ status: "failed" })
+    .update({ 
+      status: "failed",
+      error_message: "Processo interrotto manualmente dall'amministratore."
+    })
     .eq("id", dossierId);
 
   if (error) return { success: false, error: error.message };
