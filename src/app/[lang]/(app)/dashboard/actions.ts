@@ -456,4 +456,25 @@ export async function checkDossierStatus(
   };
 }
 
+/**
+ * Server Action — verifica se l'utente autenticato corrente è un amministratore.
+ *
+ * Why: questa azione POST sicura e non cacheabile viene utilizzata al mount
+ * della NavBar client-side per aggirare qualsiasi caching del layout in produzione.
+ */
+export async function checkAdminStatus(): Promise<boolean> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user || !user.email) {
+    return false;
+  }
+
+  const { isAdmin } = await import("@/lib/admin");
+  return isAdmin(user.email);
+}
+
+
 

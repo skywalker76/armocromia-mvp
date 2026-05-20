@@ -18,7 +18,12 @@ export function isAdmin(email: string | null | undefined): boolean {
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
-  return allowed.includes(email.toLowerCase());
+  const matched = allowed.includes(email.trim().toLowerCase());
+  
+  // Log di diagnostica sicuro sul server (visibile nei log di Vercel)
+  console.log(`[isAdmin check] email="${email}" allowedEmails=${JSON.stringify(allowed)} matched=${matched}`);
+  
+  return matched;
 }
 
 /**

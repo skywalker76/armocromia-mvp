@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { useTranslations } from "@/lib/i18n/translations-context";
 import { localePath } from "@/lib/i18n/config";
+import { checkAdminStatus } from "@/app/[lang]/(app)/dashboard/actions";
 
 interface NavBarProps {
   email: string;
@@ -25,6 +26,35 @@ export default function NavBar({ email, isAdmin = false }: NavBarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const [clientIsAdmin, setClientIsAdmin] = useState(isAdmin);
+
+  // Sync client state with layout server props if they update
+  useEffect(() => {
+    setClientIsAdmin(isAdmin);
+  }, [isAdmin]);
+
+  // Anti-cache runtime verify: bypasses Next.js client layout caching by asking the server dynamically
+  useEffect(() => {
+    if (isAdmin) return;
+
+    let active = true;
+    async function verifyAdmin() {
+      try {
+        const isUserAdmin = await checkAdminStatus();
+        if (active && isUserAdmin) {
+          setClientIsAdmin(true);
+        }
+      } catch (err) {
+        console.error("Errore verifica admin client-side:", err);
+      }
+    }
+    verifyAdmin();
+
+    return () => {
+      active = false;
+    };
+  }, [isAdmin]);
 
   const initial = email ? email.charAt(0).toUpperCase() : "U";
   const displayName = email ? email.split("@")[0] : t("defaultUser");
@@ -136,7 +166,7 @@ export default function NavBar({ email, isAdmin = false }: NavBarProps) {
                     </svg>
                     {t("dashboard")}
                   </a>
-                  {isAdmin && (
+                  {clientIsAdmin && (
                     <a
                       href={adminHref}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-cream"
@@ -248,7 +278,7 @@ export default function NavBar({ email, isAdmin = false }: NavBarProps) {
                 </svg>
                 <span className="font-medium">{t("home")}</span>
               </a>
-              {isAdmin && (
+              {clientIsAdmin && (
                 <a
                   href={adminHref}
                   className="flex items-center gap-4 rounded-xl px-4 py-3.5 text-ink transition-colors hover:bg-cream active:bg-cream-dark"
