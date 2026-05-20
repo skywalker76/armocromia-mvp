@@ -52,6 +52,8 @@ export default function PhotoUploader() {
   const [dossierReady, setDossierReady] = useState(false);
   const [dossierFailed, setDossierFailed] = useState(false);
   const [resolvedDossierId, setResolvedDossierId] = useState<number | null>(null);
+  const [restoredDossierId, setRestoredDossierId] = useState<string | null>(null);
+  const [isRestoredPolling, setIsRestoredPolling] = useState(false);
 
   // Sincronizza resolvedDossierId con l'id ritornato dalla Server Action appena disponibile
   useEffect(() => {
@@ -66,8 +68,26 @@ export default function PhotoUploader() {
   const router = useRouter();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    
+    // Controlla se c'è una generazione pendente in localStorage per resilienza mobile
+    try {
+      const pendingId = localStorage.getItem("armocromia_pending_dossier_id");
+      const pendingStart = localStorage.getItem("armocromia_pending_dossier_start");
+      
+      if (pendingId) {
+        console.log(`[PhotoUploader] Ripristinato polling per dossier pendente ID: ${pendingId}`);
+        setRestoredDossierId(pendingId);
+        setIsRestoredPolling(true);
+        
+        if (pendingStart) {
+          const secondsPassed = Math.floor((Date.now() - parseInt(pendingStart, 10)) / 1000);
+          setElapsedSeconds(Math.max(0, secondsPassed));
+        }
+      }
+    } catch (e) {
+      console.error("[PhotoUploader] Failed to read from localStorage:", e);
+    }
   }, []);
 
   // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
@@ -86,7 +106,8 @@ export default function PhotoUploader() {
 
   // Why: la pipeline è attiva sia mentre la Server Action è in volo (inFlight)
   // sia mentre stiamo pollingando in background prima che diventi completata/fallita.
-  const isPipelineActive = inFlight || (state.status === "success" && !dossierReady && !dossierFailed);
+  const isActivelyPolling = (state.status === "success" || isRestoredPolling) && !dossierReady && !dossierFailed;
+  const isPipelineActive = inFlight || isActivelyPolling;
 
   // Timer: conta i secondi trascorsi durante l'elaborazione per pilotare
   // la progressione dello stepper e mostrare il tempo all'utente.
@@ -238,49 +259,87 @@ export default function PhotoUploader() {
   }, [tErr]);
 
   useEffect(() => {
-    if (state.status !== "success") return;
+    const isSuccess = state.status === "success";
+    const isRestored = isRestoredPolling && restoredDossierId;
+    if (!isSuccess && !isRestored) return;
 
-    const targetId = state.dossierId ? state.dossierId : "latest";
+    const targetId: number | "latest" = isSuccess
+      ? (state.dossierId ? state.dossierId : "latest")
+      : (restoredDossierId === "latest" ? "latest" : Number(restoredDossierId));
+
+    // Se siamo appena entrati in successo, salviamo lo stato nel localStorage per resilienza ai ricaricamenti pagina
+    if (isSuccess) {
+      const dossierIdToSave = state.dossierId || "latest";
+      try {
+        localStorage.setItem("armocromia_pending_dossier_id", String(dossierIdToSave));
+        if (!localStorage.getItem("armocromia_pending_dossier_start")) {
+          localStorage.setItem("armocromia_pending_dossier_start", String(Date.now()));
+        }
+      } catch (e) {
+        console.error("[PhotoUploader] Failed to write to localStorage:", e);
+      }
+    }
+
     let cancelled = false;
     let attempts = 0;
     const MAX_ATTEMPTS = 120; // 120 × 5s = 10 minuti
+    let consecutiveNetworkErrors = 0;
+    const MAX_CONSECUTIVE_NETWORK_ERRORS = 5;
+
+    const checkOnce = async (): Promise<boolean> => {
+      if (cancelled) return true; // Termina se cancellato
+      try {
+        // Utilizza la Server Action checkDossierStatus al posto della fetch ad API route
+        // per evitare al 100% qualsiasi caching del browser/CDN e problemi di auth dei cookie.
+        const data = await checkDossierStatus(targetId);
+        consecutiveNetworkErrors = 0; // Reset degli errori al successo di rete
+
+        if (!data) {
+          console.warn(`[PhotoUploader Polling] Dossier not found or unauthorized for ID: ${targetId}`);
+          return false;
+        }
+
+        if (!cancelled) {
+          setDossierStatus(data.status);
+          if (data.id) {
+            setResolvedDossierId(data.id);
+          }
+        }
+
+        if (data.status === "completed") {
+          if (!cancelled) setDossierReady(true);
+          return true;
+        }
+
+        if (data.status === "failed") {
+          if (!cancelled) {
+            setErrorMessage(data.error_message || tErrRef.current("genericPipeline"));
+            setDossierFailed(true);
+          }
+          return true;
+        }
+      } catch (err) {
+        consecutiveNetworkErrors++;
+        console.error("[PhotoUploader Polling] Exception thrown in polling loop:", err);
+        
+        // Se si verificano troppi errori di rete consecutivi, considera fallito, 
+        // altrimenti continua sperando in un ripristino della connessione (es. galleria mobile)
+        if (consecutiveNetworkErrors >= MAX_CONSECUTIVE_NETWORK_ERRORS) {
+          if (!cancelled) {
+            setErrorMessage(tErrRef.current("genericPipeline"));
+            setDossierFailed(true);
+          }
+          return true;
+        }
+      }
+      return false;
+    };
 
     const poll = async () => {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
-        try {
-          // Utilizza la Server Action checkDossierStatus al posto della fetch ad API route
-          // per evitare al 100% qualsiasi caching del browser/CDN e problemi di auth dei cookie.
-          const data = await checkDossierStatus(targetId);
-          
-          if (!data) {
-            console.warn(`[PhotoUploader Polling] Dossier not found or unauthorized for ID: ${targetId}`);
-            await new Promise(r => setTimeout(r, 5000));
-            continue;
-          }
-
-          if (!cancelled) {
-            setDossierStatus(data.status);
-            if (data.id) {
-              setResolvedDossierId(data.id);
-            }
-          }
-
-          if (data.status === "completed") {
-            if (!cancelled) setDossierReady(true);
-            return;
-          }
-
-          if (data.status === "failed") {
-            if (!cancelled) {
-              setErrorMessage(data.error_message || tErrRef.current("genericPipeline"));
-              setDossierFailed(true);
-            }
-            return;
-          }
-        } catch (err) {
-          console.error("[PhotoUploader Polling] Exception thrown in polling loop:", err);
-        }
+        const isDone = await checkOnce();
+        if (isDone) return;
         await new Promise(r => setTimeout(r, 5000));
       }
 
@@ -291,18 +350,37 @@ export default function PhotoUploader() {
       }
     };
 
+    // Gestione risveglio da background (iOS / Android app suspension)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && !cancelled) {
+        console.log("[PhotoUploader Polling] App returned to foreground, checking status immediately...");
+        checkOnce();
+      }
+    };
+
     poll();
-    return () => { cancelled = true; };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => { 
+      cancelled = true; 
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [state.status, state.dossierId]);
 
   // Redirect solo quando il dossier è pronto
   useEffect(() => {
     if (dossierReady && resolvedDossierId) {
+      try {
+        localStorage.removeItem("armocromia_pending_dossier_id");
+        localStorage.removeItem("armocromia_pending_dossier_start");
+      } catch (e) {
+        console.error("[PhotoUploader] Failed to clear localStorage:", e);
+      }
       router.push(localePath(locale, `/dossier/${resolvedDossierId}`));
     }
   }, [dossierReady, resolvedDossierId, router, locale]);
 
-  if (state.status === "success" && !dossierReady && !dossierFailed) {
+  if (isActivelyPolling) {
     // Ancora in elaborazione — mostra stepper + timer
     return (
       <div ref={containerRef} className="space-y-6 scroll-mt-6">
@@ -325,15 +403,43 @@ export default function PhotoUploader() {
   }
 
   if (dossierFailed) {
+    try {
+      localStorage.removeItem("armocromia_pending_dossier_id");
+      localStorage.removeItem("armocromia_pending_dossier_start");
+    } catch (e) {
+      console.error("[PhotoUploader] Failed to clear localStorage:", e);
+    }
+
     return (
-      <div className="flex items-start gap-3 rounded-xl border border-error/20 bg-error-light px-5 py-4 text-sm animate-slide-up">
-        <svg className="mt-0.5 h-5 w-5 shrink-0 text-error" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-        </svg>
-        <div>
-          <p className="font-medium text-ink">{t("errorTitle")}</p>
-          <p className="mt-0.5 text-muted">{errorMessage || t("generationFailed")}</p>
+      <div className="space-y-6 animate-slide-up">
+        <div className="flex items-start gap-3 rounded-xl border border-error/20 bg-error-light px-5 py-4 text-sm">
+          <svg className="mt-0.5 h-5 w-5 shrink-0 text-error" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+          <div>
+            <p className="font-medium text-ink">{t("errorTitle")}</p>
+            <p className="mt-0.5 text-muted">{errorMessage || t("generationFailed")}</p>
+          </div>
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            setDossierFailed(false);
+            setDossierStatus("processing");
+            setErrorMessage(null);
+            setIsRestoredPolling(false);
+            setRestoredDossierId(null);
+            setElapsedSeconds(0);
+            clearPreview();
+            router.refresh();
+          }}
+          className="w-full rounded-xl bg-ink px-6 py-4 text-sm font-medium text-white transition-all hover:bg-ink-light active:scale-[0.99] shadow-md flex items-center justify-center gap-2"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          {t("changePhoto")}
+        </button>
       </div>
     );
   }

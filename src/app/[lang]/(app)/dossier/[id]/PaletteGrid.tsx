@@ -177,8 +177,9 @@ function ColorSwatch({
           </span>
         </div>
       </div>
-      <div className="bg-white px-2 py-1.5">
-        <p className="text-[11px] text-ink leading-tight truncate">{name}</p>
+      <div className="bg-white px-2 py-1.5 flex flex-col gap-0.5">
+        <p className="text-[11px] text-ink leading-tight truncate font-medium">{name}</p>
+        <p className="text-[9px] font-mono text-muted-light/75 uppercase leading-none">{hex}</p>
       </div>
     </button>
   );

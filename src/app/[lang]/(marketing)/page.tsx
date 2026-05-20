@@ -483,7 +483,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           MOBILE STICKY CTA — Fixed bottom bar
          ═══════════════════════════════════════════════ */}
-      <div className="fixed bottom-0 inset-x-0 z-30 sm:hidden border-t border-accent/10 bg-white/95 backdrop-blur-md px-4 py-3 safe-area-bottom">
+      <div className="fixed bottom-0 inset-x-0 z-30 sm:hidden border-t border-accent/10 bg-white/95 backdrop-blur-md px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <a
           href={loginHref}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-lg active:scale-[0.98] transition-transform"
@@ -496,7 +496,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </div>
 
       {/* Spacer for mobile sticky CTA */}
-      <div className="h-20 sm:hidden" />
+      <div className="h-[calc(5rem+env(safe-area-inset-bottom))] sm:hidden" />
     </main>
   );
 }

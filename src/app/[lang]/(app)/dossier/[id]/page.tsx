@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import type { SubSeason } from "@/lib/armocromia/types";
 import PaletteGrid from "./PaletteGrid";
+import DossierImage from "./DossierImage";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
 import { isValidLocale, localePath, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
@@ -174,43 +175,63 @@ export default async function DossierPage({ params }: DossierPageProps) {
 
           {/* Flow diagram */}
           {analysis && (
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-sm">
-              {[
-                { label: t("attrUndertone"), value: enumLabel("undertone", analysis.undertone) },
-                { label: t("attrValue"), value: enumLabel("value", analysis.value) },
-                { label: t("attrIntensity"), value: enumLabel("intensity", analysis.intensity) },
-                { label: t("attrContrast"), value: enumLabel("contrast", analysis.contrast) },
-              ].filter(d => d.value).map((d, i, arr) => (
-                <span key={d.label} className="flex items-center gap-2">
-                  <span className="inline-flex flex-col items-center rounded-xl border border-accent/12 bg-white px-4 py-2.5 shadow-xs">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-light">{d.label}</span>
-                    <span className="font-medium text-ink">{d.value}</span>
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-2 text-sm animate-slide-up" style={{ animationDelay: "0.05s" }}>
+              {/* Mobile layout: grid 2x2 */}
+              <div className="grid grid-cols-2 gap-2 w-full max-w-sm sm:hidden">
+                {[
+                  { label: t("attrUndertone"), value: enumLabel("undertone", analysis.undertone) },
+                  { label: t("attrValue"), value: enumLabel("value", analysis.value) },
+                  { label: t("attrIntensity"), value: enumLabel("intensity", analysis.intensity) },
+                  { label: t("attrContrast"), value: enumLabel("contrast", analysis.contrast) },
+                ].filter(d => d.value).map((d) => (
+                  <div key={d.label} className="flex flex-col items-center rounded-xl border border-accent/12 bg-white px-3 py-2 shadow-xs">
+                    <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-light">{d.label}</span>
+                    <span className="font-medium text-xs text-ink">{d.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop layout: flex row with items and arrows */}
+              <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-2">
+                {[
+                  { label: t("attrUndertone"), value: enumLabel("undertone", analysis.undertone) },
+                  { label: t("attrValue"), value: enumLabel("value", analysis.value) },
+                  { label: t("attrIntensity"), value: enumLabel("intensity", analysis.intensity) },
+                  { label: t("attrContrast"), value: enumLabel("contrast", analysis.contrast) },
+                ].filter(d => d.value).map((d, i, arr) => (
+                  <span key={d.label} className="flex items-center gap-2">
+                    <span className="inline-flex flex-col items-center rounded-xl border border-accent/12 bg-white px-4 py-2.5 shadow-xs">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-light">{d.label}</span>
+                      <span className="font-medium text-ink">{d.value}</span>
+                    </span>
+                    {i < arr.length - 1 && (
+                      <svg className="h-3.5 w-3.5 text-muted-light/50" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                    )}
                   </span>
-                  {i < arr.length - 1 && (
-                    <svg className="h-3.5 w-3.5 text-muted-light/50" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                  )}
+                ))}
+              </div>
+
+              {/* Arrow and final seasonal badge */}
+              <div className="flex items-center gap-2">
+                <svg className="h-3.5 w-3.5 text-muted-light/50 rotate-90 sm:rotate-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+                <span className="inline-flex items-center rounded-full bg-gradient-to-r from-accent to-accent-hover px-5 py-2.5 text-sm font-bold text-white shadow-md">
+                  {paletteName}
                 </span>
-              ))}
-              <svg className="h-3.5 w-3.5 text-muted-light/50" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>
-              <span className="inline-flex items-center rounded-full bg-gradient-to-r from-accent to-accent-hover px-5 py-2.5 text-sm font-bold text-white shadow-md">
-                {paletteName}
-              </span>
+              </div>
             </div>
           )}
         </div>
 
         {/* ── Dossier Image ── */}
         {dossierImageUrl && (
-          <div className="mb-14 overflow-hidden rounded-2xl shadow-xl animate-slide-up" style={{ animationDelay: "0.1s" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+          <div className="mb-14 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <DossierImage
               src={dossierImageUrl}
               alt={t("imageAlt", { season: paletteName })}
-              className="w-full"
             />
           </div>
         )}

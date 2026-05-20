@@ -49,7 +49,7 @@ export default function FloatingUploadButton({
   return (
     <button
       onClick={scrollToUpload}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-medium text-white shadow-lg shadow-accent/30 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/40 active:translate-y-0 active:shadow-md animate-fade-in focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+      className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-6 z-50 flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-medium text-white shadow-lg shadow-accent/30 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/40 active:translate-y-0 active:shadow-md animate-fade-in focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
       aria-label={t("newAnalysisHeadingAgain")}
     >
       <Plus className="h-5 w-5" />
