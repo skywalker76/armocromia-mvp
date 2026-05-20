@@ -241,11 +241,12 @@ export default function PhotoUploader() {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
         try {
-          // Bypassa la cache a livello Edge/CDN usando POST anziché GET
-          const res = await fetch(`/api/dossier-status/${targetId}`, {
-            method: "POST",
+          // Bypassa la cache a livello Edge/CDN usando GET con un parametro temporale univoco
+          const res = await fetch(`/api/dossier-status/${targetId}?t=${Date.now()}`, {
+            method: "GET",
             headers: {
-              "Content-Type": "application/json"
+              "Cache-Control": "no-cache",
+              "Pragma": "no-cache"
             },
             cache: "no-store"
           });
