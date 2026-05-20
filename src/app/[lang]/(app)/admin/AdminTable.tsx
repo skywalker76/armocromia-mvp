@@ -18,6 +18,7 @@ export interface AdminRow {
   dossier_url: string | null;
   created_at: string;
   age_minutes: number;
+  error_message: string | null;
 }
 
 interface Props {
@@ -98,10 +99,16 @@ export default function AdminTable({ rows }: Props) {
                 <td className="px-3 py-2">
                   <span
                     className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-medium ${STATUS_STYLES[r.status] ?? "bg-gray-100 text-gray-700 border-gray-200"}`}
+                    title={r.status === "failed" && r.error_message ? r.error_message : undefined}
                   >
                     {r.status}
                     {isStuck && " ⚠"}
                   </span>
+                  {r.status === "failed" && r.error_message && (
+                    <div className="text-[10px] text-red-600 mt-1 max-w-[200px] break-words" title={r.error_message}>
+                      {r.error_message}
+                    </div>
+                  )}
                 </td>
                 <td className="px-3 py-2 text-xs text-gray-700">
                   {r.classified_season ?? "—"}

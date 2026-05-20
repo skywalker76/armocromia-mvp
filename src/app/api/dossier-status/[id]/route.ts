@@ -9,6 +9,8 @@ import { createClient } from "@/lib/supabase/server";
  * la pipeline AI completi. Questo endpoint espone solo lo status
  * (processing/generating/completed/failed) — nessun dato sensibile.
  */
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -40,5 +42,14 @@ export async function GET(
     return NextResponse.json({ status: "not_found" }, { status: 404 });
   }
 
-  return NextResponse.json({ status: dossier.status });
+  return NextResponse.json(
+    { status: dossier.status },
+    {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+      }
+    }
+  );
 }

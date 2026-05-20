@@ -36,7 +36,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
   let query = admin
     .from("dossiers")
     .select(
-      "id, user_id, status, classified_season, classification_result, user_notes, original_photo_path, generated_dossier_path, created_at"
+      "id, user_id, status, classified_season, classification_result, user_notes, original_photo_path, generated_dossier_path, created_at, error_message"
     )
     .order("created_at", { ascending: false })
     .limit(PAGE_SIZE);
@@ -113,6 +113,7 @@ export default async function AdminPage({ searchParams }: PageProps) {
         dossier_url: dossierUrl,
         created_at: d.created_at,
         age_minutes: Math.floor((now - new Date(d.created_at).getTime()) / 60000),
+        error_message: d.error_message ?? null,
       };
     })
   );

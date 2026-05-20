@@ -226,7 +226,7 @@ export default function PhotoUploader() {
       while (!cancelled && attempts < MAX_ATTEMPTS) {
         attempts++;
         try {
-          const res = await fetch(`/api/dossier-status/${state.dossierId}`);
+          const res = await fetch(`/api/dossier-status/${state.dossierId}`, { cache: "no-store" });
           if (!res.ok) {
             await new Promise(r => setTimeout(r, 5000));
             continue;
