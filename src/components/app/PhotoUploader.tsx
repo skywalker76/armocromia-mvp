@@ -208,13 +208,95 @@ export default function PhotoUploader() {
     [triggerSubmit]
   );
 
-  // Successo → redirect automatico dopo breve delay
-  if (state.status === "success") {
-    // Redirect al dossier se disponibile
-    if (state.dossierId) {
-      setTimeout(() => router.push(localePath(locale, `/dossier/${state.dossierId}`)), 1500);
-    }
+  // Successo dalla Server Action → il record è creato ma la pipeline AI
+  // è in background (waitUntil). Dobbiamo aspettare che diventi "completed"
+  // prima di fare redirect, altrimenti la pagina dossier → 404.
+  // Polling ogni 5s tramite Supabase (max 4 minuti = 48 tentativi).
+  const [dossierReady, setDossierReady] = useState(false);
+  const [dossierFailed, setDossierFailed] = useState(false);
 
+  useEffect(() => {
+    if (state.status !== "success" || !state.dossierId) return;
+
+    let cancelled = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 48; // 48 × 5s = 4 minuti
+
+    const poll = async () => {
+      while (!cancelled && attempts < MAX_ATTEMPTS) {
+        attempts++;
+        try {
+          const res = await fetch(`/api/dossier-status/${state.dossierId}`);
+          if (!res.ok) {
+            await new Promise(r => setTimeout(r, 5000));
+            continue;
+          }
+          const data = await res.json();
+          if (data.status === "completed") {
+            if (!cancelled) setDossierReady(true);
+            return;
+          }
+          if (data.status === "failed") {
+            if (!cancelled) setDossierFailed(true);
+            return;
+          }
+        } catch {
+          // Network error — riprova
+        }
+        await new Promise(r => setTimeout(r, 5000));
+      }
+      // Timeout
+      if (!cancelled) setDossierFailed(true);
+    };
+
+    poll();
+    return () => { cancelled = true; };
+  }, [state.status, state.dossierId]);
+
+  // Redirect solo quando il dossier è pronto
+  useEffect(() => {
+    if (dossierReady && state.dossierId) {
+      router.push(localePath(locale, `/dossier/${state.dossierId}`));
+    }
+  }, [dossierReady, state.dossierId, router, locale]);
+
+  if (state.status === "success" && !dossierReady && !dossierFailed) {
+    // Ancora in elaborazione — mostra stepper + timer
+    return (
+      <div ref={containerRef} className="space-y-6 scroll-mt-6">
+        <div className="rounded-2xl border border-accent/10 bg-white p-6 shadow-xs animate-fade-in">
+          <ProgressStepper currentStep={currentStep} elapsedSeconds={elapsedSeconds} />
+          <div className="mt-5 text-center">
+            <p className="text-sm text-ink font-medium">
+              {t("creatingDossier")}
+            </p>
+            <p key={phaseMessage} className="mt-1 text-xs text-muted animate-fade-in">
+              {phaseMessage}
+            </p>
+          </div>
+          <div className="mt-4 h-1 overflow-hidden rounded-full bg-accent/10">
+            <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-light to-accent" style={{ animation: "progress-indeterminate 2s ease-in-out infinite" }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (dossierFailed) {
+    return (
+      <div className="flex items-start gap-3 rounded-xl border border-error/20 bg-error-light px-5 py-4 text-sm animate-slide-up">
+        <svg className="mt-0.5 h-5 w-5 shrink-0 text-error" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        </svg>
+        <div>
+          <p className="font-medium text-ink">{t("errorTitle")}</p>
+          <p className="mt-0.5 text-muted">{t("generationFailed")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (state.status === "success" && dossierReady) {
     return (
       <div className="rounded-2xl border border-success/20 bg-success-light p-8 text-center animate-scale-in">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">

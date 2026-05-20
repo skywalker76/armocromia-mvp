@@ -326,6 +326,7 @@
       "creatingDossier": "Stiamo creando il tuo dossier personalizzato",
       "aiAnalyzing": "L'intelligenza artificiale sta analizzando la tua foto…",
       "errorTitle": "Qualcosa è andato storto",
+      "generationFailed": "La generazione del dossier non è riuscita. Riprova o contattaci per assistenza.",
       "successTitle": "Analisi completata!",
       "successBody": "Il tuo dossier cromatico è pronto. Reindirizzamento in corso…",
       "waitPhase1": "Caricamento della tua foto in corso…",

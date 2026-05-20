@@ -326,6 +326,7 @@
       "creatingDossier": "We're creating your personalized dossier",
       "aiAnalyzing": "Our AI is analyzing your photo…",
       "errorTitle": "Something went wrong",
+      "generationFailed": "Dossier generation failed. Please try again or contact us for help.",
       "successTitle": "Analysis complete!",
       "successBody": "Your color dossier is ready. Redirecting now…",
       "waitPhase1": "Uploading your photo…",
