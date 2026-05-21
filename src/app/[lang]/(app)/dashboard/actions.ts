@@ -1,15 +1,13 @@
 "use server";
-
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
-import { classifyPhoto } from "@/lib/fal/classify";
-import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossier";
-import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { waitUntil } from "@vercel/functions";
-
+import { stripe } from "@/lib/stripe";
+import { headers } from "next/headers";
+import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
 
 /**
  * Stato ritornato dalla Server Action per feedback al client.
@@ -20,6 +18,7 @@ import { waitUntil } from "@vercel/functions";
 export type AnalyzePhotoState = {
   status: "idle" | "success" | "error";
   dossierId?: number;
+  checkoutUrl?: string;
   error?: string;
 };
 
@@ -28,12 +27,11 @@ export type AnalyzePhotoState = {
  *
  * Pipeline:
  * 1. Valida input (Zod)
- * 2. Crea record dossier (status: processing)
+ * 2. Crea record dossier (status: pending_payment)
  * 3. Upload foto su Supabase Storage
- * 4. Classifica con Vision AI
- * 5. Genera dossier visivo con GPT Image 2
- * 6. Upload dossier su Supabase Storage
- * 7. Aggiorna record dossier (status: completed)
+ * 4. Crea sessione Stripe Checkout
+ * 5. Registra record in payments (status: pending)
+ * 6. Ritorna URL di Stripe Checkout per redirect client
  *
  * Why: Server Action invece di API route perché:
  * - Invocazione type-safe dal client
@@ -193,92 +191,21 @@ export async function analyzePhoto(
       throw new Error("Failed to generate signed URL for photo");
     }
 
+    if (dossierId === undefined) {
+      throw new Error("Dossier ID mancante per la generazione");
+    }
+
     // ── 4-7. Task in background (non bloccante) ──
-    waitUntil((async () => {
-      try {
-        // ── 4. Classifica con Vision AI ──
-        const classification = await classifyPhoto(
-          signedUrl.signedUrl,
-          userNotes || undefined,
-          locale
-        );
-
-        // Aggiorna dossier con risultato classificazione
-        await supabase
-          .from("dossiers")
-          .update({
-            status: "generating",
-            classified_season: classification.subSeason,
-            classification_result: classification,
-          })
-          .eq("id", dossierId);
-
-        // ── 5. Genera dossier visivo con GPT Image 2 ──
-        const palette = getPaletteBySubSeason(classification.subSeason);
-        const dossierImageUrl = await generateDossierImage(
-          palette,
-          classification,
-          signedUrl.signedUrl,
-          analysisMode as DossierMode,
-          locale
-        );
-
-        // ── 6. Scarica e upload dossier su Supabase Storage (con retry) ──
-        const dossierResponse = await fetch(dossierImageUrl);
-        if (!dossierResponse.ok) {
-          throw new Error("Failed to download generated dossier image");
-        }
-        const dossierBuffer = Buffer.from(await dossierResponse.arrayBuffer());
-        const dossierPath = `${user.id}/${dossierId}.png`;
-
-        let dossierUploadError: Error | null = null;
-        for (let attempt = 1; attempt <= 3; attempt++) {
-          const { error } = await supabase.storage
-            .from("dossiers")
-            .upload(dossierPath, dossierBuffer, {
-              contentType: "image/png",
-              upsert: true,
-            });
-
-          if (!error) {
-            dossierUploadError = null;
-            break;
-          }
-          console.warn(`[analyzePhoto Background] Dossier upload attempt ${attempt}/3 failed:`, error.message);
-          dossierUploadError = new Error(error.message);
-          if (attempt < 3) await new Promise(r => setTimeout(r, attempt * 2000));
-        }
-
-        if (dossierUploadError) {
-          throw new Error(
-            `Dossier storage upload failed after 3 attempts: ${dossierUploadError.message}`
-          );
-        }
-
-        // ── 7. Aggiorna dossier → completed ──
-        await supabase
-          .from("dossiers")
-          .update({
-            status: "completed",
-            generated_dossier_path: dossierPath,
-          })
-          .eq("id", dossierId);
-
-      } catch (backgroundErr) {
-        console.error("[analyzePhoto Background] Pipeline failed:", backgroundErr);
-        
-        // Segna il dossier come fallito se esiste
-        if (dossierId) {
-          await supabase
-            .from("dossiers")
-            .update({ 
-              status: "failed",
-              error_message: backgroundErr instanceof Error ? backgroundErr.message : String(backgroundErr)
-            })
-            .eq("id", dossierId);
-        }
-      }
-    })());
+    waitUntil(
+      runDossierGenerationPipeline({
+        dossierId,
+        userId: user.id,
+        photoPath,
+        userNotes: userNotes || null,
+        analysisMode,
+        locale,
+      })
+    );
 
     // Ritorna immediatamente: la UI è libera, il dossier è in coda.
     return { status: "success", dossierId };

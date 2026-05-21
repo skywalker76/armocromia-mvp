@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -44,6 +44,7 @@ export type Database = {
           classification_result: Json | null
           classified_season: string | null
           created_at: string
+          error_message: string | null
           generated_dossier_path: string | null
           id: number
           original_photo_path: string | null
@@ -56,6 +57,7 @@ export type Database = {
           classification_result?: Json | null
           classified_season?: string | null
           created_at?: string
+          error_message?: string | null
           generated_dossier_path?: string | null
           id?: never
           original_photo_path?: string | null
@@ -68,6 +70,7 @@ export type Database = {
           classification_result?: Json | null
           classified_season?: string | null
           created_at?: string
+          error_message?: string | null
           generated_dossier_path?: string | null
           id?: never
           original_photo_path?: string | null
