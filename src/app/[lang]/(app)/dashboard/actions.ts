@@ -5,9 +5,7 @@ import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { waitUntil } from "@vercel/functions";
-import { stripe } from "@/lib/stripe";
-import { headers } from "next/headers";
-import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
+import { createCheckoutSession } from "@/lib/lemonsqueezy";
 
 /**
  * Stato ritornato dalla Server Action per feedback al client.
@@ -119,12 +117,12 @@ export async function analyzePhoto(
   let dossierId: number | undefined = undefined;
 
   try {
-    // ── 2. Crea record dossier ──
+    // ── 2. Crea record dossier in stato pending_payment ──
     const { data: dossier, error: dossierError } = await supabase
       .from("dossiers")
       .insert({
         user_id: user.id,
-        status: "processing",
+        status: "pending_payment",
         user_notes: userNotes || null,
       })
       .select("id")
@@ -182,33 +180,37 @@ export async function analyzePhoto(
       .update({ original_photo_path: photoPath })
       .eq("id", dossierId);
 
-    // Genera signed URL per Vision AI (valido 1 ora)
-    const { data: signedUrl } = await supabase.storage
-      .from("photos")
-      .createSignedUrl(photoPath, 3600);
-
-    if (!signedUrl?.signedUrl) {
-      throw new Error("Failed to generate signed URL for photo");
-    }
-
     if (dossierId === undefined) {
       throw new Error("Dossier ID mancante per la generazione");
     }
 
-    // ── 4-7. Task in background (non bloccante) ──
-    waitUntil(
-      runDossierGenerationPipeline({
-        dossierId,
-        userId: user.id,
-        photoPath,
-        userNotes: userNotes || null,
-        analysisMode,
-        locale,
-      })
-    );
+    // ── 4. Crea la sessione di Checkout su Lemon Squeezy ──
+    const checkoutUrl = await createCheckoutSession({
+      dossierId,
+      userId: user.id,
+      userEmail: user.email || "",
+      analysisMode: analysisMode || "full",
+      locale,
+    });
 
-    // Ritorna immediatamente: la UI è libera, il dossier è in coda.
-    return { status: "success", dossierId };
+    // ── 5. Crea il record di pagamento in stato pending ──
+    const { error: paymentError } = await supabase
+      .from("payments")
+      .insert({
+        user_id: user.id,
+        dossier_id: dossierId,
+        amount_cents: 2900,
+        currency: "EUR",
+        status: "pending",
+        stripe_checkout_session_id: checkoutUrl,
+      });
+
+    if (paymentError) {
+      throw new Error(`DB payment insert failed: ${paymentError.message}`);
+    }
+
+    // Ritorna immediatamente: la UI è libera, l'utente viene reindirizzato al checkout.
+    return { status: "success", dossierId, checkoutUrl };
   } catch (err) {
     console.error("[analyzePhoto] Upload/Init failed:", err);
 

@@ -47,10 +47,13 @@ const INTL_LOCALE: Record<Locale, string> = {
  */
 export default async function DashboardPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<{ payment_success?: string; dossier_id?: string }>;
 }) {
   const { lang } = await params;
+  const { payment_success, dossier_id } = await searchParams;
   const locale: Locale = isValidLocale(lang) ? lang : defaultLocale;
   const { t } = await getTranslations(locale, "app.dashboard");
   const { t: tCommon } = await getTranslations(locale, "app");
@@ -237,7 +240,11 @@ export default async function DashboardPage({
               {hasDossiers ? t("newAnalysisBodyAgain") : t("newAnalysisBodyNew")}
             </p>
           </div>
-          <PhotoUploader userId={user!.id} />
+          <PhotoUploader
+            userId={user!.id}
+            paymentSuccess={payment_success === "true"}
+            paymentDossierId={dossier_id ? parseInt(dossier_id) : undefined}
+          />
         </div>
 
         {/* ── Dossier completati — Grid ── */}

@@ -18,13 +18,13 @@ const falKey = process.env.FAL_KEY;
 // Fail-fast: senza FAL_KEY l'intera pipeline AI è morta — meglio errore chiaro
 // all'init che "Forbidden" generico al primo upload.
 if (!falKey) {
-  throw new Error(
-    "[fal] FAL_KEY env var mancante. Configurala in .env.local (locale) o nel Vercel dashboard (production)."
+  console.warn(
+    "[fal] Warning: FAL_KEY env var mancante. Configurala in .env.local (locale) o nel Vercel dashboard (production)."
   );
+} else {
+  fal.config({
+    credentials: falKey,
+  });
 }
-
-fal.config({
-  credentials: falKey,
-});
 
 export { fal };

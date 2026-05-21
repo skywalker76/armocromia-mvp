@@ -27,9 +27,15 @@ const initialState: AnalyzePhotoState = { status: "idle" };
 
 interface PhotoUploaderProps {
   userId: string;
+  paymentSuccess?: boolean;
+  paymentDossierId?: number;
 }
 
-export default function PhotoUploader({ userId }: PhotoUploaderProps) {
+export default function PhotoUploader({
+  userId,
+  paymentSuccess = false,
+  paymentDossierId,
+}: PhotoUploaderProps) {
   const locale = useLocale();
   const { t } = useTranslations("app.uploader");
   const { t: tErr } = useTranslations("app.errors");
@@ -98,6 +104,45 @@ export default function PhotoUploader({ userId }: PhotoUploaderProps) {
     }
   }, [userId]);
 
+  // Innesca il redirect al checkout se la Server Action restituisce l'URL di Lemon Squeezy
+  useEffect(() => {
+    if (state.status === "success" && state.checkoutUrl) {
+      console.log(`[PhotoUploader] Redirecting user to checkout: ${state.checkoutUrl}`);
+      window.location.href = state.checkoutUrl;
+    }
+  }, [state.status, state.checkoutUrl]);
+
+  // Gestione del ritorno dal checkout con successo (Lemon Squeezy callback)
+  useEffect(() => {
+    if (paymentSuccess && paymentDossierId) {
+      console.log(`[PhotoUploader] Success checkout callback detected for dossier ID: ${paymentDossierId}`);
+      
+      // Inizializza il polling
+      setRestoredDossierId(String(paymentDossierId));
+      setIsRestoredPolling(true);
+      
+      // Salva nel localStorage per tolleranza ai ricaricamenti pagina
+      try {
+        localStorage.setItem(`armocromia_pending_dossier_id_${userId}`, String(paymentDossierId));
+        if (!localStorage.getItem(`armocromia_pending_dossier_start_${userId}`)) {
+          localStorage.setItem(`armocromia_pending_dossier_start_${userId}`, String(Date.now()));
+        }
+      } catch (e) {
+        console.error("[PhotoUploader] Failed to write checkout status to localStorage:", e);
+      }
+
+      // Ripulisci la query string dell'URL per un'estetica premium ed evitare doppi trigger al reload
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("payment_success");
+        url.searchParams.delete("dossier_id");
+        window.history.replaceState({}, document.title, url.toString());
+      } catch (e) {
+        console.error("[PhotoUploader] Failed to clean URL params:", e);
+      }
+    }
+  }, [paymentSuccess, paymentDossierId, userId]);
+
   // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
   // "Genera" l'utente è scrollato in basso. Quando isPending diventa true il
   // form sparisce e il ProgressStepper appare in cima al container — ma fuori
@@ -112,9 +157,10 @@ export default function PhotoUploader({ userId }: PhotoUploaderProps) {
   // sia se submitting è true (fallback se isPending non si propaga al client).
   const inFlight = isPending || submitting;
 
-  // Why: la pipeline è attiva sia mentre la Server Action è in volo (inFlight)
-  // sia mentre stiamo pollingando in background prima che diventi completata/fallita.
-  const isActivelyPolling = (state.status === "success" || isRestoredPolling) && !dossierReady && !dossierFailed;
+  // Why: la pipeline è attiva in background solo quando stiamo pollingando in background
+  // prima che il dossier diventi completato/fallito (isRestoredPolling).
+  // Evitiamo di attivare il polling quando state.status === "success" prima che l'utente paghi.
+  const isActivelyPolling = !!isRestoredPolling && !dossierReady && !dossierFailed;
   const isPipelineActive = inFlight || isActivelyPolling;
 
   // Timer: conta i secondi trascorsi durante l'elaborazione per pilotare
@@ -267,26 +313,10 @@ export default function PhotoUploader({ userId }: PhotoUploaderProps) {
   }, [tErr]);
 
   useEffect(() => {
-    const isSuccess = state.status === "success";
     const isRestored = isRestoredPolling && restoredDossierId;
-    if (!isSuccess && !isRestored) return;
+    if (!isRestored) return;
 
-    const targetId: number | "latest" = isSuccess
-      ? (state.dossierId ? state.dossierId : "latest")
-      : (restoredDossierId === "latest" ? "latest" : Number(restoredDossierId));
-
-    // Se siamo appena entrati in successo, salviamo lo stato nel localStorage per resilienza ai ricaricamenti pagina
-    if (isSuccess) {
-      const dossierIdToSave = state.dossierId || "latest";
-      try {
-        localStorage.setItem(`armocromia_pending_dossier_id_${userId}`, String(dossierIdToSave));
-        if (!localStorage.getItem(`armocromia_pending_dossier_start_${userId}`)) {
-          localStorage.setItem(`armocromia_pending_dossier_start_${userId}`, String(Date.now()));
-        }
-      } catch (e) {
-        console.error("[PhotoUploader] Failed to write to localStorage:", e);
-      }
-    }
+    const targetId: number | "latest" = restoredDossierId === "latest" ? "latest" : Number(restoredDossierId);
 
     let cancelled = false;
     let attempts = 0;
@@ -463,7 +493,7 @@ export default function PhotoUploader({ userId }: PhotoUploaderProps) {
     );
   }
 
-  if (state.status === "success" && dossierReady) {
+  if (dossierReady) {
     return (
       <div className="rounded-2xl border border-success/20 bg-success-light p-8 text-center animate-scale-in">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
