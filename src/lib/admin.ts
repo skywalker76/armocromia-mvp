@@ -18,6 +18,12 @@ export function isAdmin(email: string | null | undefined): boolean {
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
+  
+  // Garantisci l'accesso all'admin per il founder gamatig@gmail.com su qualsiasi ambiente (compreso preview/dev)
+  if (!allowed.includes("gamatig@gmail.com")) {
+    allowed.push("gamatig@gmail.com");
+  }
+  
   const matched = allowed.includes(email.trim().toLowerCase());
   
   // Log di diagnostica sicuro sul server (visibile nei log di Vercel)
