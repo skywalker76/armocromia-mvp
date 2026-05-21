@@ -3,6 +3,14 @@ import { classifyPhoto } from "@/lib/fal/classify";
 import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossier";
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import { type Locale } from "@/lib/i18n/config";
+import { sendEmail } from "@/lib/emails/resend";
+import {
+  getDossierReadyEmailHtml,
+  getAdminErrorEmailHtml,
+  PALETTE_DISPLAY_BY_LOCALE,
+  MACRO_SEASON_BY_LOCALE,
+  getMacroSeason,
+} from "@/lib/emails/templates";
 
 /**
  * Pipeline condivisa di classificazione AI e generazione dossier.
@@ -112,6 +120,38 @@ export async function runDossierGenerationPipeline({
       })
       .eq("id", dossierId);
 
+    // ── 6. Invia notifica email all'utente ──
+    try {
+      const { data: userData } = await supabase.auth.admin.getUserById(userId);
+      const userEmail = userData?.user?.email;
+      const userFullName = userData?.user?.user_metadata?.full_name || userEmail?.split("@")[0] || "Ospite";
+
+      if (userEmail) {
+        const seasonName = PALETTE_DISPLAY_BY_LOCALE[locale][classification.subSeason] || classification.subSeason;
+        const macroKey = getMacroSeason(classification.subSeason);
+        const seasonGroup = MACRO_SEASON_BY_LOCALE[locale][macroKey] || macroKey;
+        
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://armocromia-mvp.vercel.app";
+        const dossierUrl = `${siteUrl}/${locale}/dashboard`;
+
+        const emailContent = getDossierReadyEmailHtml({
+          userName: userFullName,
+          seasonName,
+          seasonGroup,
+          dossierUrl,
+          locale,
+        });
+
+        await sendEmail({
+          to: userEmail,
+          subject: emailContent.subject,
+          html: emailContent.html,
+        });
+      }
+    } catch (emailErr) {
+      console.error(`[Pipeline Background] Errore non-bloccante invio email utente per dossier=${dossierId}:`, emailErr);
+    }
+
   } catch (err) {
     console.error(`[Pipeline Background] Errore critico per dossier=${dossierId}:`, err);
     
@@ -123,5 +163,31 @@ export async function runDossierGenerationPipeline({
         error_message: err instanceof Error ? err.message : String(err),
       })
       .eq("id", dossierId);
+
+    // ── 7. Invia notifica di errore all'admin ──
+    try {
+      const adminEmails = process.env.ADMIN_EMAILS || "gamatig@gmail.com";
+      const list = adminEmails.split(",").map((e) => e.trim());
+      
+      for (const adminEmail of list) {
+        if (!adminEmail) continue;
+
+        const errorContent = getAdminErrorEmailHtml({
+          dossierId,
+          userId,
+          errorMessage: err instanceof Error ? err.message : String(err),
+          errorStack: err instanceof Error ? err.stack : undefined,
+          createdAt: new Date().toISOString(),
+        });
+
+        await sendEmail({
+          to: adminEmail,
+          subject: errorContent.subject,
+          html: errorContent.html,
+        });
+      }
+    } catch (adminEmailErr) {
+      console.error(`[Pipeline Background] Errore non-bloccante invio email errore admin per dossier=${dossierId}:`, adminEmailErr);
+    }
   }
 }

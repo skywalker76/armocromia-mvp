@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import PhotoUploader from "@/components/app/PhotoUploader";
 import DossierCard from "@/components/app/DossierCard";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
+import DeleteAccountButton from "@/components/app/DeleteAccountButton";
 import FloatingUploadButton from "@/components/app/FloatingUploadButton";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
@@ -261,11 +262,14 @@ export default async function DashboardPage({
           </div>
         )}
 
-        {/* ── Footer branding ── */}
-        <div className="mt-14 text-center">
+        {/* ── Footer branding & Privacy ── */}
+        <div className="mt-14 flex flex-col items-center gap-4 text-center">
           <p className="text-xs text-muted-light/60 tracking-wide">
             {t("footerBranding")}
           </p>
+          <div className="flex items-center gap-3">
+            <DeleteAccountButton />
+          </div>
         </div>
       </div>
 

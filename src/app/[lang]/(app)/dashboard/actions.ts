@@ -403,5 +403,140 @@ export async function checkAdminStatus(): Promise<boolean> {
   return isAdmin(user.email);
 }
 
+/**
+ * Server Action — elimina in modo definitivo e irreversibile l'account utente e tutti i suoi dati (Diritto all'Oblio - GDPR).
+ *
+ * Pipeline:
+ * 1. Verifica auth
+ * 2. Recupera tutti i dossier dell'utente per identificare i file in Storage
+ * 3. Rimuove tutti i file fisici (originali e generati) da photos e dossiers buckets
+ * 4. Rimuove i record dei dossier e dei pagamenti dal DB
+ * 5. Rimuove il profilo utente dalla tabella profiles
+ * 6. Rimuove l'utente in modo definitivo da auth.users tramite l'API di amministrazione di Supabase
+ */
+export async function deleteAccount(
+  clientLocale?: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient();
+  const locale: Locale =
+    typeof clientLocale === "string" && isValidLocale(clientLocale)
+      ? clientLocale
+      : defaultLocale;
+  const { t: tErr } = await getTranslations(locale, "app.errors");
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: tErr("notAuthenticated") };
+  }
+
+  // Protezione di sicurezza: gli amministratori di sistema non possono cancellare il proprio account da qui
+  const { isAdmin } = await import("@/lib/admin");
+  if (user.email && isAdmin(user.email)) {
+    return {
+      success: false,
+      error:
+        locale === "it"
+          ? "Gli account amministratore non possono essere eliminati per motivi di sicurezza."
+          : locale === "es"
+          ? "Las cuentas de administrador no se pueden eliminar por razones de seguridad."
+          : "Administrator accounts cannot be deleted for security reasons.",
+    };
+  }
+
+  try {
+    // 1. Recupera tutti i dossier dell'utente per identificare i file nello Storage
+    const { data: dossiers, error: fetchError } = await supabase
+      .from("dossiers")
+      .select("id, original_photo_path, generated_dossier_path")
+      .eq("user_id", user.id);
+
+    if (fetchError) {
+      throw new Error(`Fetch dossiers failed: ${fetchError.message}`);
+    }
+
+    // Raccoglie tutti i file da eliminare
+    const filesToDelete: Array<{ bucket: string; path: string }> = [];
+    if (dossiers) {
+      for (const d of dossiers) {
+        if (d.original_photo_path) {
+          filesToDelete.push({ bucket: "photos", path: d.original_photo_path });
+        }
+        if (d.generated_dossier_path) {
+          filesToDelete.push({ bucket: "dossiers", path: d.generated_dossier_path });
+        }
+      }
+    }
+
+    // 2. Elimina i file fisici dallo Storage (best-effort)
+    for (const file of filesToDelete) {
+      const { error } = await supabase.storage.from(file.bucket).remove([file.path]);
+      if (error) {
+        console.warn(`[deleteAccount] Failed to delete ${file.bucket}/${file.path}:`, error.message);
+      }
+    }
+
+    // 3. Cancella i dossier dal database
+    const { error: dossiersDeleteError } = await supabase
+      .from("dossiers")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (dossiersDeleteError) {
+      throw new Error(`DB dossiers delete failed: ${dossiersDeleteError.message}`);
+    }
+
+    // 4. Cancella i pagamenti dal database
+    const { error: paymentsDeleteError } = await supabase
+      .from("payments")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (paymentsDeleteError) {
+      console.warn(`[deleteAccount] Payments delete failed:`, paymentsDeleteError.message);
+    }
+
+    // 5. Cancella il profilo utente dal database (profiles)
+    const { error: profileDeleteError } = await supabase
+      .from("profiles")
+      .delete()
+      .eq("id", user.id);
+
+    if (profileDeleteError) {
+      console.warn(`[deleteAccount] Profile delete failed:`, profileDeleteError.message);
+    }
+
+    // 6. Elimina l'utente da auth.users tramite admin client
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SECRET_KEY;
+
+    if (!supabaseUrl || !serviceKey) {
+      throw new Error("Supabase Admin credentials missing");
+    }
+
+    const { createClient: createAdminClient } = await import("@supabase/supabase-js");
+    const admin = createAdminClient(supabaseUrl, serviceKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+
+    const { error: deleteUserError } = await admin.auth.admin.deleteUser(user.id);
+
+    if (deleteUserError) {
+      throw new Error(`Auth user delete failed: ${deleteUserError.message}`);
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error("[deleteAccount] Unrecoverable error during account deletion:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : tErr("deleteGeneric") || "Account deletion failed",
+    };
+  }
+}
+
+
 
 
