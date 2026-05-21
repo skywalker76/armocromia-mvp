@@ -237,7 +237,7 @@ export default async function DashboardPage({
               {hasDossiers ? t("newAnalysisBodyAgain") : t("newAnalysisBodyNew")}
             </p>
           </div>
-          <PhotoUploader />
+          <PhotoUploader userId={user!.id} />
         </div>
 
         {/* ── Dossier completati — Grid ── */}

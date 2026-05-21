@@ -25,7 +25,11 @@ interface ModeCopy {
 
 const initialState: AnalyzePhotoState = { status: "idle" };
 
-export default function PhotoUploader() {
+interface PhotoUploaderProps {
+  userId: string;
+}
+
+export default function PhotoUploader({ userId }: PhotoUploaderProps) {
   const locale = useLocale();
   const { t } = useTranslations("app.uploader");
   const { t: tErr } = useTranslations("app.errors");
@@ -72,11 +76,15 @@ export default function PhotoUploader() {
     
     // Controlla se c'è una generazione pendente in localStorage per resilienza mobile
     try {
-      const pendingId = localStorage.getItem("armocromia_pending_dossier_id");
-      const pendingStart = localStorage.getItem("armocromia_pending_dossier_start");
+      // Pulisci i vecchi cookie globali non-scopati se presenti per evitare di rimanere bloccati
+      localStorage.removeItem("armocromia_pending_dossier_id");
+      localStorage.removeItem("armocromia_pending_dossier_start");
+
+      const pendingId = localStorage.getItem(`armocromia_pending_dossier_id_${userId}`);
+      const pendingStart = localStorage.getItem(`armocromia_pending_dossier_start_${userId}`);
       
       if (pendingId) {
-        console.log(`[PhotoUploader] Ripristinato polling per dossier pendente ID: ${pendingId}`);
+        console.log(`[PhotoUploader] Ripristinato polling per dossier pendente ID: ${pendingId} per utente: ${userId}`);
         setRestoredDossierId(pendingId);
         setIsRestoredPolling(true);
         
@@ -88,7 +96,7 @@ export default function PhotoUploader() {
     } catch (e) {
       console.error("[PhotoUploader] Failed to read from localStorage:", e);
     }
-  }, []);
+  }, [userId]);
 
   // Why: il PhotoUploader sta in fondo alla dashboard, quindi al click di
   // "Genera" l'utente è scrollato in basso. Quando isPending diventa true il
@@ -271,9 +279,9 @@ export default function PhotoUploader() {
     if (isSuccess) {
       const dossierIdToSave = state.dossierId || "latest";
       try {
-        localStorage.setItem("armocromia_pending_dossier_id", String(dossierIdToSave));
-        if (!localStorage.getItem("armocromia_pending_dossier_start")) {
-          localStorage.setItem("armocromia_pending_dossier_start", String(Date.now()));
+        localStorage.setItem(`armocromia_pending_dossier_id_${userId}`, String(dossierIdToSave));
+        if (!localStorage.getItem(`armocromia_pending_dossier_start_${userId}`)) {
+          localStorage.setItem(`armocromia_pending_dossier_start_${userId}`, String(Date.now()));
         }
       } catch (e) {
         console.error("[PhotoUploader] Failed to write to localStorage:", e);
@@ -296,7 +304,18 @@ export default function PhotoUploader() {
 
         if (!data) {
           console.warn(`[PhotoUploader Polling] Dossier not found or unauthorized for ID: ${targetId}`);
-          return false;
+          try {
+            localStorage.removeItem(`armocromia_pending_dossier_id_${userId}`);
+            localStorage.removeItem(`armocromia_pending_dossier_start_${userId}`);
+          } catch (e) {
+            console.error(e);
+          }
+          if (!cancelled) {
+            setIsRestoredPolling(false);
+            setRestoredDossierId(null);
+            setDossierStatus("processing");
+          }
+          return true; // Stop polling immediately!
         }
 
         if (!cancelled) {
@@ -371,14 +390,14 @@ export default function PhotoUploader() {
   useEffect(() => {
     if (dossierReady && resolvedDossierId) {
       try {
-        localStorage.removeItem("armocromia_pending_dossier_id");
-        localStorage.removeItem("armocromia_pending_dossier_start");
+        localStorage.removeItem(`armocromia_pending_dossier_id_${userId}`);
+        localStorage.removeItem(`armocromia_pending_dossier_start_${userId}`);
       } catch (e) {
         console.error("[PhotoUploader] Failed to clear localStorage:", e);
       }
       router.push(localePath(locale, `/dossier/${resolvedDossierId}`));
     }
-  }, [dossierReady, resolvedDossierId, router, locale]);
+  }, [dossierReady, resolvedDossierId, router, locale, userId]);
 
   if (isActivelyPolling) {
     // Ancora in elaborazione — mostra stepper + timer
@@ -404,8 +423,8 @@ export default function PhotoUploader() {
 
   if (dossierFailed) {
     try {
-      localStorage.removeItem("armocromia_pending_dossier_id");
-      localStorage.removeItem("armocromia_pending_dossier_start");
+      localStorage.removeItem(`armocromia_pending_dossier_id_${userId}`);
+      localStorage.removeItem(`armocromia_pending_dossier_start_${userId}`);
     } catch (e) {
       console.error("[PhotoUploader] Failed to clear localStorage:", e);
     }
