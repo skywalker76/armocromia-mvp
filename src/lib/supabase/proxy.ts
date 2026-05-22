@@ -15,10 +15,10 @@ export async function updateSession(request: NextRequest) {
   // Why: se le env vars Supabase non sono configurate (es. durante lo sviluppo iniziale),
   // lasciamo passare la request senza refreshare la sessione.
   // Questo evita crash su pagine pubbliche come la landing.
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-  ) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
+
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.next({ request });
   }
 
@@ -29,8 +29,8 @@ export async function updateSession(request: NextRequest) {
   // Why: con Fluid compute, creare sempre un nuovo client per ogni request.
   // Non mettere il client in una variabile globale.
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() {

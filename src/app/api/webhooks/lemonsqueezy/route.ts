@@ -7,11 +7,11 @@ import { type Locale, isValidLocale, defaultLocale } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
-const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
+const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET?.trim();
 
 // Inizializza client Supabase Admin con privilegi service_role per bypassare le policy RLS
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SECRET_KEY; // service_role key
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseServiceKey = process.env.SUPABASE_SECRET_KEY?.trim(); // service_role key
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error("[LemonSqueezy Webhook] Critical: Supabase Admin env vars missing.");

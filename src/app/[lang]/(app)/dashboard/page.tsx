@@ -78,7 +78,7 @@ export default async function DashboardPage({
     })
     .eq("user_id", user!.id)
     .in("status", ["processing", "generating"])
-    .lt("created_at", stuckCutoff);
+    .lt("updated_at", stuckCutoff);
 
   // Carica i dossier dell'utente
   const { data: dossiers } = await supabase

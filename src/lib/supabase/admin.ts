@@ -10,8 +10,8 @@ import { Database } from "@/types/database";
  * garantisce che il server possa aggiornare lo stato del dossier e caricare i file in sicurezza.
  */
 export function createAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SECRET_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseServiceKey = process.env.SUPABASE_SECRET_KEY?.trim();
 
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error(

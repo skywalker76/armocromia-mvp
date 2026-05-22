@@ -7,8 +7,8 @@ import { createBrowserClient } from "@supabase/ssr";
  * e gestisce automaticamente i cookie di sessione lato client.
  */
 export function createClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(

@@ -32,9 +32,9 @@ export async function createCheckoutSession({
   analysisMode,
   locale,
 }: CreateCheckoutParams): Promise<string> {
-  const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
-  const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
-  const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID;
+  const apiKey = process.env.LEMON_SQUEEZY_API_KEY?.trim();
+  const storeId = process.env.LEMON_SQUEEZY_STORE_ID?.trim();
+  const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID?.trim();
 
   if (!apiKey || !storeId || !variantId) {
     throw new Error(

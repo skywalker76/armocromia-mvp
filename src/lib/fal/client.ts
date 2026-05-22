@@ -13,7 +13,7 @@ import { fal } from "@fal-ai/client";
 
 // Why: passiamo la key esplicitamente perché "from_env" non funziona
 // in modo affidabile con Next.js Turbopack (non legge FAL_KEY).
-const falKey = process.env.FAL_KEY;
+const falKey = process.env.FAL_KEY?.trim();
 
 // Fail-fast: senza FAL_KEY l'intera pipeline AI è morta — meglio errore chiaro
 // all'init che "Forbidden" generico al primo upload.
