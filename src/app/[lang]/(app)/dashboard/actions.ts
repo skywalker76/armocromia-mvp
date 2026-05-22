@@ -1,5 +1,6 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { getTranslations } from "@/lib/i18n/server";
@@ -194,7 +195,10 @@ export async function analyzePhoto(
     });
 
     // ── 5. Crea il record di pagamento in stato pending ──
-    const { error: paymentError } = await supabase
+    // Usa il client admin (service_role) per bypassare RLS sulla tabella payments.
+    // L'autenticità dell'utente è già verificata sopra tramite supabase.auth.getUser().
+    const supabaseAdmin = createAdminClient();
+    const { error: paymentError } = await supabaseAdmin
       .from("payments")
       .insert({
         user_id: user.id,
