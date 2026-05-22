@@ -1,6 +1,11 @@
+import "server-only";
+
 /**
  * Helper REST nativo ed estremamente leggero per interagire con le API di Lemon Squeezy
  * in linea con la filosofia anti-slop del progetto (nessuna dipendenza da SDK pesanti).
+ *
+ * "server-only" garantisce che Turbopack/webpack NON includa mai questo modulo
+ * in bundle client-side, dove process.env (server vars) sarebbe undefined.
  */
 
 if (!process.env.LEMON_SQUEEZY_API_KEY) {
