@@ -1,0 +1,12 @@
+.env
+.env.*
+.env.local
+.env.production
+.env.production.local
+.env.production.pulled
+.env.production.real
+.env.vercel.pull
+.env.vercel.pull.prod
+.env-val
+scratch/
+scratch_temp_*
