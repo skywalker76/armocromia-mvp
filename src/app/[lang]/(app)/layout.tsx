@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import ToastContainer from "@/components/ui/Toast";
@@ -13,7 +14,9 @@ export const dynamic = "force-dynamic";
  *
  * Why: questo layout fa il check auth a livello di gruppo.
  * Tutte le pagine sotto [lang]/(app)/ ereditano questo guard.
- * Se l'utente non è autenticato, redirect a /[locale]/auth/login.
+ * Se l'utente non è autenticato, redirect a /[locale]/auth/login?next=<url>.
+ * Il parametro ?next= permette alla login page di rimandare l'utente
+ * all'URL originale (es. dashboard con payment_success=true) dopo l'auth.
  */
 export default async function AppLayout({
   children,
@@ -31,7 +34,12 @@ export default async function AppLayout({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect(localePath(locale, "/auth/login"));
+    // Preserva l'URL originale (incluso payment_success + dossier_id)
+    // così dopo il login l'utente viene rimandato al dossier in elaborazione.
+    const headersList = await headers();
+    const requestUrl = headersList.get("x-invoke-path") ?? "";
+    const nextParam = requestUrl ? `?next=${encodeURIComponent(requestUrl)}` : "";
+    redirect(`${localePath(locale, "/auth/login")}${nextParam}`);
   }
 
   const userIsAdmin = isAdmin(user.email);

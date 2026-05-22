@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, Suspense } from "react";
 import type { FormEvent, KeyboardEvent, ClipboardEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale } from "@/lib/i18n/locale-context";
 import { useTranslations } from "@/lib/i18n/translations-context";
 import { localePath } from "@/lib/i18n/config";
@@ -19,14 +19,19 @@ import { localePath } from "@/lib/i18n/config";
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 60;
 
-export default function LoginPage() {
+// Componente interno che usa useSearchParams — deve stare dentro <Suspense>
+function LoginPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
   const { t } = useTranslations("auth.login");
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // URL di redirect post-login (es. dashboard?payment_success=true&dossier_id=X)
+  const nextUrl = searchParams.get("next") ?? localePath(locale, "/dashboard");
 
   // OTP state
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
@@ -98,8 +103,8 @@ export default function LoginPage() {
       }
 
       setStatus("success");
-      // Breve delay per mostrare l'animazione di successo, poi redirect
-      setTimeout(() => router.push(localePath(locale, "/dashboard")), 800);
+      // Redirect al ?next= URL (es. dashboard con payment_success) oppure alla dashboard
+      setTimeout(() => router.push(nextUrl), 800);
     } catch {
       setStatus("error");
       setErrorMessage(t("otpNetworkError"));
@@ -428,5 +433,15 @@ export default function LoginPage() {
         )}
       </div>
     </main>
+  );
+}
+
+// Wrapper con Suspense boundary richiesto da Next.js per useSearchParams()
+// https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
   );
 }
