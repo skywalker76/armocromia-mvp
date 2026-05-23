@@ -414,7 +414,7 @@ export default function PhotoUploader({
       cancelled = true; 
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [state.status, state.dossierId]);
+  }, [state.status, state.dossierId, isRestoredPolling, restoredDossierId, userId]);
 
   // Redirect solo quando il dossier è pronto
   useEffect(() => {
