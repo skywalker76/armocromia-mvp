@@ -470,6 +470,7 @@ export default function PhotoUploader({
             }
 
             setDossierReady(true);
+            router.refresh(); // Eagerly refresh server data to pop the new card into the grid
           }
           return true;
         }
@@ -478,6 +479,7 @@ export default function PhotoUploader({
           if (!cancelled) {
             setErrorMessage(data.error_message || tErrRef.current("genericPipeline"));
             setDossierFailed(true);
+            router.refresh(); // Eagerly refresh server data to show the failed state in dashboard
           }
           return true;
         }
