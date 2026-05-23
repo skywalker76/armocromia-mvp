@@ -67,9 +67,9 @@ export default function ProgressStepper({
   return (
     <div className="space-y-6">
       {/* ── Step indicators ── */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-start justify-between gap-2">
         {steps.map((step, i) => (
-          <div key={step.label} className="flex flex-1 items-center">
+          <div key={step.label} className="flex flex-1 items-start">
             {/* Step indicator */}
             <div className="flex flex-col items-center gap-2">
               <div
@@ -116,7 +116,7 @@ export default function ProgressStepper({
 
             {/* Connector line */}
             {i < steps.length - 1 && (
-              <div className="relative mx-2 h-0.5 flex-1 bg-cream-dark overflow-hidden rounded-full">
+              <div className="relative mx-2 h-0.5 flex-1 bg-cream-dark overflow-hidden rounded-full mt-5">
                 <div
                   className={`absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out
                     ${i < currentStep ? "w-full bg-green-500" : "w-0 bg-accent"}
