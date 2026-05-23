@@ -329,6 +329,7 @@
       "generationFailed": "La generazione del dossier non è riuscita. Riprova o contattaci per assistenza.",
       "successTitle": "Analisi completata!",
       "successBody": "Il tuo dossier cromatico è pronto. Reindirizzamento in corso…",
+      "styleTipTitle": "✦ Tip di Stile ✦",
       "waitPhase1": "Caricamento della tua foto in corso…",
       "waitPhase2": "L'IA sta classificando i tuoi colori…",
       "waitPhase3": "Stiamo generando il tuo dossier personalizzato…",
@@ -338,7 +339,13 @@
         "I colori giusti valorizzano la pelle e la fanno sembrare più luminosa",
         "La tua stagione cromatica resta costante nel tempo, anche con i capelli tinti",
         "Il dossier analizza sottotono, valore, intensità e contrasto del tuo incarnato",
-        "I metalli giusti (oro, argento, bronzo) possono valorizzarti tanto quanto i vestiti"
+        "I metalli giusti (oro, argento, bronzo) possono valorizzarti tanto quanto i vestiti",
+        "Il nero non valorizza tutti. Molte stagioni splendono decisamente di più con il blu navy, il cioccolato o il grigio antracite!",
+        "Il rossetto ideale si basa sul tuo sottotono. Toni caldi come il corallo e il pesca per la Primavera, toni freddi come il lampone e il prugna per l'Inverno.",
+        "Il contrasto misura la differenza di valore tra pelle, occhi e capelli. Chi ha un contrasto alto risplende con abbinamenti cromatici decisi.",
+        "Un trucco per capire il sottotono? Guarda come reagisce la pelle al sole: se ti scotti facilmente e fai fatica ad abbronzarti, tendi al sottotono freddo.",
+        "Le stagioni fredde (Estate/Inverno) sono valorizzate da colori a base blu o grigia, mentre quelle calde (Primavera/Autunno) splendono con sfumature a base gialla o aranciata.",
+        "Il guardaroba capsula perfetto si costruisce partendo dai colori neutri della tua palette, per poi aggiungere accenti di colore stagionali."
       ]
     },
     "stepper": {

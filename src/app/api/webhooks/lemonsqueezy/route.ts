@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import { waitUntil } from "@vercel/functions";
 import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
 import { type Locale, isValidLocale, defaultLocale } from "@/lib/i18n/config";
+import { sendEmail } from "@/lib/emails/resend";
+import { getReceiptEmailHtml } from "@/lib/emails/templates";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300; // 5 minuti max execution duration per background pipeline AI in waitUntil
@@ -154,6 +156,41 @@ export async function POST(request: Request) {
     if (dossierUpdateError) {
       console.error(`[LemonSqueezy Webhook] Failed to update dossier status to processing:`, dossierUpdateError.message);
       return NextResponse.json({ error: "Dossier update failed" }, { status: 500 });
+    }
+
+    // 3.5. Recupera l'email e i metadati dell'utente da Supabase Auth Admin per inviare la ricevuta
+    try {
+      const { data: authUserData } = await supabaseAdmin.auth.admin.getUserById(userId);
+      const userEmail = authUserData?.user?.email;
+      const displayName = (authUserData?.user?.user_metadata?.display_name || authUserData?.user?.user_metadata?.full_name || userEmail?.split("@")[0] || "Cliente").trim();
+
+      if (userEmail) {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://armocromia-mvp-tan.vercel.app";
+        const dossierUrl = `${siteUrl}/${locale}/dashboard`;
+        const { subject, html } = getReceiptEmailHtml({
+          userName: displayName,
+          dossierId,
+          amount: "€29,00",
+          dossierUrl,
+          locale,
+        });
+
+        waitUntil(
+          sendEmail({
+            to: userEmail,
+            subject,
+            html,
+          }).then((res) => {
+            if (!res.success) {
+              console.error(`[LemonSqueezy Webhook] Failed to send receipt email to ${userEmail}:`, res.error);
+            } else {
+              console.log(`[LemonSqueezy Webhook] Receipt email successfully sent to ${userEmail}`);
+            }
+          })
+        );
+      }
+    } catch (emailErr) {
+      console.error("[LemonSqueezy Webhook] Non-blocking exception during user receipt email creation:", emailErr);
     }
 
     // 4. Innesca in background la generazione asincrona del dossier biometrico 4K

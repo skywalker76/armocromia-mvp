@@ -329,6 +329,7 @@
       "generationFailed": "La generación del dossier ha fallado. Inténtalo de nuevo o contáctanos.",
       "successTitle": "¡Análisis completado!",
       "successBody": "Tu dossier cromático está listo. Redirigiendo…",
+      "styleTipTitle": "✦ Consejo de Estilo ✦",
       "waitPhase1": "Subiendo tu foto…",
       "waitPhase2": "La IA está clasificando tus colores…",
       "waitPhase3": "Generando tu dossier personalizado…",
@@ -338,7 +339,13 @@
         "Los colores adecuados realzan tu piel y la hacen parecer más luminosa",
         "Tu estación cromática permanece constante con el tiempo, incluso con el cabello teñido",
         "El dossier analiza subtono, valor, intensidad y contraste de tu tez",
-        "Los metales adecuados (oro, plata, bronce) pueden realzarte tanto como la ropa"
+        "Los metales adecuados (oro, plata, bronce) pueden realzarte tanto como la ropa",
+        "El negro no favorece a todos. Muchas estaciones brillan mucho más con azul marino, chocolate o gris marengo.",
+        "El labial ideal se basa en tu subtono. Tonos cálidos como el coral y el melocotón para la Primavera, tonos fríos como la frambuesa y la ciruela para el Invierno.",
+        "El contraste mide la diferencia de valor entre piel, ojos y cabello. Quienes tienen un contraste alto brillan con combinaciones cromáticas atrevidas.",
+        "¿Un truco para entender tu subtono? Observa cómo reacciona tu piel al sol: si te quemas fácilmente y te cuesta broncearte, tiendes a un subtono frío.",
+        "Las estaciones frías (Verano/Invierno) se ven favorecidas por colores con base azul o gris, mientras que las cálidas (Primavera/Otoño) brillan con tonos de base amarilla o naranja.",
+        "El fondo de armario perfecto se construye a partir de los colores de tu paleta, para luego añadir acentos de color estacionales."
       ]
     },
     "stepper": {

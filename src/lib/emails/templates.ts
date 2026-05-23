@@ -400,3 +400,246 @@ export function getAdminErrorEmailHtml({
 
   return { subject, html };
 }
+
+interface ReceiptEmailParams {
+  userName: string;
+  dossierId: number;
+  amount: string;
+  dossierUrl: string;
+  locale: Locale;
+}
+
+/**
+ * Genera l'HTML per la ricevuta di pagamento in 3 lingue.
+ */
+export function getReceiptEmailHtml({
+  userName,
+  dossierId,
+  amount,
+  dossierUrl,
+  locale,
+}: ReceiptEmailParams): { subject: string; html: string } {
+  const translations = {
+    it: {
+      subject: "🧾 Ricevuta di pagamento — Il tuo Dossier Armocromia",
+      salutation: `Ciao ${userName},`,
+      title: "Grazie per il tuo acquisto.",
+      intro: `Abbiamo ricevuto con successo il tuo pagamento di <strong>${amount}</strong> per la generazione del tuo dossier cromatico personalizzato (Dossier #${dossierId}).`,
+      detailsTitle: "Dettagli dell'Ordine",
+      detailsItem: "Servizio",
+      detailsService: "Analisi Cromatica Premium (Dossier 4K)",
+      detailsAmount: "Importo totale",
+      ctaLabel: "Vai alla tua Dashboard",
+      outro: "La nostra intelligenza artificiale è già al lavoro per elaborare la tua foto. Riceverai un'ulteriore email di notifica non appena il tuo dossier sarà pronto da consultare e scaricare.",
+      footerNote: "Hai 14 giorni di garanzia 'soddisfatti o rimborsati'. Per supporto o richieste di rimborso scrivi a info@antigravity.dev.",
+    },
+    en: {
+      subject: "🧾 Payment Receipt — Your Color Analysis Dossier",
+      salutation: `Hello ${userName},`,
+      title: "Thank you for your purchase.",
+      intro: `We have successfully received your payment of <strong>${amount}</strong> for generating your personalized color analysis (Dossier #${dossierId}).`,
+      detailsTitle: "Order Details",
+      detailsItem: "Service",
+      detailsService: "Premium Color Analysis (4K Dossier)",
+      detailsAmount: "Total amount",
+      ctaLabel: "Go to Your Dashboard",
+      outro: "Our AI is already at work processing your photo. You will receive another email notification as soon as your dossier is ready to view and download.",
+      footerNote: "You have 14 days of 'no questions asked' refund policy. For support or refund requests, please contact info@antigravity.dev.",
+    },
+    es: {
+      subject: "🧾 Recibo de Pago — Tu Dossier de Armocromía",
+      salutation: `Hola ${userName},`,
+      title: "Gracias por tu compra.",
+      intro: `Hemos recibido con éxito tu pago de <strong>${amount}</strong> para la generación de tu análisis cromático personalizado (Dossier #${dossierId}).`,
+      detailsTitle: "Detalles del Pedido",
+      detailsItem: "Servicio",
+      detailsService: "Análisis Cromático Premium (Dossier 4K)",
+      detailsAmount: "Importe total",
+      ctaLabel: "Ir a tu Panel",
+      outro: "Nuestra inteligencia artificial ya está trabajando procesando tu foto. Recibirás otro correo electrónico tan pronto como tu dossier esté listo para ver y descargar.",
+      footerNote: "Tienes 14 días de garantía de reembolso sin preguntas. Para soporte o reembolsos escribe a info@antigravity.dev.",
+    },
+  };
+
+  const t = translations[locale] || translations.it;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${t.subject}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #FAF6F0;
+      color: #1A1513;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+      width: 100%;
+      background-color: #FAF6F0;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #FFFFFF;
+      border: 1px solid #F4EFE6;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26, 21, 19, 0.03);
+    }
+    .header {
+      padding: 30px 40px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid #FAF6F0;
+    }
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 24px;
+      font-style: italic;
+      letter-spacing: -0.5px;
+      color: #B97A6A;
+      text-decoration: none;
+    }
+    .content {
+      padding: 40px;
+    }
+    .salutation {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #1A1513;
+    }
+    .title {
+      font-family: Georgia, serif;
+      font-size: 26px;
+      line-height: 1.3;
+      font-weight: normal;
+      color: #1A1513;
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #5C524D;
+      margin-bottom: 24px;
+    }
+    .receipt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 32px 0;
+      font-size: 14px;
+    }
+    .receipt-table th {
+      text-align: left;
+      font-weight: 700;
+      color: #A3938C;
+      border-bottom: 1px solid #F4EFE6;
+      padding-bottom: 12px;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .receipt-table td {
+      padding: 16px 0;
+      border-bottom: 1px solid #FAF6F0;
+      color: #1A1513;
+    }
+    .receipt-table td.amount {
+      text-align: right;
+      font-weight: 600;
+    }
+    .cta-container {
+      text-align: center;
+      margin: 32px 0 16px 0;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #B97A6A;
+      color: #FFFFFF !important;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 16px 36px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(185, 122, 106, 0.2);
+    }
+    .footer {
+      background-color: #FFFFFF;
+      padding: 30px 40px 40px 40px;
+      border-top: 1px solid #FAF6F0;
+      text-align: center;
+    }
+    .footer-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #A3938C;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <a href="${dossierUrl}" class="logo">Armocromia</a>
+      </div>
+      
+      <!-- Content -->
+      <div class="content">
+        <p class="salutation">${t.salutation}</p>
+        <h1 class="title">${t.title}</h1>
+        <p class="text">${t.intro}</p>
+        
+        <!-- Order Details Table -->
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th>${t.detailsItem}</th>
+              <th style="text-align: right;">${t.detailsAmount}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>${t.detailsService}</strong><br>
+                <span style="font-size: 12px; color: #A3938C;">Dossier ID: #${dossierId}</span>
+              </td>
+              <td class="amount">${amount}</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <p class="text">${t.outro}</p>
+        
+        <!-- Button CTA -->
+        <div class="cta-container">
+          <a href="${dossierUrl}" class="cta-button" target="_blank">${t.ctaLabel}</a>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="footer">
+        <p class="footer-text">${t.footerNote}</p>
+        <div style="font-size: 11px; color: #A3938C;">
+          <span>&copy; 2026 Armocromia B2C SaaS.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  return { subject: t.subject, html };
+}
+

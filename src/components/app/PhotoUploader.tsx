@@ -104,7 +104,7 @@ export default function PhotoUploader({
   paymentDossierId,
 }: PhotoUploaderProps) {
   const locale = useLocale();
-  const { t } = useTranslations("app.uploader");
+  const { t, raw: rawUploader } = useTranslations("app.uploader");
   const { t: tErr } = useTranslations("app.errors");
   const { raw: rawMode } = useTranslations("app.analysisModes");
   const [state, formAction, isPending] = useActionState(analyzePhoto, initialState);
@@ -271,6 +271,18 @@ export default function PhotoUploader({
     if (elapsedSeconds < 30) return t("waitPhase2");
     return t("waitPhase3");
   }, [elapsedSeconds, t]);
+ 
+  // Load wait tips array and translate styleTipTitle localizable
+  const tips = useMemo(() => {
+    try {
+      return rawUploader<string[]>("waitTips") || [];
+    } catch (e) {
+      return [];
+    }
+  }, [rawUploader]);
+
+  const currentTipIndex = Math.floor(elapsedSeconds / 6) % (tips.length || 1);
+  const activeTip = tips[currentTipIndex] || "";
 
   // Smonta submitting quando la Server Action restituisce un risultato.
   // Min display time 3s: evita flicker se la Server Action torna error
@@ -567,6 +579,21 @@ export default function PhotoUploader({
           <div className="mt-4 h-1 overflow-hidden rounded-full bg-accent/10">
             <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-light to-accent" style={{ animation: "progress-indeterminate 2s ease-in-out infinite" }} />
           </div>
+
+          {/* Active Style Tip Box */}
+          {activeTip && (
+            <div 
+              key={currentTipIndex} 
+              className="mt-6 rounded-xl border border-accent/5 bg-accent/[0.02] p-4 text-center animate-fade-in"
+            >
+              <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-accent mb-1">
+                {t("styleTipTitle")}
+              </span>
+              <p className="text-xs text-ink/80 leading-relaxed max-w-sm mx-auto">
+                {activeTip}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -664,6 +691,22 @@ export default function PhotoUploader({
                 style={{ animation: "progress-indeterminate 2s ease-in-out infinite" }}
               />
             </div>
+
+            {/* Active Style Tip Box (Modal) */}
+            {activeTip && (
+              <div 
+                key={currentTipIndex} 
+                className="mt-6 rounded-xl border border-accent/5 bg-accent/[0.02] p-4 text-center animate-fade-in"
+              >
+                <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-accent mb-1">
+                  {t("styleTipTitle")}
+                </span>
+                <p className="text-xs text-ink/80 leading-relaxed">
+                  {activeTip}
+                </p>
+              </div>
+            )}
+
             <p className="mt-4 text-xs text-muted-light">
               ⏱️ {elapsedSeconds}s
             </p>
@@ -688,6 +731,21 @@ export default function PhotoUploader({
           <div className="mt-4 h-1 overflow-hidden rounded-full bg-accent/10">
             <div className="h-full w-1/3 rounded-full bg-gradient-to-r from-accent-light to-accent" style={{ animation: "progress-indeterminate 2s ease-in-out infinite" }} />
           </div>
+
+          {/* Active Style Tip Box (Inline) */}
+          {activeTip && (
+            <div 
+              key={currentTipIndex} 
+              className="mt-6 rounded-xl border border-accent/5 bg-accent/[0.02] p-4 text-center animate-fade-in"
+            >
+              <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-accent mb-1">
+                {t("styleTipTitle")}
+              </span>
+              <p className="text-xs text-ink/80 leading-relaxed max-w-sm mx-auto">
+                {activeTip}
+              </p>
+            </div>
+          )}
         </div>
       )}
 

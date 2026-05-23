@@ -329,6 +329,7 @@
       "generationFailed": "Dossier generation failed. Please try again or contact us for help.",
       "successTitle": "Analysis complete!",
       "successBody": "Your color dossier is ready. Redirecting now…",
+      "styleTipTitle": "✦ Style Tip ✦",
       "waitPhase1": "Uploading your photo…",
       "waitPhase2": "Our AI is classifying your colors…",
       "waitPhase3": "Generating your personalized dossier…",
@@ -338,7 +339,13 @@
         "The right colors enhance your skin and make it look more radiant",
         "Your color season stays constant over time, even with dyed hair",
         "The dossier analyzes undertone, value, intensity and contrast of your complexion",
-        "The right metals (gold, silver, bronze) can flatter you as much as the right clothes"
+        "The right metals (gold, silver, bronze) can flatter you as much as the right clothes",
+        "Black doesn't flatter everyone. Many seasons shine much brighter in navy blue, rich chocolate, or charcoal grey!",
+        "The perfect lipstick matches your undertone. Warm tones like coral and peach for Spring, cool tones like raspberry and plum for Winter.",
+        "Contrast measures the difference in value between your skin, eyes, and hair. Those with high contrast shine in bold color pairings.",
+        "A trick to find your undertone? Look at how your skin reacts to the sun: if you burn easily and struggle to tan, you lean cool.",
+        "Cool seasons (Summer/Winter) are elevated by blue or grey-based colors, while warm seasons (Spring/Autumn) glow in yellow or orange-based shades.",
+        "The perfect capsule wardrobe is built starting from the neutral colors of your palette, adding seasonal color accents later."
       ]
     },
     "stepper": {
