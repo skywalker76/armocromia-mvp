@@ -23,6 +23,73 @@ interface ModeCopy {
  * drag-over, progress). La mutazione è delegata alla Server Action.
  */
 
+/**
+ * Utility client-side per ridimensionare e comprimere foto biometriche prima dell'upload.
+ *
+ * Why: i sensori delle fotocamere mobile moderne generano foto da 8-15MB.
+ * Caricarle raw su Vercel provocherebbe sistematicamente un errore 413 (Payload Too Large)
+ * poiché il limite rigido delle Serverless Functions è di 4.5MB.
+ * Questo compressore riduce la foto a max 1200px ed applica compressione JPEG 0.85,
+ * riducendo il payload a ~150-300KB mantenendo intatta la biometria per Gemini e fal.ai,
+ * garantendo caricamenti istantanei su rete mobile.
+ */
+const compressImage = (file: File, maxWidth = 1200, maxHeight = 1200, quality = 0.85): Promise<File> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              resolve(file);
+              return;
+            }
+            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+              type: "image/jpeg",
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          },
+          "image/jpeg",
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
+};
+
 const initialState: AnalyzePhotoState = { status: "idle" };
 
 interface PhotoUploaderProps {
@@ -77,8 +144,19 @@ export default function PhotoUploader({
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+  const confettiRef = useRef<any>(null);
+
   useEffect(() => {
     setMounted(true);
+
+    // Eagerly load canvas-confetti on client-side mount to avoid lazy chunk mismatches
+    import("canvas-confetti")
+      .then((module) => {
+        confettiRef.current = module.default;
+      })
+      .catch((err) => {
+        console.error("[Confetti] Eager load of canvas-confetti failed:", err);
+      });
     
     // Controlla se c'è una generazione pendente in localStorage per resilienza mobile
     try {
@@ -270,7 +348,7 @@ export default function PhotoUploader({
   // può assegnare programmaticamente input.files (DataTransfer bloccato), quindi
   // costruiamo la FormData manualmente dallo stato React e la passiamo a
   // formAction() — pattern supportato da useActionState e cross-browser.
-  const triggerSubmit = useCallback(() => {
+  const triggerSubmit = useCallback(async () => {
     if (!file || inFlight) return;
 
     // CRITICAL: flushSync forza il render sincrono di submitting=true PRIMA
@@ -283,8 +361,18 @@ export default function PhotoUploader({
     // perché iOS Safari ha bug con behavior:"smooth" durante form submit.
     window.scrollTo({ top: 0, behavior: "auto" });
 
+    let fileToUpload = file;
+    try {
+      // Compress and resize image client-side to ensure super-fast mobile uploads
+      // and completely prevent Vercel 4.5MB Serverless Function payload limit errors.
+      fileToUpload = await compressImage(file);
+      console.log(`[PhotoUploader] Client-side compressed: ${(file.size / 1024 / 1024).toFixed(2)}MB -> ${(fileToUpload.size / 1024).toFixed(1)}KB`);
+    } catch (compressErr) {
+      console.warn("[PhotoUploader] Client-side compression failed, uploading original:", compressErr);
+    }
+
     const formData = new FormData();
-    formData.append("photo", file);
+    formData.append("photo", fileToUpload);
     formData.append("analysisMode", selectedMode);
     formData.append("userNotes", userNotes);
     formData.append("locale", locale);
@@ -356,7 +444,33 @@ export default function PhotoUploader({
         }
 
         if (data.status === "completed") {
-          if (!cancelled) setDossierReady(true);
+          if (!cancelled) {
+            // Trigger refined tactile feedback (vibration) on supported mobile devices
+            if (typeof navigator !== "undefined" && navigator.vibrate) {
+              try {
+                navigator.vibrate([100, 50, 100]);
+              } catch (vibrateErr) {
+                console.warn("[Haptics] Haptic vibration failed or blocked:", vibrateErr);
+              }
+            }
+
+            // Trigger eager-loaded luxury brand confetti celebration
+            if (confettiRef.current) {
+              try {
+                confettiRef.current({
+                  particleCount: 150,
+                  spread: 80,
+                  origin: { y: 0.65 },
+                  colors: ["#D4A99A", "#B97A6A", "#FDFBF7", "#1E1E1E"],
+                  disableForReducedMotion: true // A11y respect
+                });
+              } catch (confettiErr) {
+                console.error("[Confetti] Confetti blast failed:", confettiErr);
+              }
+            }
+
+            setDossierReady(true);
+          }
           return true;
         }
 
@@ -419,13 +533,18 @@ export default function PhotoUploader({
   // Redirect solo quando il dossier è pronto
   useEffect(() => {
     if (dossierReady && resolvedDossierId) {
-      try {
-        localStorage.removeItem(`armocromia_pending_dossier_id_${userId}`);
-        localStorage.removeItem(`armocromia_pending_dossier_start_${userId}`);
-      } catch (e) {
-        console.error("[PhotoUploader] Failed to clear localStorage:", e);
-      }
-      router.push(localePath(locale, `/dossier/${resolvedDossierId}`));
+      // 2.5-second elegant delay to let the confetti celebration and success card be fully enjoyed
+      const timer = setTimeout(() => {
+        try {
+          localStorage.removeItem(`armocromia_pending_dossier_id_${userId}`);
+          localStorage.removeItem(`armocromia_pending_dossier_start_${userId}`);
+        } catch (e) {
+          console.error("[PhotoUploader] Failed to clear localStorage:", e);
+        }
+        router.push(localePath(locale, `/dossier/${resolvedDossierId}`));
+      }, 2500);
+
+      return () => clearTimeout(timer);
     }
   }, [dossierReady, resolvedDossierId, router, locale, userId]);
 

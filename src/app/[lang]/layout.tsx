@@ -171,6 +171,19 @@ export default async function RootLayout({
       className={`${playfairDisplay.variable} ${inter.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Self-healing script to detect ChunkLoadErrors (aggressive mobile caches / redeployments) and trigger a hard reload */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (e.message && (e.message.indexOf('ChunkLoadError') !== -1 || e.message.indexOf('Loading chunk') !== -1)) {
+                  console.warn('ChunkLoadError intercepted. Performing self-healing location refresh...');
+                  window.location.reload(true);
+                }
+              }, true);
+            `,
+          }}
+        />
         <LocaleProvider locale={lang}>
           <TranslationsProvider dict={dict} fallbackDict={fallbackDict}>
             <ConsentProvider>
