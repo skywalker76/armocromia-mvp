@@ -37,7 +37,7 @@ export default async function AppLayout({
     // Preserva l'URL originale (incluso payment_success + dossier_id)
     // così dopo il login l'utente viene rimandato al dossier in elaborazione.
     const headersList = await headers();
-    const requestUrl = headersList.get("x-invoke-path") ?? "";
+    const requestUrl = headersList.get("x-url") ?? headersList.get("x-invoke-path") ?? "";
     const nextParam = requestUrl ? `?next=${encodeURIComponent(requestUrl)}` : "";
     redirect(`${localePath(locale, "/auth/login")}${nextParam}`);
   }

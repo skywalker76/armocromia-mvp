@@ -46,6 +46,10 @@ function detectLocale(request: NextRequest): string {
 }
 
 export async function proxy(request: NextRequest) {
+  // Aggiungiamo l'URL completo (inclusi query params) negli header della request
+  // così che possa essere letto dai Server Components e Layouts tramite headers().
+  request.headers.set("x-url", request.nextUrl.pathname + request.nextUrl.search);
+
   const { pathname } = request.nextUrl;
 
   // Path tecnici (API, callback, static) — solo sessione, no locale
