@@ -69,12 +69,12 @@ export default async function DashboardPage({
   // da più di 5 minuti (sintomo di funzione killata da Vercel timeout).
   // Why: senza questo, l'utente vedrebbe "in elaborazione" all'infinito.
   // eslint-disable-next-line react-hooks/purity
-  const stuckCutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  const stuckCutoff = new Date(Date.now() - 10 * 60 * 1000).toISOString();
   await supabase
     .from("dossiers")
     .update({ 
       status: "failed",
-      error_message: "Processo interrotto: superato il limite massimo di tempo (timeout 5 minuti)."
+      error_message: "Processo interrotto: superato il limite massimo di tempo (timeout 10 minuti)."
     })
     .eq("user_id", user!.id)
     .in("status", ["processing", "generating"])

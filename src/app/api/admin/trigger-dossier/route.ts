@@ -5,6 +5,7 @@ import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
 import { defaultLocale } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 300; // 5 minuti max execution duration per background pipeline AI in waitUntil
 
 /**
  * Endpoint admin temporaneo per triggerare manualmente la generazione di un dossier.

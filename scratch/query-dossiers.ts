@@ -22,16 +22,16 @@ async function main() {
   console.log("Fetching dossier 96 status...");
   const { data: dossier, error: dossierError } = await supabaseAdmin
     .from("dossiers")
-    .select("id, status, error_message, updated_at")
-    .eq("id", 96)
+    .select("id, status, error_message, classified_season, classification_result, created_at, updated_at")
+    .eq("id", 98)
     .single();
 
   if (dossierError) {
-    console.error("Error fetching dossier 96:", dossierError);
+    console.error("Error fetching dossier 98:", dossierError);
     return;
   }
 
-  console.log("Dossier 96:", JSON.stringify(dossier, null, 2));
+  console.log("Dossier 98:", JSON.stringify(dossier, null, 2));
 }
 
 main().catch(console.error);

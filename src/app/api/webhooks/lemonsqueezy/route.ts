@@ -6,6 +6,7 @@ import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
 import { type Locale, isValidLocale, defaultLocale } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 300; // 5 minuti max execution duration per background pipeline AI in waitUntil
 
 const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET?.trim();
 

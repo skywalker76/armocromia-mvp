@@ -117,6 +117,7 @@ export async function runDossierGenerationPipeline({
       .update({
         status: "completed",
         generated_dossier_path: dossierPath,
+        error_message: null, // Reset di eventuali errori da tentativi precedenti o watchdog
       })
       .eq("id", dossierId);
 
