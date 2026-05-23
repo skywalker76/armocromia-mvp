@@ -65,6 +65,10 @@ export default async function DashboardPage({
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    return null;
+  }
+
   // Safety net: marca come 'failed' i dossier rimasti in processing/generating
   // da più di 5 minuti (sintomo di funzione killata da Vercel timeout).
   // Why: senza questo, l'utente vedrebbe "in elaborazione" all'infinito.
@@ -76,7 +80,7 @@ export default async function DashboardPage({
       status: "failed",
       error_message: "Processo interrotto: superato il limite massimo di tempo (timeout 10 minuti)."
     })
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
     .in("status", ["processing", "generating"])
     .lt("updated_at", stuckCutoff);
 
@@ -86,7 +90,7 @@ export default async function DashboardPage({
     .select(
       "id, status, classified_season, classification_result, created_at, generated_dossier_path"
     )
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   const completedDossiers =
@@ -241,7 +245,7 @@ export default async function DashboardPage({
             </p>
           </div>
           <PhotoUploader
-            userId={user!.id}
+            userId={user.id}
             paymentSuccess={payment_success === "true"}
             paymentDossierId={dossier_id ? parseInt(dossier_id) : undefined}
           />
