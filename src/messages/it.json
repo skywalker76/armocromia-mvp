@@ -1,12 +1,12 @@
 {
   "metadata": {
     "root": {
-      "titleDefault": "Armocromia — I colori che ti fanno splendere",
-      "titleTemplate": "%s | Armocromia",
+      "titleDefault": "Cromea Studio — I tuoi colori ideali",
+      "titleTemplate": "%s | Cromea Studio",
       "description": "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
-      "ogTitle": "Armocromia — I colori che ti fanno splendere",
+      "ogTitle": "Cromea Studio — I tuoi colori ideali",
       "ogDescription": "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in 90 secondi grazie all'AI.",
-      "twitterTitle": "Armocromia — I colori che ti fanno splendere",
+      "twitterTitle": "Cromea Studio — I tuoi colori ideali",
       "twitterDescription": "Analisi cromatica AI in 90 secondi. Palette, outfit e consigli su misura per la tua stagione.",
       "ogLocale": "it_IT"
     },
@@ -15,22 +15,22 @@
     },
     "login": {
       "title": "Accedi",
-      "description": "Accedi al tuo dossier Armocromia. Login senza password tramite codice OTP via email."
+      "description": "Accedi al tuo dossier Cromea Studio. Login senza password tramite codice OTP via email."
     },
     "privacy": {
       "title": "Privacy Policy",
-      "description": "Informativa sulla privacy di Armocromia: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR."
+      "description": "Informativa sulla privacy di Cromea Studio: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR."
     },
     "terms": {
       "title": "Termini di Servizio",
-      "description": "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità."
+      "description": "Termini e condizioni di Cromea Studio: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità."
     },
     "dashboard": {
-      "title": "Dashboard — Armocromia",
+      "title": "Dashboard — Cromea Studio",
       "description": "Il tuo pannello personale per gestire l'analisi cromatica."
     },
     "dossier": {
-      "titleTemplate": "Dossier #{id} — Armocromia",
+      "titleTemplate": "Dossier #{id} — Cromea Studio",
       "description": "Il tuo dossier cromatico personalizzato."
     }
   },
@@ -216,12 +216,12 @@
       ]
     },
     "footer": {
-      "brand": "Armocromia",
+      "brand": "Cromea Studio",
       "tagline": "Powered by Antigravity",
       "privacy": "Privacy Policy",
       "terms": "Termini di Servizio",
       "contact": "Contatti",
-      "copyrightSuffix": "Antigravity — Tutti i diritti riservati"
+      "copyrightSuffix": "Cromea Studio — Tutti i diritti riservati"
     },
     "mobileCta": "Crea il tuo dossier — €29"
   },
@@ -275,12 +275,12 @@
       "newAnalysisHeadingAgain": "Nuova analisi cromatica",
       "newAnalysisBodyNew": "Carica una foto ritratto e l'intelligenza artificiale creerà un dossier visivo personalizzato con palette, outfit e consigli su misura per te.",
       "newAnalysisBodyAgain": "Carica una nuova foto per scoprire altri abbinamenti e palette personalizzate.",
-      "footerBranding": "Armocromia AI · Powered by Antigravity"
+      "footerBranding": "Cromea Studio · Powered by Antigravity"
     },
     "dossierPage": {
       "breadcrumbDashboard": "Dashboard",
       "breadcrumbCurrent": "Dossier #{id}",
-      "heroEyebrow": "Armocromia · Il tuo profilo cromatico",
+      "heroEyebrow": "Cromea Studio · Il tuo profilo cromatico",
       "analysisTitle": "La tua analisi",
       "reasoningTitle": "Perché questa stagione ti valorizza",
       "reasoningGoodTitle": "Colori che ti valorizzano",
@@ -289,7 +289,7 @@
       "tipsTitle": "Consigli pratici",
       "looksTitle": "Idee di look in armonia",
       "downloadCta": "Scarica il tuo dossier",
-      "footerGenerated": "Generato il {date} · Armocromia AI by Antigravity",
+      "footerGenerated": "Generato il {date} · Cromea Studio by Antigravity",
       "attrUndertone": "Sottotono",
       "attrValue": "Valore",
       "attrIntensity": "Intensità",
@@ -525,7 +525,7 @@
   },
   "auth": {
     "login": {
-      "brandLink": "Armocromia",
+      "brandLink": "Cromea Studio",
       "successTitle": "Accesso effettuato!",
       "successMessage": "Reindirizzamento alla dashboard…",
       "otpTitle": "Inserisci il codice",
@@ -552,9 +552,9 @@
   },
   "legal": {
     "common": {
-      "brand": "Armocromia",
+      "brand": "Cromea Studio",
       "backHome": "← Torna alla home",
-      "footerBrand": "Armocromia",
+      "footerBrand": "Cromea Studio",
       "footerTagline": "Powered by Antigravity",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Termini di Servizio",
@@ -564,11 +564,11 @@
     },
     "privacy": {
       "metaTitle": "Privacy Policy",
-      "metaDescription": "Informativa sulla privacy di Armocromia: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR.",
+      "metaDescription": "Informativa sulla privacy di Cromea Studio: trattamento foto e dati personali, base giuridica, retention 24h, diritti GDPR.",
       "eyebrow": "Informativa",
       "title": "Privacy Policy",
       "intro": [
-        "La presente informativa descrive come Armocromia (di seguito anche &quot;noi&quot; o &quot;il Servizio&quot;) tratta i dati personali degli utenti che accedono al sito <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">armocromia-mvp-nine.vercel.app</a> e utilizzano il servizio di analisi cromatica AI.",
+        "La presente informativa descrive come Cromea Studio (di seguito anche &quot;noi&quot; o &quot;il Servizio&quot;) tratta i dati personali degli utenti che accedono al sito <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">www.cromeastudio.com</a> e utilizzano il servizio di analisi cromatica AI.",
         "Il trattamento è effettuato in conformità al <strong>Regolamento (UE) 2016/679 (GDPR)</strong>, al D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 e — per gli utenti residenti fuori dall'Unione Europea — alle normative applicabili (CCPA per la California, UK GDPR, LGPD in Brasile, PIPEDA in Canada)."
       ],
       "sec1": {
@@ -661,17 +661,17 @@
     },
     "terms": {
       "metaTitle": "Termini di Servizio",
-      "metaDescription": "Termini e condizioni di Armocromia: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità.",
+      "metaDescription": "Termini e condizioni di Cromea Studio: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità.",
       "eyebrow": "Condizioni d'uso",
       "title": "Termini di Servizio",
-      "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Armocromia (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
+      "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Cromea Studio (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
       "sec1": {
         "heading": "1. Fornitore",
         "p1": "Il Servizio è fornito da <strong>Antigravity</strong>, contattabile all'indirizzo email <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
       },
       "sec2": {
         "heading": "2. Oggetto del Servizio",
-        "p1": "Armocromia è un servizio digitale di analisi cromatica personalizzata. L'utente carica una propria fotografia e riceve un <strong>dossier visivo</strong> generato da intelligenza artificiale che include: classificazione in una delle 12 sotto-stagioni cromatiche, palette colori consigliata, suggerimenti di outfit e consigli pratici.",
+        "p1": "Cromea Studio è un servizio digitale di analisi cromatica personalizzata. L'utente carica una propria fotografia e riceve un <strong>dossier visivo</strong> generato da intelligenza artificiale che include: classificazione in una delle 12 sotto-stagioni cromatiche, palette colori consigliata, suggerimenti di outfit e consigli pratici.",
         "p2": "Il dossier ha natura <strong>informativa e di intrattenimento</strong> e <strong>non costituisce consulenza professionale di immagine, styling, moda o medica</strong>. L'intelligenza artificiale può commettere errori: i risultati vanno valutati con spirito critico."
       },
       "sec3": {

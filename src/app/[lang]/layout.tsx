@@ -42,10 +42,11 @@ export const viewport: Viewport = {
   themeColor: "#B97A6A",
 };
 
-const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
+const SITE_URL = "https://www.cromeastudio.com";
 
 const KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
   it: [
+    "cromea studio",
     "armocromia",
     "analisi cromatica",
     "personal color analysis",
@@ -55,6 +56,7 @@ const KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
     "AI styling",
   ],
   en: [
+    "cromea studio",
     "color analysis",
     "personal color analysis",
     "color season",
@@ -64,6 +66,7 @@ const KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
     "armocromia",
   ],
   es: [
+    "cromea studio",
     "análisis cromático",
     "análisis de color personal",
     "armocromía",
@@ -90,7 +93,7 @@ export async function generateMetadata({
       template: t("titleTemplate"),
     },
     description: t("description"),
-    applicationName: "Armocromia",
+    applicationName: "Cromea Studio",
     keywords: KEYWORDS_BY_LOCALE[locale],
     authors: [{ name: "Antigravity" }],
     creator: "Antigravity",
@@ -108,7 +111,7 @@ export async function generateMetadata({
       title: t("ogTitle"),
       description: t("ogDescription"),
       url: `${SITE_URL}/${locale}`,
-      siteName: "Armocromia",
+      siteName: "Cromea Studio",
       locale: t("ogLocale"),
       type: "website",
     },
@@ -130,7 +133,7 @@ export async function generateMetadata({
     appleWebApp: {
       capable: true,
       statusBarStyle: "default",
-      title: "Armocromia",
+      title: "Cromea Studio",
     },
     icons: {
       icon: "/icon-192.png",

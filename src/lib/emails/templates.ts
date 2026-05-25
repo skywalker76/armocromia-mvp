@@ -258,7 +258,7 @@ export function getDossierReadyEmailHtml({
     <div class="container">
       <!-- Header -->
       <div class="header">
-        <a href="${dossierUrl}" class="logo">Armocromia</a>
+        <a href="${dossierUrl}" class="logo">Cromea Studio</a>
       </div>
       
       <!-- Content -->
@@ -286,7 +286,7 @@ export function getDossierReadyEmailHtml({
       <div class="footer">
         <p class="footer-text">${t.footerNote}</p>
         <div class="footer-links">
-          <span>&copy; 2026 Armocromia B2C SaaS.</span>
+          <span>&copy; 2026 Cromea Studio.</span>
         </div>
       </div>
     </div>
@@ -366,7 +366,7 @@ export function getAdminErrorEmailHtml({
 <body>
   <div class="card">
     <h1>🚨 PIPELINE FAILURE REPORT (ADMIN ONLY)</h1>
-    <p>A critical crash occurred during the processing of an Armocromia AI analysis. Please review the details below immediately.</p>
+    <p>A critical crash occurred during the processing of a Cromea Studio AI analysis. Please review the details below immediately.</p>
     
     <table>
       <tr>
@@ -391,7 +391,7 @@ export function getAdminErrorEmailHtml({
     <pre class="code-block">${errorStack || "No stack trace provided."}</pre>
     
     <div style="margin-top: 32px; font-size: 12px; color: #718096;">
-      This notification was automatically dispatched by the Armocromia MVP transactional system.
+      This notification was automatically dispatched by the Cromea Studio transactional system.
     </div>
   </div>
 </body>
@@ -421,7 +421,7 @@ export function getReceiptEmailHtml({
 }: ReceiptEmailParams): { subject: string; html: string } {
   const translations = {
     it: {
-      subject: "🧾 Ricevuta di pagamento — Il tuo Dossier Armocromia",
+      subject: "🧾 Ricevuta di pagamento — Il tuo Dossier Cromea Studio",
       salutation: `Ciao ${userName},`,
       title: "Grazie per il tuo acquisto.",
       intro: `Abbiamo ricevuto con successo il tuo pagamento di <strong>${amount}</strong> per la generazione del tuo dossier cromatico personalizzato (Dossier #${dossierId}).`,
@@ -447,7 +447,7 @@ export function getReceiptEmailHtml({
       footerNote: "You have 14 days of 'no questions asked' refund policy. For support or refund requests, please contact info@antigravity.dev.",
     },
     es: {
-      subject: "🧾 Recibo de Pago — Tu Dossier de Armocromía",
+      subject: "🧾 Recibo de Pago — Tu Dossier de Cromea Studio",
       salutation: `Hola ${userName},`,
       title: "Gracias por tu compra.",
       intro: `Hemos recibido con éxito tu pago de <strong>${amount}</strong> para la generación de tu análisis cromático personalizado (Dossier #${dossierId}).`,
@@ -591,7 +591,7 @@ export function getReceiptEmailHtml({
     <div class="container">
       <!-- Header -->
       <div class="header">
-        <a href="${dossierUrl}" class="logo">Armocromia</a>
+        <a href="${dossierUrl}" class="logo">Cromea Studio</a>
       </div>
       
       <!-- Content -->
@@ -631,7 +631,7 @@ export function getReceiptEmailHtml({
       <div class="footer">
         <p class="footer-text">${t.footerNote}</p>
         <div style="font-size: 11px; color: #A3938C;">
-          <span>&copy; 2026 Armocromia B2C SaaS.</span>
+          <span>&copy; 2026 Cromea Studio.</span>
         </div>
       </div>
     </div>

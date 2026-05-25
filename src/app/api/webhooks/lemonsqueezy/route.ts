@@ -165,7 +165,7 @@ export async function POST(request: Request) {
       const displayName = (authUserData?.user?.user_metadata?.display_name || authUserData?.user?.user_metadata?.full_name || userEmail?.split("@")[0] || "Cliente").trim();
 
       if (userEmail) {
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://armocromia-mvp-tan.vercel.app";
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.cromeastudio.com";
         const dossierUrl = `${siteUrl}/${locale}/dashboard`;
         const { subject, html } = getReceiptEmailHtml({
           userName: displayName,

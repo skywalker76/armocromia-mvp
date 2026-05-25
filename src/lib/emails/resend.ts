@@ -14,7 +14,7 @@ interface SendEmailParams {
 
 export async function sendEmail({ to, subject, html }: SendEmailParams): Promise<{ success: boolean; id?: string; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
-  const fromEmail = process.env.RESEND_FROM_EMAIL || "Armocromia <onboarding@resend.dev>";
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "Cromea Studio <onboarding@resend.dev>";
 
   console.log(`[Email Engine] Preparazione invio email a: ${to} | Oggetto: "${subject}"`);
 

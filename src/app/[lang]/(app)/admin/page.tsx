@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 export const metadata: Metadata = {
-  title: "Admin | Armocromia",
+  title: "Admin | Cromea Studio",
   robots: { index: false, follow: false },
 };
 

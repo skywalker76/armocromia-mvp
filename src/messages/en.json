@@ -1,12 +1,12 @@
 {
   "metadata": {
     "root": {
-      "titleDefault": "Armocromia — The colors that bring you to life",
-      "titleTemplate": "%s | Armocromia",
+      "titleDefault": "Cromea Studio — The colors that bring you to life",
+      "titleTemplate": "%s | Cromea Studio",
       "description": "Discover your personal color analysis with a professional visual dossier. Tailored color palette, outfit pairings and makeup advice made just for you.",
-      "ogTitle": "Armocromia — The colors that bring you to life",
+      "ogTitle": "Cromea Studio — The colors that bring you to life",
       "ogDescription": "Upload a photo, receive a professional visual dossier with palette, outfits and tailored advice. Results in 90 seconds, powered by AI.",
-      "twitterTitle": "Armocromia — The colors that bring you to life",
+      "twitterTitle": "Cromea Studio — The colors that bring you to life",
       "twitterDescription": "AI color analysis in 90 seconds. Palette, outfits and tailored advice for your season.",
       "ogLocale": "en_US"
     },
@@ -15,22 +15,22 @@
     },
     "login": {
       "title": "Sign in",
-      "description": "Sign in to your Armocromia dossier. Passwordless login with an OTP code via email."
+      "description": "Sign in to your Cromea Studio dossier. Passwordless login with an OTP code via email."
     },
     "privacy": {
       "title": "Privacy Policy",
-      "description": "Armocromia privacy notice: photo and personal data processing, legal basis, 24h retention, GDPR rights."
+      "description": "Cromea Studio privacy notice: photo and personal data processing, legal basis, 24h retention, GDPR rights."
     },
     "terms": {
       "title": "Terms of Service",
-      "description": "Armocromia terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability."
+      "description": "Cromea Studio terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability."
     },
     "dashboard": {
-      "title": "Dashboard — Armocromia",
+      "title": "Dashboard — Cromea Studio",
       "description": "Your personal panel to manage your color analysis."
     },
     "dossier": {
-      "titleTemplate": "Dossier #{id} — Armocromia",
+      "titleTemplate": "Dossier #{id} — Cromea Studio",
       "description": "Your personalized color dossier."
     }
   },
@@ -216,12 +216,12 @@
       ]
     },
     "footer": {
-      "brand": "Armocromia",
+      "brand": "Cromea Studio",
       "tagline": "Powered by Antigravity",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "contact": "Contact",
-      "copyrightSuffix": "Antigravity — All rights reserved"
+      "copyrightSuffix": "Cromea Studio — All rights reserved"
     },
     "mobileCta": "Create your dossier — €29"
   },
@@ -275,12 +275,12 @@
       "newAnalysisHeadingAgain": "New color analysis",
       "newAnalysisBodyNew": "Upload a portrait photo and our AI will create a personalized visual dossier with palette, outfits and tailored advice for you.",
       "newAnalysisBodyAgain": "Upload a new photo to discover more pairings and personalized palettes.",
-      "footerBranding": "Armocromia AI · Powered by Antigravity"
+      "footerBranding": "Cromea Studio · Powered by Antigravity"
     },
     "dossierPage": {
       "breadcrumbDashboard": "Dashboard",
       "breadcrumbCurrent": "Dossier #{id}",
-      "heroEyebrow": "Armocromia · Your color profile",
+      "heroEyebrow": "Cromea Studio · Your color profile",
       "analysisTitle": "Your analysis",
       "reasoningTitle": "Why this season flatters you",
       "reasoningGoodTitle": "Colors that flatter you",
@@ -289,7 +289,7 @@
       "tipsTitle": "Practical tips",
       "looksTitle": "Looks in harmony",
       "downloadCta": "Download your dossier",
-      "footerGenerated": "Generated on {date} · Armocromia AI by Antigravity",
+      "footerGenerated": "Generated on {date} · Cromea Studio by Antigravity",
       "attrUndertone": "Undertone",
       "attrValue": "Value",
       "attrIntensity": "Intensity",
@@ -525,7 +525,7 @@
   },
   "auth": {
     "login": {
-      "brandLink": "Armocromia",
+      "brandLink": "Cromea Studio",
       "successTitle": "You're in!",
       "successMessage": "Redirecting to your dashboard…",
       "otpTitle": "Enter the code",
@@ -552,9 +552,9 @@
   },
   "legal": {
     "common": {
-      "brand": "Armocromia",
+      "brand": "Cromea Studio",
       "backHome": "← Back to home",
-      "footerBrand": "Armocromia",
+      "footerBrand": "Cromea Studio",
       "footerTagline": "Powered by Antigravity",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Terms of Service",
@@ -564,11 +564,11 @@
     },
     "privacy": {
       "metaTitle": "Privacy Policy",
-      "metaDescription": "Armocromia privacy notice: photo and personal data processing, legal basis, 24h retention, GDPR rights.",
+      "metaDescription": "Cromea Studio privacy notice: photo and personal data processing, legal basis, 24h retention, GDPR rights.",
       "eyebrow": "Notice",
       "title": "Privacy Policy",
       "intro": [
-        "This notice describes how Armocromia (hereinafter also &quot;we&quot; or &quot;the Service&quot;) processes personal data of users who access the site <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">armocromia-mvp-nine.vercel.app</a> and use the AI color analysis service.",
+        "This notice describes how Cromea Studio (hereinafter also &quot;we&quot; or &quot;the Service&quot;) processes personal data of users who access the site <a href=\"{homeUrl}\" class=\"text-accent hover:underline\">www.cromeastudio.com</a> and use the AI color analysis service.",
         "Processing is carried out in compliance with <strong>Regulation (EU) 2016/679 (GDPR)</strong>, Italian Legislative Decree 196/2003 as amended by Decree 101/2018 and — for users residing outside the European Union — applicable regulations (CCPA for California, UK GDPR, LGPD in Brazil, PIPEDA in Canada)."
       ],
       "sec1": {
@@ -661,17 +661,17 @@
     },
     "terms": {
       "metaTitle": "Terms of Service",
-      "metaDescription": "Armocromia terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability.",
+      "metaDescription": "Cromea Studio terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability.",
       "eyebrow": "Terms of use",
       "title": "Terms of Service",
-      "intro": "These Terms of Service (hereinafter the &quot;Terms&quot;) govern access to and use of the Armocromia service (hereinafter the &quot;Service&quot;) provided by Antigravity. By using the Service you fully accept these Terms. If you do not accept them, do not use the Service.",
+      "intro": "These Terms of Service (hereinafter the &quot;Terms&quot;) govern access to and use of the Cromea Studio service (hereinafter the &quot;Service&quot;) provided by Antigravity. By using the Service you fully accept these Terms. If you do not accept them, do not use the Service.",
       "sec1": {
         "heading": "1. Provider",
         "p1": "The Service is provided by <strong>Antigravity</strong>, reachable at the email address <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>. For support and refund requests: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
       },
       "sec2": {
         "heading": "2. Scope of the Service",
-        "p1": "Armocromia is a digital personalized color analysis service. The user uploads a photo of themselves and receives a <strong>visual dossier</strong> generated by artificial intelligence that includes: classification into one of the 12 color sub-seasons, a recommended color palette, outfit suggestions and practical advice.",
+        "p1": "Cromea Studio is a digital personalized color analysis service. The user uploads a photo of themselves and receives a <strong>visual dossier</strong> generated by artificial intelligence that includes: classification into one of the 12 color sub-seasons, a recommended color palette, outfit suggestions and practical advice.",
         "p2": "The dossier is <strong>informational and entertainment in nature</strong> and <strong>does not constitute professional image, styling, fashion or medical advice</strong>. Artificial intelligence can make mistakes: results should be evaluated with a critical mind."
       },
       "sec3": {

@@ -120,7 +120,7 @@ export default function NavBar({ email, isAdmin = false }: NavBarProps) {
               </svg>
             </div>
             <span className="font-serif text-lg tracking-tight text-ink">
-              Armocromia
+              Cromea Studio
             </span>
           </a>
 

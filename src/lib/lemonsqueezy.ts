@@ -43,7 +43,7 @@ export async function createCheckoutSession({
   }
 
   // Costruisci la URL di redirect post-pagamento
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://armocromia-mvp.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.cromeastudio.com";
   const redirectUrl = `${siteUrl}/${locale}/dashboard?payment_success=true&dossier_id=${dossierId}`;
 
   console.log(`[LemonSqueezy] Creating checkout for user=${userId} dossier=${dossierId} redirect=${redirectUrl}`);

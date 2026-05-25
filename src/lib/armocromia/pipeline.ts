@@ -132,7 +132,7 @@ export async function runDossierGenerationPipeline({
         const macroKey = getMacroSeason(classification.subSeason);
         const seasonGroup = MACRO_SEASON_BY_LOCALE[locale][macroKey] || macroKey;
         
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://armocromia-mvp.vercel.app";
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.cromeastudio.com";
         const dossierUrl = `${siteUrl}/${locale}/dashboard`;
 
         const emailContent = getDossierReadyEmailHtml({

@@ -366,7 +366,7 @@ export default async function DossierPage({ params }: DossierPageProps) {
           {dossierImageUrl && (
             <a
               href={dossierImageUrl}
-              download={`armocromia-${season}-dossier.png`}
+              download={`cromeastudio-${season}-dossier.png`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"

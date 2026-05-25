@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n/config";
 
-const BASE_URL = "https://armocromia-mvp-nine.vercel.app";
+const BASE_URL = "https://www.cromeastudio.com";
 
 /**
  * Sitemap multi-locale.

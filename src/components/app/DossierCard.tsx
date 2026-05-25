@@ -170,7 +170,7 @@ export default function DossierCard({
           {dossierImageUrl && (
             <a
               href={dossierImageUrl}
-              download={`armocromia-dossier-${dossier.id}.png`}
+              download={`cromeastudio-dossier-${dossier.id}.png`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-10 w-10 items-center justify-center rounded-xl border border-accent/15 text-accent transition-all hover:bg-accent/5 hover:border-accent/25"

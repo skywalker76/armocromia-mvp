@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Armocromia — I colori che ti fanno splendere";
+export const alt = "Cromea Studio — I tuoi colori ideali";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -144,7 +144,7 @@ export default async function Image() {
             fontFamily: "Georgia, serif",
           }}
         >
-          Armocromia
+          Cromea Studio
         </div>
       </div>
     ),

@@ -20,7 +20,7 @@ export async function generateMetadata({
   };
 }
 
-const SITE_URL = "https://armocromia-mvp-nine.vercel.app";
+const SITE_URL = "https://www.cromeastudio.com";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -28,7 +28,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "Armocromia",
+      name: "Cromea Studio",
       url: SITE_URL,
       logo: `${SITE_URL}/icon-512.png`,
       sameAs: [],
@@ -37,7 +37,7 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: "Armocromia",
+      name: "Cromea Studio",
       publisher: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "it-IT",
     },
