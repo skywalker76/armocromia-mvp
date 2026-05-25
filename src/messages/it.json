@@ -217,7 +217,7 @@
     },
     "footer": {
       "brand": "Cromea Studio",
-      "tagline": "Powered by Antigravity",
+      "tagline": "Powered by NexaFrontiers",
       "privacy": "Privacy Policy",
       "terms": "Termini di Servizio",
       "contact": "Contatti",
@@ -275,7 +275,7 @@
       "newAnalysisHeadingAgain": "Nuova analisi cromatica",
       "newAnalysisBodyNew": "Carica una foto ritratto e l'intelligenza artificiale creerà un dossier visivo personalizzato con palette, outfit e consigli su misura per te.",
       "newAnalysisBodyAgain": "Carica una nuova foto per scoprire altri abbinamenti e palette personalizzate.",
-      "footerBranding": "Cromea Studio · Powered by Antigravity"
+      "footerBranding": "Cromea Studio · Powered by NexaFrontiers"
     },
     "dossierPage": {
       "breadcrumbDashboard": "Dashboard",
@@ -555,7 +555,7 @@
       "brand": "Cromea Studio",
       "backHome": "← Torna alla home",
       "footerBrand": "Cromea Studio",
-      "footerTagline": "Powered by Antigravity",
+      "footerTagline": "Powered by NexaFrontiers",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Termini di Servizio",
       "footerContact": "Contatti",

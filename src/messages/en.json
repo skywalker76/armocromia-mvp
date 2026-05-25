@@ -217,7 +217,7 @@
     },
     "footer": {
       "brand": "Cromea Studio",
-      "tagline": "Powered by Antigravity",
+      "tagline": "Powered by NexaFrontiers",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "contact": "Contact",
@@ -275,7 +275,7 @@
       "newAnalysisHeadingAgain": "New color analysis",
       "newAnalysisBodyNew": "Upload a portrait photo and our AI will create a personalized visual dossier with palette, outfits and tailored advice for you.",
       "newAnalysisBodyAgain": "Upload a new photo to discover more pairings and personalized palettes.",
-      "footerBranding": "Cromea Studio · Powered by Antigravity"
+      "footerBranding": "Cromea Studio · Powered by NexaFrontiers"
     },
     "dossierPage": {
       "breadcrumbDashboard": "Dashboard",
@@ -555,7 +555,7 @@
       "brand": "Cromea Studio",
       "backHome": "← Back to home",
       "footerBrand": "Cromea Studio",
-      "footerTagline": "Powered by Antigravity",
+      "footerTagline": "Powered by NexaFrontiers",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Terms of Service",
       "footerContact": "Contact",
