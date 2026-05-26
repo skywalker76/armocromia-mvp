@@ -38,6 +38,13 @@ const SEASON_VISUALS: Record<SeasonId, { image: string; palette: string[] }> = {
   },
 };
 
+const SEASON_GLOWS: Record<SeasonId, string> = {
+  spring: "from-amber-200/35 via-rose-200/15 to-transparent",
+  summer: "from-purple-200/25 via-blue-200/15 to-transparent",
+  autumn: "from-orange-300/25 via-amber-900/5 to-transparent",
+  winter: "from-blue-950/40 via-slate-900/5 to-transparent",
+};
+
 interface DemoCopy {
   name: string;
   subtitle: string;
@@ -102,19 +109,34 @@ export default function DossierShowcase() {
       {/* Content grid */}
       <div className="grid items-center gap-10 lg:grid-cols-5 lg:gap-14">
         {/* Left — Dossier image (3 col) */}
-        <div className="lg:col-span-3 relative">
-          <div className="relative overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5 transition-all duration-500">
+        <div className="lg:col-span-3 relative px-4 sm:px-0 flex justify-center items-center">
+          {/* Glowing Aura Ambient Background */}
+          <div
+            className={`absolute -inset-4 sm:-inset-10 -z-10 rounded-[3rem] bg-gradient-to-tr blur-3xl opacity-75 transition-all duration-700 ${SEASON_GLOWS[activeId]}`}
+          />
+
+          {/* Underlay card 2 (Editorial pile) */}
+          <div className="absolute inset-0 rounded-2xl border border-black/5 bg-cream/35 shadow-md rotate-3 scale-[0.97] opacity-55 translate-x-3 translate-y-2 pointer-events-none transition-all duration-500" />
+          
+          {/* Underlay card 1 (Editorial pile) */}
+          <div className="absolute inset-0 rounded-2xl border border-black/5 bg-cream-dark/40 shadow-lg -rotate-2 scale-[0.99] opacity-75 -translate-x-2 pointer-events-none transition-all duration-500" />
+
+          {/* Active Main Card */}
+          <div className="relative w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.01] hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] group/card">
+            {/* Elegant glass reflection overlay */}
+            <div className="absolute inset-0 z-10 bg-gradient-to-tr from-white/0 via-white/10 to-white/20 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-700" />
+            
             <Image
               src={activeVisual.image}
               alt={`${t("imageAltPrefix")} — ${activeCopy.name}`}
               width={800}
               height={1000}
-              className="w-full transition-opacity duration-300"
+              className="w-full object-cover transition-opacity duration-300"
             />
           </div>
 
           {/* Floating season badge */}
-          <div className="absolute top-4 right-4 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-accent shadow-md backdrop-blur-sm">
+          <div className="absolute top-6 right-8 rounded-full border border-white/40 bg-white/95 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-accent shadow-lg backdrop-blur-md z-20">
             {activeCopy.name}
           </div>
         </div>
@@ -131,14 +153,20 @@ export default function DossierShowcase() {
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-light mb-3">
               {t("paletteLabel")}
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2.5">
               {activeVisual.palette.map((color, i) => (
                 <div
                   key={`${activeId}-${i}`}
-                  className="group relative h-12 flex-1 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer first:rounded-l-2xl last:rounded-r-2xl"
-                  style={{ backgroundColor: color }}
+                  className="group relative h-12 flex-1 rounded-xl transition-all duration-300 hover:scale-115 hover:shadow-lg cursor-pointer first:rounded-l-2xl last:rounded-r-2xl border border-white/20 ring-1 ring-black/5 shadow-sm"
+                  style={{ 
+                    backgroundColor: color,
+                    boxShadow: "inset 0 2px 4px rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.05)"
+                  }}
                 >
-                  <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2 py-0.5 text-[10px] font-mono text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  {/* Subtle inner card metallic gloss sheen */}
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
+                  
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-[10px] font-mono text-white opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 shadow-md z-30">
                     {color}
                   </span>
                 </div>
