@@ -472,7 +472,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <span className="hidden sm:inline">·</span>
               <CookiePreferencesLink className="hover:text-accent transition-colors" />
               <span className="hidden sm:inline">·</span>
-              <a href="mailto:info@antigravity.dev" className="hover:text-accent transition-colors">{t("footer.contact")}</a>
+              <a href="mailto:hello@cromeastudio.com" className="hover:text-accent transition-colors">{t("footer.contact")}</a>
             </div>
             <p className="mt-2 text-xs text-muted-light/50">
               &copy; {new Date().getFullYear()} {t("footer.copyrightSuffix")}

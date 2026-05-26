@@ -573,8 +573,8 @@
       ],
       "sec1": {
         "heading": "1. Titolare del trattamento",
-        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>",
-        "p2": "Per qualsiasi richiesta relativa al trattamento dei tuoi dati personali puoi scriverci a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>."
+        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>",
+        "p2": "Per qualsiasi richiesta relativa al trattamento dei tuoi dati personali puoi scriverci a <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>."
       },
       "sec2": {
         "heading": "2. Tipologie di dati raccolti",
@@ -641,7 +641,7 @@
           "<strong>Revoca del consenso</strong> in qualsiasi momento, senza pregiudicare la liceità dei trattamenti precedenti.",
           "<strong>Reclamo</strong> presso il Garante per la protezione dei dati personali (<a href=\"https://www.garanteprivacy.it\" target=\"_blank\" rel=\"noopener\" class=\"text-accent hover:underline\">garanteprivacy.it</a>) o l'autorità del tuo Stato di residenza."
         ],
-        "after": "Per esercitare i tuoi diritti scrivici a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Risponderemo entro 30 giorni."
+        "after": "Per esercitare i tuoi diritti scrivici a <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Risponderemo entro 30 giorni."
       },
       "sec8": {
         "heading": "8. Utenti residenti in California (CCPA / CPRA)",
@@ -656,7 +656,7 @@
         "p1": "Potremo aggiornare questa informativa in caso di modifiche tecniche, normative o organizzative. Le modifiche sostanziali saranno comunicate via email con almeno 30 giorni di preavviso. La data dell'ultimo aggiornamento è indicata in alto."
       },
       "callout": {
-        "lead": "<strong class=\"text-ink\">Domande?</strong> Scrivici a <a href=\"mailto:privacy@antigravity.dev\" class=\"text-accent hover:underline\">privacy@antigravity.dev</a>. Ti risponderemo entro 5 giorni lavorativi."
+        "lead": "<strong class=\"text-ink\">Domande?</strong> Scrivici a <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Ti risponderemo entro 5 giorni lavorativi."
       }
     },
     "terms": {
@@ -667,7 +667,7 @@
       "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Cromea Studio (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
       "sec1": {
         "heading": "1. Fornitore",
-        "p1": "Il Servizio è fornito da <strong>Antigravity</strong>, contattabile all'indirizzo email <a href=\"mailto:info@antigravity.dev\" class=\"text-accent hover:underline\">info@antigravity.dev</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
+        "p1": "Il Servizio è fornito da <strong>Antigravity</strong>, contattabile all'indirizzo email <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
       },
       "sec2": {
         "heading": "2. Oggetto del Servizio",

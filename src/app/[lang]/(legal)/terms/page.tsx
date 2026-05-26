@@ -20,7 +20,7 @@ export async function generateMetadata({
 
 const PRICE = "€29";
 const REFUND_DAYS = 14;
-const REFUND_EMAIL = "support@antigravity.dev";
+const REFUND_EMAIL = "hello@cromeastudio.com";
 
 export default async function TermsPage({
   params,

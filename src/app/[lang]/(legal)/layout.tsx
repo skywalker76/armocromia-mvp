@@ -61,7 +61,7 @@ export default async function LegalLayout({
             <CookiePreferencesLink className="hover:text-accent transition-colors" />
             <span>·</span>
             <a
-              href="mailto:info@antigravity.dev"
+              href="mailto:hello@cromeastudio.com"
               className="hover:text-accent transition-colors"
             >
               {t("footerContact")}

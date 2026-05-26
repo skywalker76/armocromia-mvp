@@ -431,7 +431,7 @@ export function getReceiptEmailHtml({
       detailsAmount: "Importo totale",
       ctaLabel: "Vai alla tua Dashboard",
       outro: "La nostra intelligenza artificiale è già al lavoro per elaborare la tua foto. Riceverai un'ulteriore email di notifica non appena il tuo dossier sarà pronto da consultare e scaricare.",
-      footerNote: "Hai 14 giorni di garanzia 'soddisfatti o rimborsati'. Per supporto o richieste di rimborso scrivi a info@antigravity.dev.",
+      footerNote: "Hai 14 giorni di garanzia 'soddisfatti o rimborsati'. Per supporto o richieste di rimborso scrivi a hello@cromeastudio.com.",
     },
     en: {
       subject: "🧾 Payment Receipt — Your Color Analysis Dossier",
@@ -444,7 +444,7 @@ export function getReceiptEmailHtml({
       detailsAmount: "Total amount",
       ctaLabel: "Go to Your Dashboard",
       outro: "Our AI is already at work processing your photo. You will receive another email notification as soon as your dossier is ready to view and download.",
-      footerNote: "You have 14 days of 'no questions asked' refund policy. For support or refund requests, please contact info@antigravity.dev.",
+      footerNote: "You have 14 days of 'no questions asked' refund policy. For support or refund requests, please contact hello@cromeastudio.com.",
     },
     es: {
       subject: "🧾 Recibo de Pago — Tu Dossier de Cromea Studio",
@@ -457,7 +457,7 @@ export function getReceiptEmailHtml({
       detailsAmount: "Importe total",
       ctaLabel: "Ir a tu Panel",
       outro: "Nuestra inteligencia artificial ya está trabajando procesando tu foto. Recibirás otro correo electrónico tan pronto como tu dossier esté listo para ver y descargar.",
-      footerNote: "Tienes 14 días de garantía de reembolso sin preguntas. Para soporte o reembolsos escribe a info@antigravity.dev.",
+      footerNote: "Tienes 14 días de garantía de reembolso sin preguntas. Para soporte o reembolsos escribe a hello@cromeastudio.com.",
     },
   };
 
