@@ -210,7 +210,6 @@ interface InteractiveDossierDashboardProps {
   paletteDesc: string;
   dossierImageUrl: string | null;
   locale: Locale;
-  dateFmt: Intl.DateTimeFormat;
 }
 
 export default function InteractiveDossierDashboard({
@@ -221,10 +220,20 @@ export default function InteractiveDossierDashboard({
   paletteName,
   paletteDesc,
   dossierImageUrl,
-  locale,
-  dateFmt
+  locale
 }: InteractiveDossierDashboardProps) {
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const dateFmt = new Intl.DateTimeFormat(
+    locale === "it" ? "it-IT" : locale === "es" ? "es-ES" : "en-US",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
   // Rileva la macrostagione (Spring, Summer, Autumn, Winter) per caricare i prodotti boutique corretti
   const dbSeason = dossier.classified_season || "";

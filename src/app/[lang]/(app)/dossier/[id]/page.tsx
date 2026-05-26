@@ -157,7 +157,6 @@ export default async function DossierPage({ params, searchParams }: DossierPageP
         paletteDesc={paletteDesc}
         dossierImageUrl={dossierImageUrl}
         locale={locale}
-        dateFmt={dateFmt}
       />
     );
   }
