@@ -5,9 +5,9 @@
       "titleTemplate": "%s | Cromea Studio",
       "description": "Descubre tu análisis cromático personal con un dossier visual profesional. Paleta de colores personalizada, outfits y maquillaje a medida.",
       "ogTitle": "Cromea Studio — Los colores que te hacen brillar",
-      "ogDescription": "Sube una foto y recibe un dossier visual profesional con paleta, outfits y consejos a medida. Resultado en 90 segundos gracias a la IA.",
+      "ogDescription": "Sube una foto y recibe un dossier visual profesional con paleta, outfits y consejos a medida. Resultado en pocos minutos por email.",
       "twitterTitle": "Cromea Studio — Los colores que te hacen brillar",
-      "twitterDescription": "Análisis cromático con IA en 90 segundos. Paleta, outfits y consejos a medida para tu estación.",
+      "twitterDescription": "Análisis cromático con IA en pocos minutos. Paleta, outfits y consejos con notificación por email.",
       "ogLocale": "es_ES"
     },
     "marketing": {
@@ -53,7 +53,7 @@
       "items": [
         { "icon": "🎨", "text": "12 sub-estaciones cromáticas" },
         { "icon": "✨", "text": "Visión IA avanzada" },
-        { "icon": "⚡", "text": "Resultado en ~90 segundos" },
+        { "icon": "✉️", "text": "Notificación por email al estar listo" },
         { "icon": "🔒", "text": "Foto eliminada en 24h" },
         { "icon": "👤", "text": "Para mujer y hombre" },
         { "icon": "💎", "text": "Pago único, tuyo para siempre" }
@@ -121,14 +121,14 @@
         {
           "number": "02",
           "title": "La IA analiza tus colores",
-          "description": "En unos 90 segundos, nuestra tecnología de visión avanzada examina el subtono, el valor, la intensidad y el contraste para clasificarte en una de las 12 sub-estaciones cromáticas.",
-          "tip": "Análisis automático, sin esperas"
+          "description": "Nuestra tecnología de visión avanzada examina el subtono, el valor, la intensidad y el contraste, y elabora tu dossier completo en pocos minutos en segundo plano.",
+          "tip": "En pocos minutos en segundo plano"
         },
         {
           "number": "03",
-          "title": "Recibe tu dossier",
-          "description": "Un dossier visual profesional con paleta personalizada, combinaciones de outfit para cada ocasión, consejos de maquillaje y guía de los metales ideales.",
-          "tip": "Descargable en alta calidad"
+          "title": "Notificación por email y acceso",
+          "description": "Recibe un correo electrónico tan pronto como tu dossier esté listo. Haz clic en el enlace para desbloquear tu paleta personalizada, consejos de maquillaje, outfits y joyas ideales.",
+          "tip": "Notificación por email al estar listo"
         }
       ]
     },
@@ -211,8 +211,8 @@
       "subnote": "Sin suscripción · Pago único · Satisfacción o reembolso",
       "trustIndicators": [
         "Foto eliminada en 24 horas",
-        "Resultado en 90 segundos",
-        "Descarga inmediata"
+        "Notificación por email al estar listo",
+        "Acceso desde panel y email"
       ]
     },
     "footer": {

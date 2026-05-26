@@ -5,9 +5,9 @@
       "titleTemplate": "%s | Cromea Studio",
       "description": "Scopri la tua armocromia personale con un dossier visivo professionale. Analisi cromatica personalizzata con palette colori, outfit e makeup su misura.",
       "ogTitle": "Cromea Studio — I tuoi colori ideali",
-      "ogDescription": "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in 90 secondi grazie all'AI.",
+      "ogDescription": "Carica una foto, ricevi un dossier visivo professionale con palette, outfit e consigli su misura. Risultato in pochi minuti via email.",
       "twitterTitle": "Cromea Studio — I tuoi colori ideali",
-      "twitterDescription": "Analisi cromatica AI in 90 secondi. Palette, outfit e consigli su misura per la tua stagione.",
+      "twitterDescription": "Analisi cromatica AI in pochi minuti. Palette, outfit e consigli con notifica via email.",
       "ogLocale": "it_IT"
     },
     "marketing": {
@@ -53,7 +53,7 @@
       "items": [
         { "icon": "🎨", "text": "12 sotto-stagioni cromatiche" },
         { "icon": "✨", "text": "Visione AI avanzata" },
-        { "icon": "⚡", "text": "Risultato in ~90 secondi" },
+        { "icon": "✉️", "text": "Notifica via email a dossier pronto" },
         { "icon": "🔒", "text": "Foto cancellata in 24h" },
         { "icon": "👤", "text": "Per uomo e donna" },
         { "icon": "💎", "text": "Pagamento unico, tuo per sempre" }
@@ -121,14 +121,14 @@
         {
           "number": "02",
           "title": "L'AI analizza i tuoi colori",
-          "description": "In circa 90 secondi, la nostra tecnologia di visione avanzata analizza sottotono, valore, intensità e contrasto per classificarti in una delle 12 sotto-stagioni cromatiche.",
-          "tip": "Analisi automatica, senza attese"
+          "description": "La nostra tecnologia di visione avanzata analizza sottotono, valore, intensità e contrasto, ed elabora il tuo dossier completo in pochi minuti in background.",
+          "tip": "In pochi minuti in background"
         },
         {
           "number": "03",
-          "title": "Ricevi il tuo dossier",
-          "description": "Un dossier visivo professionale con palette personalizzata, abbinamenti outfit per ogni occasione, consigli makeup e guida ai metalli ideali.",
-          "tip": "Scaricabile in alta qualità"
+          "title": "Notifica email e accesso",
+          "description": "Ricevi un'email non appena il dossier è pronto. Clicca sul link per sbloccare la tua palette personalizzata, consigli makeup, outfit e gioielli ideali.",
+          "tip": "Notifica email a dossier pronto"
         }
       ]
     },
@@ -211,8 +211,8 @@
       "subnote": "Nessun abbonamento · Un pagamento unico · Soddisfatti o rimborsati",
       "trustIndicators": [
         "Foto cancellata in 24 ore",
-        "Risultato in 90 secondi",
-        "Download immediato"
+        "Notifica via email a dossier pronto",
+        "Accesso da dashboard e email"
       ]
     },
     "footer": {

@@ -105,7 +105,7 @@ export default async function Image() {
             lineHeight: 1.4,
           }}
         >
-          Dossier visivo professionale in 90 secondi · €29 una tantum
+          Dossier visivo professionale in pochi minuti · €29 una tantum
         </div>
 
         {/* Palette dots */}

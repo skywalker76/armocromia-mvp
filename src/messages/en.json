@@ -5,9 +5,9 @@
       "titleTemplate": "%s | Cromea Studio",
       "description": "Discover your personal color analysis with a professional visual dossier. Tailored color palette, outfit pairings and makeup advice made just for you.",
       "ogTitle": "Cromea Studio — The colors that bring you to life",
-      "ogDescription": "Upload a photo, receive a professional visual dossier with palette, outfits and tailored advice. Results in 90 seconds, powered by AI.",
+      "ogDescription": "Upload a photo, receive a professional visual dossier with palette, outfits and tailored advice. Results in a few minutes via email.",
       "twitterTitle": "Cromea Studio — The colors that bring you to life",
-      "twitterDescription": "AI color analysis in 90 seconds. Palette, outfits and tailored advice for your season.",
+      "twitterDescription": "AI color analysis in a few minutes. Palette, outfits and advice with email notification.",
       "ogLocale": "en_US"
     },
     "marketing": {
@@ -53,7 +53,7 @@
       "items": [
         { "icon": "🎨", "text": "12 color sub-seasons" },
         { "icon": "✨", "text": "Advanced AI vision" },
-        { "icon": "⚡", "text": "Results in ~90 seconds" },
+        { "icon": "✉️", "text": "Email notification when ready" },
         { "icon": "🔒", "text": "Photo deleted within 24h" },
         { "icon": "👤", "text": "For women and men" },
         { "icon": "💎", "text": "One-time payment, yours forever" }
@@ -121,14 +121,14 @@
         {
           "number": "02",
           "title": "AI analyzes your colors",
-          "description": "In about 90 seconds, our advanced vision technology examines undertone, value, intensity and contrast to classify you in one of the 12 color sub-seasons.",
-          "tip": "Automatic analysis, no waiting"
+          "description": "Our advanced vision technology examines undertone, value, intensity and contrast, and generates your complete dossier in a few minutes in the background.",
+          "tip": "A few minutes in the background"
         },
         {
           "number": "03",
-          "title": "Receive your dossier",
-          "description": "A professional visual dossier with a personalized palette, outfit pairings for every occasion, makeup advice and a guide to your ideal metals.",
-          "tip": "Downloadable in high quality"
+          "title": "Email alert and access",
+          "description": "Receive an email as soon as your dossier is ready. Click the link to unlock your personalized palette, makeup tips, outfits and ideal metals.",
+          "tip": "Email notification when ready"
         }
       ]
     },
@@ -211,8 +211,8 @@
       "subnote": "No subscription · One-time payment · Money-back guarantee",
       "trustIndicators": [
         "Photo deleted within 24 hours",
-        "Results in 90 seconds",
-        "Instant download"
+        "Email notification when ready",
+        "Dashboard & email access"
       ]
     },
     "footer": {
