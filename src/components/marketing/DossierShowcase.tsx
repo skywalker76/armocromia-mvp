@@ -77,7 +77,7 @@ export default function DossierShowcase() {
               key={id}
               onClick={() => setActiveIndex(i)}
               className={`
-                relative rounded-xl px-6 py-3 text-sm font-medium transition-all duration-300
+                relative rounded-xl px-6 py-3 text-sm font-medium transition-all duration-300 touch-bounce
                 ${i === activeIndex
                   ? "bg-accent text-white shadow-lg"
                   : "bg-white text-muted hover:bg-cream-dark hover:text-ink border border-accent/10"
@@ -112,7 +112,7 @@ export default function DossierShowcase() {
         <div className="lg:col-span-3 relative px-4 sm:px-0 flex justify-center items-center">
           {/* Glowing Aura Ambient Background */}
           <div
-            className={`absolute -inset-4 sm:-inset-10 -z-10 rounded-[3rem] bg-gradient-to-tr blur-3xl opacity-75 transition-all duration-700 ${SEASON_GLOWS[activeId]}`}
+            className={`absolute -inset-4 sm:-inset-10 -z-10 rounded-[3rem] bg-gradient-to-tr blur-3xl opacity-75 transition-all duration-700 animate-breath ${SEASON_GLOWS[activeId]}`}
           />
 
           {/* Underlay card 2 (Editorial pile) */}
@@ -196,8 +196,11 @@ export default function DossierShowcase() {
           {/* CTA */}
           <a
             href={loginHref}
-            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+            className="group relative overflow-hidden inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-6 py-3.5 text-sm font-medium text-white shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 touch-bounce"
           >
+            {/* Elegant glass sheen shine */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-out" />
+            
             {t("cta")}
             <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />

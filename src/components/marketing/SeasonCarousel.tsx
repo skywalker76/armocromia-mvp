@@ -80,7 +80,7 @@ export default function SeasonCarousel() {
             className={`
               snap-center shrink-0 w-[85vw] sm:w-auto sm:min-w-0
               group relative overflow-hidden rounded-2xl border text-left
-              transition-all duration-500 ease-out
+              transition-all duration-500 ease-out touch-bounce
               ${isActive
                 ? "border-accent/20 bg-white shadow-lg ring-1 ring-accent/10"
                 : "border-accent/8 bg-white/60 hover:border-accent/15 hover:bg-white hover:shadow-md"

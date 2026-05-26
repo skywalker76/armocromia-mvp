@@ -47,10 +47,10 @@ export default async function HowItWorks({ lang }: { lang: Locale }) {
 
         <div className="mt-16 space-y-0">
           {steps.map((step, i) => (
-            <div key={step.number} className="relative flex gap-8">
+            <div key={step.number} className="relative flex gap-8 group/step cursor-pointer">
               {/* Timeline connector */}
               <div className="flex flex-col items-center">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-accent shadow-sm ring-1 ring-accent/10">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-accent shadow-sm ring-1 ring-accent/10 transition-all duration-300 group-hover/step:-translate-y-1 group-hover/step:shadow-md group-hover/step:ring-accent/25">
                   {STEP_ICONS[i]}
                 </div>
                 {i < steps.length - 1 && (
@@ -59,7 +59,7 @@ export default async function HowItWorks({ lang }: { lang: Locale }) {
               </div>
 
               {/* Content */}
-              <div className={`pb-14 ${i === steps.length - 1 ? "pb-0" : ""}`}>
+              <div className={`pb-14 ${i === steps.length - 1 ? "pb-0" : ""} transition-all duration-300 group-hover/step:translate-x-1.5`}>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-xs font-bold text-accent/60 tracking-widest">{step.number}</span>
                 </div>

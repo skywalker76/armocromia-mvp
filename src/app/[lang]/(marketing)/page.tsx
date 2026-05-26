@@ -133,12 +133,12 @@ export default async function HomePage({ params }: HomePageProps) {
 
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Left — Copy */}
-          <div className="relative z-10 animate-fade-in">
-            <p className="mb-5 text-xs font-semibold tracking-[0.25em] uppercase text-accent">
+          <div className="relative z-10">
+            <p className="mb-5 text-xs font-semibold tracking-[0.25em] uppercase text-accent animate-slide-up">
               {t("hero.eyebrow")}
             </p>
 
-            <h1 className="font-serif text-3xl leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-6xl">
+            <h1 className="font-serif text-3xl leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-6xl animate-slide-up stagger-1">
               {t("hero.titleBefore")}{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 italic text-accent">{t("hero.titleHighlight")}</span>
@@ -150,16 +150,19 @@ export default async function HomePage({ params }: HomePageProps) {
               </span>
             </h1>
 
-            <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted">
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted animate-slide-up stagger-2">
               {t("hero.lead")}
             </p>
 
             {/* CTA group */}
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center animate-slide-up stagger-3">
               <a
                 href={loginHref}
-                className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] touch-bounce"
               >
+                {/* Elegant glass sheen shine */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-out" />
+                
                 {t("hero.cta")}
                 <svg
                   className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
@@ -175,7 +178,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </div>
 
             {/* Mini social proof */}
-            <div className="mt-10 flex items-center gap-5 border-t border-accent/10 pt-6">
+            <div className="mt-10 flex items-center gap-5 border-t border-accent/10 pt-6 animate-slide-up stagger-4">
               <div className="flex -space-x-2">
                 {HERO_AVATAR_GRADIENTS.map((gradient, i) => (
                   <div
@@ -195,7 +198,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <div className="relative w-full mx-auto max-w-md lg:max-w-none">
               {/* Luxury Background Glow */}
               <div
-                className="absolute -inset-6 sm:-inset-12 -z-10 rounded-[3rem] bg-gradient-to-tr from-orange-300/35 via-amber-900/5 to-transparent blur-3xl opacity-80"
+                className="absolute -inset-6 sm:-inset-12 -z-10 rounded-[3rem] bg-gradient-to-tr from-orange-300/35 via-amber-900/5 to-transparent blur-3xl opacity-80 animate-breath"
                 aria-hidden="true"
               />
 
@@ -424,8 +427,11 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="mt-10 flex flex-col items-center gap-5">
             <a
               href={loginHref}
-              className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-10 py-5 text-lg font-medium text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
+              className="group relative overflow-hidden inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-accent to-accent-hover px-10 py-5 text-lg font-medium text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] touch-bounce"
             >
+              {/* Elegant glass sheen shine */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-out" />
+              
               {t("finalCta.cta")}
               <svg
                 className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
