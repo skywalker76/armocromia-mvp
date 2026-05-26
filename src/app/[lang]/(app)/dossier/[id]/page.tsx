@@ -145,8 +145,8 @@ export default async function DossierPage({ params, searchParams }: DossierPageP
     minute: "2-digit",
   });
 
-  const isInteractive = sParams.interactive === "true" || sParams.preview === "true";
-  if (isInteractive) {
+  const isLegacy = sParams.legacy === "true" || sParams.interactive === "false";
+  if (!isLegacy) {
     return (
       <InteractiveDossierDashboard
         dossier={dossier}
