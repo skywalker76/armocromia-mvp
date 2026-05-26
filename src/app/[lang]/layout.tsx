@@ -116,18 +116,18 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: "/opengraph-image",
-          width: 1200,
-          height: 630,
-          alt: "Cromea Studio — I tuoi colori ideali",
+          url: `${SITE_URL}/icon-512.png`,
+          width: 512,
+          height: 512,
+          alt: "Cromea Studio",
         },
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: t("twitterTitle"),
       description: t("twitterDescription"),
-      images: ["/opengraph-image"],
+      images: [`${SITE_URL}/icon-512.png`],
     },
     robots: {
       index: true,
