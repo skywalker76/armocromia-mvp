@@ -110,7 +110,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const feature2Looks = raw<Array<{ name: string; colors: string }>>("valueProp.feature2.looks");
 
   return (
-    <main className="flex flex-1 flex-col overflow-x-hidden">
+    <main className="flex flex-1 flex-col overflow-x-hidden bg-[radial-gradient(circle_at_top_right,_#FFFDF9_0%,_#FAF7F2_50%,_#EFEAE2_100%)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
