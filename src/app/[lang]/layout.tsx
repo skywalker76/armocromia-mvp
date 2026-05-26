@@ -10,6 +10,7 @@ import { defaultLocale, isValidLocale, locales, type Locale } from "@/lib/i18n/c
 import { ConsentProvider } from "@/lib/consent/consent-context";
 import CookieBanner from "@/components/consent/CookieBanner";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import Script from "next/script";
 
 /**
  * Font Playfair Display — serif editoriale per titoli.
@@ -216,6 +217,23 @@ export default async function RootLayout({
               }
             `,
           }}
+        />
+        {/* Lemon Squeezy Affiliate Tracking Script */}
+        <Script
+          id="lemonsqueezy-affiliate-config"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.lemonSqueezyAffiliateConfig = {
+                store: 'cromeastudio'
+              };
+            `,
+          }}
+        />
+        <Script
+          src="https://lmsqueezy.com/affiliate.js"
+          strategy="afterInteractive"
+          defer
         />
       </body>
     </html>
