@@ -8,9 +8,11 @@ import DossierImage from "./DossierImage";
 import DeleteDossierButton from "@/components/app/DeleteDossierButton";
 import { isValidLocale, localePath, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
+import InteractiveDossierDashboard from "./InteractiveDossierDashboard";
 
 interface DossierPageProps {
   params: Promise<{ id: string; lang: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({
@@ -37,8 +39,9 @@ const INTL_LOCALE: Record<Locale, string> = {
  * Why: Server Component — legge dal DB e genera signed URLs.
  * La palette interattiva è delegata al Client Component PaletteGrid.
  */
-export default async function DossierPage({ params }: DossierPageProps) {
+export default async function DossierPage({ params, searchParams }: DossierPageProps) {
   const { id, lang } = await params;
+  const sParams = await searchParams;
   const locale: Locale = isValidLocale(lang) ? lang : defaultLocale;
   const dashboardHref = localePath(locale, "/dashboard");
   const dossierId = parseInt(id, 10);
@@ -141,6 +144,23 @@ export default async function DossierPage({ params }: DossierPageProps) {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const isInteractive = sParams.interactive === "true" || sParams.preview === "true";
+  if (isInteractive) {
+    return (
+      <InteractiveDossierDashboard
+        dossier={dossier}
+        analysis={analysis}
+        reasoning={reasoning}
+        palette={palette}
+        paletteName={paletteName}
+        paletteDesc={paletteDesc}
+        dossierImageUrl={dossierImageUrl}
+        locale={locale}
+        dateFmt={dateFmt}
+      />
+    );
+  }
 
   return (
     <div className="px-6 py-10 sm:py-14">
