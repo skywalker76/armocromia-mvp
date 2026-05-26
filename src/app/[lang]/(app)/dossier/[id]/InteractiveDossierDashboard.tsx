@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { type Locale, localePath } from "@/lib/i18n/config";
 
 // Tipi per la profilazione dei dati stagionali dinamici (Boutique Privata & Makeup)
@@ -350,11 +349,10 @@ export default function InteractiveDossierDashboard({
             <div className="flex items-center gap-3 sm:border-l sm:border-accent/10 sm:pl-4">
               <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-accent-light to-accent flex items-center justify-center text-white text-xs font-bold ring-2 ring-white shadow-sm overflow-hidden">
                 {dossierImageUrl ? (
-                  <Image
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
                     src={dossierImageUrl}
                     alt={userDisplayName}
-                    width={36}
-                    height={36}
                     className="object-cover h-full w-full"
                   />
                 ) : (
@@ -401,11 +399,11 @@ export default function InteractiveDossierDashboard({
                       {/* Face photo framed in luxury border */}
                       <div className="relative mx-auto h-52 w-44 overflow-hidden rounded-xl shadow-md border-2 border-white ring-1 ring-black/5">
                         {dossierImageUrl ? (
-                          <Image
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
                             src={dossierImageUrl}
                             alt={paletteName}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="object-cover h-full w-full transition-transform duration-500 group-hover:scale-105"
                           />
                         ) : (
                           <div className="h-full w-full bg-cream-dark flex items-center justify-center text-muted">Original Photo</div>
