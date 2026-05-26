@@ -136,7 +136,7 @@ export default async function DashboardPage({
   });
 
   return (
-    <div className="px-6 py-10 sm:py-14">
+    <div className="min-h-[calc(100vh-64px)] px-6 py-10 sm:py-14 bg-[radial-gradient(circle_at_top_right,_#FFFDF9_0%,_#FAF7F2_50%,_#EFEAE2_100%)]">
       <div className="mx-auto max-w-5xl">
         {/* ── Welcome Header ── */}
         <div className="mb-10 animate-fade-in">

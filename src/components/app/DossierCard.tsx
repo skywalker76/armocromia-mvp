@@ -95,7 +95,7 @@ export default function DossierCard({
 
   return (
     <div
-      className="group relative overflow-hidden rounded-2xl border border-accent/8 bg-white shadow-xs transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up"
+      className="group relative overflow-hidden rounded-2xl border border-accent/8 bg-white/60 backdrop-blur-md shadow-xs transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up"
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       {/* Image Section */}
