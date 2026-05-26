@@ -191,27 +191,36 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
 
           {/* Right — Dossier visual */}
-          <div className="relative animate-slide-up lg:animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              {/* Background glow */}
+          <div className="relative animate-slide-up lg:animate-fade-in flex items-center justify-center" style={{ animationDelay: "0.2s" }}>
+            <div className="relative w-full mx-auto max-w-md lg:max-w-none">
+              {/* Luxury Background Glow */}
               <div
-                className="absolute inset-0 -m-4 rounded-3xl opacity-50 blur-2xl"
-                style={{ background: "linear-gradient(135deg, rgba(212,169,154,0.3), rgba(185,122,106,0.15))" }}
+                className="absolute -inset-6 sm:-inset-12 -z-10 rounded-[3rem] bg-gradient-to-tr from-orange-300/35 via-amber-900/5 to-transparent blur-3xl opacity-80"
                 aria-hidden="true"
               />
+
+              {/* Underlay card 2 (Editorial pile) */}
+              <div className="absolute inset-0 rounded-2xl border border-black/5 bg-cream/35 shadow-md rotate-3 scale-[0.97] opacity-55 translate-x-3 translate-y-2 pointer-events-none transition-all duration-500" />
+              
+              {/* Underlay card 1 (Editorial pile) */}
+              <div className="absolute inset-0 rounded-2xl border border-black/5 bg-cream-dark/40 shadow-lg -rotate-2 scale-[0.99] opacity-75 -translate-x-2 pointer-events-none transition-all duration-500" />
+
               {/* Main dossier image */}
-              <div className="relative overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 transition-all duration-500 hover:scale-[1.01] hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] group/card">
+                {/* Elegant glass reflection overlay */}
+                <div className="absolute inset-0 z-10 bg-gradient-to-tr from-white/0 via-white/10 to-white/20 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-700" />
+                
                 <Image
                   src="/demo/dossier-autumn.png"
                   alt={t("hero.heroImageAlt")}
                   width={600}
                   height={750}
-                  className="w-full"
+                  className="w-full object-cover"
                   priority
                 />
               </div>
               {/* Floating badge */}
-              <div className="hidden sm:block absolute -bottom-3 -left-3 rounded-xl border border-accent/10 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-sm animate-float sm:-left-6">
+              <div className="hidden sm:block absolute -bottom-3 -left-3 rounded-xl border border-white/40 bg-white/95 px-4 py-3 shadow-xl backdrop-blur-md animate-float sm:-left-6 z-20">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
                     <svg className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
