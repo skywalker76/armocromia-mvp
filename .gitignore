@@ -36,6 +36,7 @@ yarn-error.log*
 # env files
 .env
 .env.*
+.env-val
 !.env.local.example
 !.env.example
 
@@ -52,6 +53,12 @@ cookie-*.png
 i18n-*.png
 prod-*.png
 test-final-*.png
+overlay-*.png
+upload-*.png
+
+# scratch / throwaway scripts (may contain secrets — never commit)
+scratch/
+scratch_temp_*
 
 # playwright MCP local data
 .playwright-mcp/
