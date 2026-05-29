@@ -25,14 +25,24 @@ export async function GET(request: Request) {
   const raw = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
   const secret = raw?.trim();
 
+  const env = {
+    vercelEnv: process.env.VERCEL_ENV ?? null,
+    commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
+    present: {
+      LEMON_SQUEEZY_WEBHOOK_SECRET: !!secret,
+      LEMON_SQUEEZY_API_KEY: !!process.env.LEMON_SQUEEZY_API_KEY,
+      ADMIN_SECRET: !!process.env.ADMIN_SECRET,
+      RESEND_API_KEY: !!process.env.RESEND_API_KEY,
+      SUPABASE_SECRET_KEY: !!process.env.SUPABASE_SECRET_KEY,
+      FAL_KEY: !!process.env.FAL_KEY,
+    },
+  };
+
   if (!secret) {
-    return NextResponse.json({ configured: false });
+    return NextResponse.json({ configured: false, ...env });
   }
 
-  const masked =
-    secret.length <= 6
-      ? "***"
-      : `${secret.slice(0, 3)}…${secret.slice(-3)}`;
+  const masked = secret.length <= 6 ? "***" : `${secret.slice(0, 3)}…${secret.slice(-3)}`;
 
   return NextResponse.json({
     configured: true,
@@ -40,5 +50,6 @@ export async function GET(request: Request) {
     hadWhitespace: raw !== secret, // true = c'erano spazi prima/dopo (typo!)
     fingerprint: masked,
     sha256: crypto.createHash("sha256").update(secret).digest("hex").slice(0, 16),
+    ...env,
   });
 }
