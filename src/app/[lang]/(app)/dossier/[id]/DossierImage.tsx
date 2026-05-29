@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ZoomIn, ZoomOut, RotateCcw, X } from "lucide-react";
 
 interface DossierImageProps {
@@ -11,6 +11,14 @@ interface DossierImageProps {
 export default function DossierImage({ src, alt }: DossierImageProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scale, setScale] = useState(1);
+  const modalRef = useRef<HTMLDivElement>(null);
+  // Ricordiamo l'elemento che aveva il focus per ripristinarlo alla chiusura.
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setScale(1);
+  }, []);
 
   // Prevent background scrolling when lightbox is active
   useEffect(() => {
@@ -24,10 +32,45 @@ export default function DossierImage({ src, alt }: DossierImageProps) {
     };
   }, [isOpen]);
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setScale(1);
-  };
+  // Accessibilità lightbox: ESC per chiudere + focus-trap (Tab resta nel modal)
+  // + ripristino del focus al trigger alla chiusura.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    modalRef.current?.focus();
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const node = modalRef.current;
+      if (!node) return;
+      const focusable = node.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      // Ripristina il focus al trigger (se ancora nel DOM).
+      previouslyFocused.current?.focus?.();
+    };
+  }, [isOpen, handleClose]);
 
   const handleZoomIn = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,9 +96,18 @@ export default function DossierImage({ src, alt }: DossierImageProps) {
   return (
     <>
       {/* Dossier Image Container - Premium Hover Effects */}
-      <div 
+      <div
         onClick={() => setIsOpen(true)}
-        className="group relative cursor-zoom-in overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.005]"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsOpen(true);
+          }
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label={`Ingrandisci: ${alt}`}
+        className="group relative cursor-zoom-in overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.005] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -76,10 +128,13 @@ export default function DossierImage({ src, alt }: DossierImageProps) {
 
       {/* Full-Screen Elite Lightbox Modal */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 z-50 flex flex-col bg-black/98 animate-fade-in"
+        <div
+          ref={modalRef}
+          tabIndex={-1}
+          className="fixed inset-0 z-50 flex flex-col bg-black/98 animate-fade-in focus:outline-none"
           role="dialog"
           aria-modal="true"
+          aria-label={alt}
         >
           {/* Header & Controls bar */}
           <div className="flex items-center justify-between px-6 py-4 text-white z-10 bg-gradient-to-b from-black/80 to-transparent">
