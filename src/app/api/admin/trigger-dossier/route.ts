@@ -18,9 +18,9 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
   const secret = searchParams.get("secret");
 
-  // Verifica secret admin
-  const expectedSecret = process.env.ADMIN_SECRET || "ArmoAdmin2026!";
-  if (secret !== expectedSecret) {
+  // Verifica secret admin (fail-closed: senza ADMIN_SECRET configurato, nega sempre).
+  const expectedSecret = process.env.ADMIN_SECRET;
+  if (!expectedSecret || secret !== expectedSecret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
