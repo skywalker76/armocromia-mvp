@@ -119,13 +119,23 @@ export async function POST(request: Request) {
     // 1. Verifica l'esistenza del dossier ed ottieni i puntatori
     const { data: dossier, error: dossierFetchError } = await supabaseAdmin
       .from("dossiers")
-      .select("original_photo_path, user_notes")
+      .select("original_photo_path, user_notes, status")
       .eq("id", dossierId)
       .single();
 
     if (dossierFetchError || !dossier) {
       console.error(`[LemonSqueezy Webhook] Dossier ${dossierId} not found:`, dossierFetchError?.message);
       return NextResponse.json({ error: "Dossier not found in DB" }, { status: 404 });
+    }
+
+    // 1.5. Idempotenza: processa solo i dossier ancora in attesa di pagamento.
+    // Why: Lemon Squeezy può consegnare lo stesso order_created più volte (retry,
+    // resend manuale). Senza questo guard ogni replica rigenererebbe il dossier e
+    // rispedirebbe la ricevuta. Lo stato iniziale al checkout è "pending_payment";
+    // qualsiasi altro stato significa che l'ordine è già stato gestito.
+    if (dossier.status !== "pending_payment") {
+      console.log(`[LemonSqueezy Webhook] Dossier ${dossierId} già processato (status=${dossier.status}). Skip idempotente.`);
+      return NextResponse.json({ received: true, status: "already_processed" }, { status: 200 });
     }
 
     // 2. Aggiorna lo stato del pagamento
