@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { waitUntil } from "@vercel/functions";
 import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
@@ -9,20 +10,42 @@ export const maxDuration = 300; // 5 minuti max execution duration per backgroun
 
 /**
  * Endpoint admin temporaneo per triggerare manualmente la generazione di un dossier.
- * Protetto da ADMIN_SECRET per prevenire abusi.
+ * Protetto da ADMIN_SECRET, passato nell'header Authorization (NON in query
+ * string, così il secret non finisce nei log degli URL / header Referer).
  *
- * Uso: GET /api/admin/trigger-dossier?id=96&secret=ADMIN_SECRET_VALUE
+ * Uso: GET /api/admin/trigger-dossier?id=96
+ *      header → Authorization: Bearer <ADMIN_SECRET>
+ *   es: curl -H "Authorization: Bearer $ADMIN_SECRET" \
+ *         "https://www.cromeastudio.com/api/admin/trigger-dossier?id=96"
  */
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-  const secret = searchParams.get("secret");
 
-  // Verifica secret admin (fail-closed: senza ADMIN_SECRET configurato, nega sempre).
-  const expectedSecret = process.env.ADMIN_SECRET;
-  if (!expectedSecret || secret !== expectedSecret) {
+/**
+ * Autorizza la richiesta confrontando il Bearer token con ADMIN_SECRET.
+ * Fail-closed: senza ADMIN_SECRET configurato nega sempre. Confronto a tempo
+ * costante per non esporre lunghezza/contenuto del secret via timing.
+ */
+function isAuthorized(request: Request): boolean {
+  const expected = process.env.ADMIN_SECRET;
+  if (!expected) return false;
+
+  const header = request.headers.get("authorization") ?? "";
+  const provided = header.startsWith("Bearer ") ? header.slice(7).trim() : "";
+  if (!provided) return false;
+
+  const providedBuf = Buffer.from(provided);
+  const expectedBuf = Buffer.from(expected);
+  if (providedBuf.length !== expectedBuf.length) return false;
+  return crypto.timingSafeEqual(providedBuf, expectedBuf);
+}
+
+export async function GET(request: Request) {
+  // Verifica secret admin (header Authorization, fail-closed).
+  if (!isAuthorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
 
   const dossierId = parseInt(id || "", 10);
   if (isNaN(dossierId)) {
