@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { logAudit } from "@/lib/audit";
 
 /**
  * GET /api/cron/delete-old-photos
@@ -145,6 +146,15 @@ export async function GET(request: NextRequest) {
           }
         }
       }
+    }
+
+    // Audit GDPR (best-effort): traccia il purge di retention quando ha effetto.
+    if (dbCleared > 0 || filesDeleted > 0) {
+      await logAudit({
+        action: "photos_retention_purge",
+        actor: "system",
+        details: { dbCleared, filesDeleted, retentionHours: RETENTION_HOURS },
+      });
     }
 
     return NextResponse.json({

@@ -7,6 +7,7 @@ import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { waitUntil } from "@vercel/functions";
 import { createCheckoutSession } from "@/lib/lemonsqueezy";
+import { logAudit } from "@/lib/audit";
 
 /**
  * Stato ritornato dalla Server Action per feedback al client.
@@ -327,6 +328,15 @@ export async function deleteDossier(
       throw new Error(`DB delete failed: ${deleteError.message}`);
     }
 
+    // Audit GDPR (best-effort): traccia la cancellazione del dossier.
+    await logAudit({
+      action: "dossier_deleted",
+      actor: "user",
+      userId: user.id,
+      targetId: dossierId,
+      details: { filesDeleted: filesToDelete.length },
+    });
+
     // Why: passa per [lang] perché la dashboard ora vive sotto /<locale>/dashboard.
     // Il secondo argomento "page" invalida tutte le varianti di locale in una shot.
     revalidatePath("/[lang]/dashboard", "page");
@@ -532,6 +542,18 @@ export async function deleteAccount(
     if (deleteUserError) {
       throw new Error(`Auth user delete failed: ${deleteUserError.message}`);
     }
+
+    // Audit GDPR (best-effort): traccia l'esercizio del diritto all'oblio.
+    // Il record sopravvive alla cancellazione dell'account (nessuna FK).
+    await logAudit({
+      action: "account_deleted",
+      actor: "user",
+      userId: user.id,
+      details: {
+        dossiers: dossiers?.length ?? 0,
+        filesAttempted: filesToDelete.length,
+      },
+    });
 
     return { success: true };
   } catch (err) {
