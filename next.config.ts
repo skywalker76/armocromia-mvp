@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /**
  * Content Security Policy
@@ -17,7 +18,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: blob: https://*.supabase.co https://*.fal.run https://v3.fal.media",
   "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.fal.run https://*.fal.ai https://queue.fal.run https://v3.fal.media https://vitals.vercel-insights.com",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.fal.run https://*.fal.ai https://queue.fal.run https://v3.fal.media https://vitals.vercel-insights.com https://*.ingest.de.sentry.io https://*.sentry.io",
   "frame-ancestors 'self'",
   "form-action 'self'",
   "base-uri 'self'",
@@ -51,4 +52,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  org: "cromeastudio-armocromia",
+  project: "javascript-nextjs",
+  // Niente log rumorosi del plugin in build (incl. pre-commit hook).
+  silent: true,
+  // Nessun authToken configurato → l'upload delle source map è saltato
+  // (accettato per ora: gli errori vengono comunque catturati).
+  widenClientFileUpload: true,
+  disableLogger: true,
+});

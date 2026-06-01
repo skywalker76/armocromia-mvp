@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.0",
+    "@sentry/nextjs": "^10.55.0",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.105.1",
     "@vercel/functions": "^3.6.0",
