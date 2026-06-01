@@ -119,13 +119,23 @@ export async function POST(request: Request) {
     // 1. Verifica l'esistenza del dossier ed ottieni i puntatori
     const { data: dossier, error: dossierFetchError } = await supabaseAdmin
       .from("dossiers")
-      .select("original_photo_path, user_notes, status")
+      .select("user_id, original_photo_path, user_notes, status")
       .eq("id", dossierId)
       .single();
 
     if (dossierFetchError || !dossier) {
       console.error(`[LemonSqueezy Webhook] Dossier ${dossierId} not found:`, dossierFetchError?.message);
       return NextResponse.json({ error: "Dossier not found in DB" }, { status: 404 });
+    }
+
+    // 1.2. Ownership: il dossier DEVE appartenere all'utente indicato nei
+    // custom_data. Why: i custom_data sono impostati lato client alla creazione
+    // del checkout, quindi un utente pagante potrebbe puntare al dossier_id di
+    // un altro. La firma HMAC autentica Lemon Squeezy, NON il legame
+    // utente↔dossier. Difesa in profondità contro generazioni cross-account.
+    if (dossier.user_id !== userId) {
+      console.error(`[LemonSqueezy Webhook] Ownership mismatch: dossier ${dossierId} appartiene a ${dossier.user_id}, ma custom_data.user_id=${userId}.`);
+      return NextResponse.json({ error: "Dossier ownership mismatch" }, { status: 403 });
     }
 
     // 1.5. Idempotenza: processa solo i dossier ancora in attesa di pagamento.
