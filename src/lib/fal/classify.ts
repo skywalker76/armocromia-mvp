@@ -96,6 +96,14 @@ REPLY ONLY WITH VALID JSON (no markdown, no code fences):
 }`;
 }
 
+/**
+ * Numero massimo di tentativi di classificazione.
+ * Why: l'output di un LLM è non deterministico — una singola risposta
+ * malformata o un errore transitorio di fal NON deve far fallire il dossier
+ * di un cliente pagante (= refund). Ritentiamo l'intero ciclo.
+ */
+const MAX_CLASSIFY_ATTEMPTS = 3;
+
 export async function classifyPhoto(
   photoUrl: string,
   userNotes?: string,
@@ -106,19 +114,59 @@ export async function classifyPhoto(
     ? `${basePrompt}\n\n${NOTES_LABEL[locale]}: "${userNotes}"`
     : basePrompt;
 
-  const result = await fal.subscribe("fal-ai/any-llm/vision", {
-    input: {
-      image_url: photoUrl,
-      prompt,
-      model: "google/gemini-2.5-flash",
-    },
-  });
+  // Ritenta l'intero ciclo (chiamata fal + parsing/repair + validazione Zod)
+  // fino a MAX_CLASSIFY_ATTEMPTS. Il percorso "buono" resta a 1 sola chiamata:
+  // i retry scattano solo in caso di errore.
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= MAX_CLASSIFY_ATTEMPTS; attempt++) {
+    try {
+      const result = await fal.subscribe("fal-ai/any-llm/vision", {
+        input: {
+          image_url: photoUrl,
+          prompt,
+          model: "google/gemini-2.5-flash",
+        },
+      });
 
-  // Why: la risposta è un oggetto con campo "output" (stringa)
-  const rawOutput =
-    typeof result.data === "string"
-      ? result.data
-      : (result.data as { output?: string }).output ?? JSON.stringify(result.data);
+      return parseAndValidateClassification(extractRawOutput(result.data));
+    } catch (err) {
+      lastError = err;
+      console.warn(
+        `[classify] Tentativo ${attempt}/${MAX_CLASSIFY_ATTEMPTS} fallito: ${
+          err instanceof Error ? err.message : String(err)
+        }`
+      );
+      // Backoff incrementale prima del tentativo successivo (non dopo l'ultimo)
+      if (attempt < MAX_CLASSIFY_ATTEMPTS) {
+        await new Promise((r) => setTimeout(r, attempt * 1500));
+      }
+    }
+  }
+
+  throw new Error(
+    `Classificazione AI non valida dopo ${MAX_CLASSIFY_ATTEMPTS} tentativi: ${
+      lastError instanceof Error ? lastError.message : String(lastError)
+    }. Riprova.`
+  );
+}
+
+/**
+ * Estrae la stringa di output grezza dalla risposta di fal.
+ * Why: la risposta è tipicamente un oggetto con campo "output" (stringa).
+ */
+function extractRawOutput(data: unknown): string {
+  if (typeof data === "string") return data;
+  return (data as { output?: string }).output ?? JSON.stringify(data);
+}
+
+/**
+ * Pulisce, ripara, parsa e valida (Zod) l'output grezzo dell'AI.
+ * Throwa se l'output è irrecuperabile o non rispetta lo schema:
+ * il caller (classifyPhoto) gestisce il retry.
+ */
+function parseAndValidateClassification(
+  rawOutput: string
+): ClassificationResultParsed {
 
   // Pulizia robusta: rimuove markdown fences, estrae JSON dal testo
   let cleaned = rawOutput
@@ -160,9 +208,9 @@ export async function classifyPhoto(
       repaired = balanceBraces(repaired);
       parsed = JSON.parse(repaired);
     } catch (e2) {
-      console.error("[classify] FULL Raw AI output:", rawOutput);
+      console.error("[classify] Raw AI output non parsabile:", rawOutput);
       throw new Error(
-        `Classificazione AI non valida: ${e2 instanceof Error ? e2.message : "JSON parse error"}. Riprova.`
+        `JSON parse error: ${e2 instanceof Error ? e2.message : "unknown"}`
       );
     }
   }
