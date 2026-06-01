@@ -194,7 +194,29 @@ export default function PhotoUploader({
   useEffect(() => {
     if (paymentSuccess && paymentDossierId) {
       console.log(`[PhotoUploader] Success checkout callback detected for dossier ID: ${paymentDossierId}`);
-      
+
+      // GA4 — evento di conversione "purchase" (una sola volta per dossier).
+      // Why: misura le VENDITE reali in Analytics, non solo le visite.
+      // transaction_id = dossierId è la chiave anti-duplicato; un flag in
+      // localStorage evita un secondo invio se l'effetto ri-esegue.
+      try {
+        const purchaseKey = `armocromia_purchase_tracked_${paymentDossierId}`;
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (gtag && !localStorage.getItem(purchaseKey)) {
+          gtag("event", "purchase", {
+            transaction_id: String(paymentDossierId),
+            value: 29,
+            currency: "EUR",
+            items: [
+              { item_id: "dossier_cromatico", item_name: "Dossier cromatico", price: 29, quantity: 1 },
+            ],
+          });
+          localStorage.setItem(purchaseKey, "1");
+        }
+      } catch (e) {
+        console.error("[PhotoUploader] Failed to track purchase event:", e);
+      }
+
       // Inizializza il polling
       setRestoredDossierId(String(paymentDossierId));
       setIsRestoredPolling(true);
