@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 
 /**
@@ -24,6 +25,17 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Il codice deve essere di 6 cifre." },
       { status: 400 }
+    );
+  }
+
+  // Rate limit anti brute-force sul codice a 6 cifre (best-effort).
+  // 8 tentativi / 10 min per IP+email: generoso per i refusi, blocca lo sweep.
+  const verifyKey = `otp-verify:${clientIp(request)}:${email.trim().toLowerCase()}`;
+  const attempt = rateLimit(verifyKey, 8, 10 * 60_000);
+  if (!attempt.allowed) {
+    return NextResponse.json(
+      { error: "Troppi tentativi. Attendi qualche minuto e riprova." },
+      { status: 429, headers: { "Retry-After": String(attempt.retryAfterSec) } }
     );
   }
 

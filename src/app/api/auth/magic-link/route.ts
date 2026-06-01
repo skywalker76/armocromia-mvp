@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
@@ -18,6 +19,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: "Email obbligatoria." },
       { status: 400 }
+    );
+  }
+
+  // Rate limit anti-abuso/costi (best-effort, in aggiunta al limite Supabase).
+  // Limita per IP e per email su finestra di 10 minuti.
+  const emailKey = email.trim().toLowerCase();
+  const WINDOW = 10 * 60_000;
+  const ipLimit = rateLimit(`otp-send:ip:${clientIp(request)}`, 8, WINDOW);
+  const emailLimit = rateLimit(`otp-send:email:${emailKey}`, 4, WINDOW);
+  if (!ipLimit.allowed || !emailLimit.allowed) {
+    const retryAfter = Math.max(ipLimit.retryAfterSec, emailLimit.retryAfterSec);
+    return NextResponse.json(
+      { error: "Troppi tentativi. Attendi qualche minuto e riprova." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } }
     );
   }
 
