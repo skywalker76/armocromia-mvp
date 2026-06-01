@@ -105,11 +105,22 @@ export default function DossierCard({
           {!imageLoaded && (
             <div className="absolute inset-0 skeleton" />
           )}
+          {/*
+            Why <img> e non next/image: la sorgente è una signed URL Supabase
+            (dinamica, scade) di un dossier 4K premium dietro login (noindex).
+            L'optimizer di Next NON inoltra auth e su piano Hobby ha quota
+            trasformazioni limitata + cache inefficace con URL che cambiano →
+            ottimizzare è controproducente/rischioso (cfr. 500 passato).
+            Il beneficio chiave qui — caricare in differita le card fuori
+            schermo — si ottiene a rischio zero con loading="lazy".
+          */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dossierImageUrl}
             alt={seasonLabel ? `Dossier ${seasonLabel}` : `Dossier #${dossier.id}`}
             className={`h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.03] ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+            loading="lazy"
+            decoding="async"
             onLoad={() => setImageLoaded(true)}
           />
           {/* Hover overlay con azioni rapide */}
