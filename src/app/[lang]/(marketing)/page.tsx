@@ -4,6 +4,7 @@ import SeasonCarousel from "@/components/marketing/SeasonCarousel";
 import HowItWorks from "@/components/marketing/HowItWorks";
 import StickyNav from "@/components/marketing/StickyNav";
 import DossierGallery from "@/components/marketing/DossierGallery";
+import Testimonials from "@/components/marketing/Testimonials";
 import PricingCard from "@/components/marketing/PricingCard";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import CookiePreferencesLink from "@/components/consent/CookiePreferencesLink";
@@ -112,11 +113,27 @@ export default async function HomePage({ params }: HomePageProps) {
   const feature2Bullets = raw<string[]>("valueProp.feature2.bullets");
   const feature2Looks = raw<Array<{ name: string; colors: string }>>("valueProp.feature2.looks");
 
+  // FAQPage schema — costruito dalle FAQ localizzate per il rich result Google.
+  const faqItems = raw<Array<{ q: string; a: string }>>("faq.items");
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
   return (
     <main className="flex flex-1 flex-col overflow-x-hidden bg-[radial-gradient(circle_at_top_right,_#FFFDF9_0%,_#FAF7F2_50%,_#EFEAE2_100%)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
       {/* Sticky floating nav — appears after scrolling past hero */}
@@ -265,7 +282,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           REAL DOSSIER GALLERY — Photo scroll gallery
          ═══════════════════════════════════════════════ */}
-      <section id="dossier-gallery" className="px-6 py-24 sm:py-32">
+      <section id="dossier-gallery" className="px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -282,6 +299,10 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════════
+          TESTIMONIALS — Prova sociale
+         ═══════════════════════════════════════════════ */}
+      <Testimonials lang={locale} />
 
       {/* ═══════════════════════════════════════════════
           HOW IT WORKS — 3 Steps
@@ -293,8 +314,8 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           VALUE PROPOSITION — Zig-zag layout
          ═══════════════════════════════════════════════ */}
-      <section className="bg-white/40 px-6 py-24 sm:py-32">
-        <div className="mx-auto max-w-5xl space-y-24">
+      <section className="bg-white/40 px-6 py-16 sm:py-24">
+        <div className="mx-auto max-w-5xl space-y-20">
           {/* Feature 1 */}
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -390,7 +411,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           SEASON EXPLORER — Carousel interattivo
          ═══════════════════════════════════════════════ */}
-      <section id="stagioni" className="scroll-mt-20 px-6 py-24 sm:py-32">
+      <section id="stagioni" className="scroll-mt-20 bg-cream-dark/20 px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -416,8 +437,8 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           FAQ — Accordion
          ═══════════════════════════════════════════════ */}
-      <section id="faq" className="scroll-mt-20 px-6 py-24 sm:py-32">
-        <div className="mx-auto max-w-2xl">
+      <section id="faq" className="scroll-mt-20 px-6 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
               {t("faq.eyebrow")}
@@ -426,14 +447,16 @@ export default async function HomePage({ params }: HomePageProps) {
               {t("faq.title")}
             </h2>
           </div>
-          <FAQAccordion />
+          <div className="mt-10 rounded-2xl border border-accent/8 bg-white/50 px-6 sm:px-8">
+            <FAQAccordion />
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════
           FINAL CTA — Closing section
          ═══════════════════════════════════════════════ */}
-      <section id="inizia" className="scroll-mt-20 relative px-6 py-24 sm:py-32">
+      <section id="inizia" className="scroll-mt-20 relative px-6 py-16 sm:py-24">
         {/* Background pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-30"

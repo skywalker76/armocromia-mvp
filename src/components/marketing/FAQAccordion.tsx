@@ -14,11 +14,11 @@ export default function FAQAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="mt-12">
+    <div className="py-2">
       {items.map((item, i) => {
         const isOpen = openIndex === i;
         return (
-          <div key={i} className="border-b border-accent/10">
+          <div key={i} className="border-b border-accent/10 last:border-b-0">
             <button
               type="button"
               className="flex w-full items-center justify-between gap-4 py-5 text-left transition-colors hover:text-accent"

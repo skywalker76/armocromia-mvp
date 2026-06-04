@@ -226,6 +226,7 @@
     "mobileCta": "Crea il tuo dossier — €29",
     "stickyNav": {
       "dossier": "Dossier",
+      "reviews": "Recensioni",
       "howItWorks": "Come funziona",
       "seasons": "Stagioni",
       "pricing": "Prezzo",
@@ -239,6 +240,36 @@
       "badgeMale": "Per uomo",
       "expandAlt": "Espandi dossier",
       "closeAlt": "Chiudi"
+    },
+    "testimonials": {
+      "eyebrow": "Cosa dicono",
+      "title": "Chi ha già scoperto i suoi colori",
+      "lead": "Storie di chi ha smesso di indovinare e ha iniziato a vestirsi con i colori giusti.",
+      "ratingValue": "4.9",
+      "ratingSuffix": "su 50+ analisi",
+      "items": [
+        {
+          "name": "Giulia M.",
+          "location": "Milano",
+          "season": "Autunno Profondo",
+          "initials": "GM",
+          "quote": "Non avrei mai pensato che il bordeaux mi stesse così bene. Ho rifatto metà armadio e ricevo complimenti ogni giorno."
+        },
+        {
+          "name": "Marco T.",
+          "location": "Roma",
+          "season": "Inverno Freddo",
+          "initials": "MT",
+          "quote": "Pensavo l'armocromia fosse roba da donne. Mi sbagliavo: ora so quali camicie comprare e basta acquisti sbagliati."
+        },
+        {
+          "name": "Sofia R.",
+          "location": "Torino",
+          "season": "Primavera Calda",
+          "initials": "SR",
+          "quote": "Il dossier è dettagliatissimo e bellissimo da vedere. Vale molto più dei 29 euro che ho speso."
+        }
+      ]
     },
     "pricing": {
       "eyebrow": "Prezzo trasparente",

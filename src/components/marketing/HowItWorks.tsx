@@ -34,7 +34,7 @@ export default async function HowItWorks({ lang }: { lang: Locale }) {
   const steps = raw<StepCopy[]>("steps");
 
   return (
-    <section className="bg-cream-dark/40 px-6 py-24 sm:py-32">
+    <section className="bg-cream-dark/40 px-6 py-16 sm:py-24">
       <div className="mx-auto max-w-4xl">
         <div className="text-center">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -60,10 +60,10 @@ export default async function HowItWorks({ lang }: { lang: Locale }) {
 
               {/* Content */}
               <div className={`pb-14 ${i === steps.length - 1 ? "pb-0" : ""} transition-all duration-300 group-hover/step:translate-x-1.5`}>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xs font-bold text-accent/60 tracking-widest">{step.number}</span>
+                <div className="flex items-baseline gap-3 mb-1">
+                  <span className="font-serif text-3xl font-semibold leading-none text-accent">{step.number}</span>
                 </div>
-                <h3 className="font-serif text-xl text-ink">{step.title}</h3>
+                <h3 className="mt-2 font-serif text-xl text-ink">{step.title}</h3>
                 <p className="mt-3 max-w-md text-muted leading-relaxed">
                   {step.description}
                 </p>

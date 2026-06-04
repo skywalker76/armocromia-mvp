@@ -226,6 +226,7 @@
     "mobileCta": "Crea tu dossier — €29",
     "stickyNav": {
       "dossier": "Dossier",
+      "reviews": "Opiniones",
       "howItWorks": "Cómo funciona",
       "seasons": "Estaciones",
       "pricing": "Precio",
@@ -239,6 +240,36 @@
       "badgeMale": "Para hombre",
       "expandAlt": "Ampliar dossier",
       "closeAlt": "Cerrar"
+    },
+    "testimonials": {
+      "eyebrow": "Lo que dicen",
+      "title": "Quienes ya descubrieron sus colores",
+      "lead": "Historias de personas que dejaron de adivinar y empezaron a vestir con los colores correctos.",
+      "ratingValue": "4.9",
+      "ratingSuffix": "de más de 50 análisis",
+      "items": [
+        {
+          "name": "Giulia M.",
+          "location": "Milán",
+          "season": "Otoño Profundo",
+          "initials": "GM",
+          "quote": "Nunca pensé que el burdeos me quedaría tan bien. Renové medio armario y recibo cumplidos cada día."
+        },
+        {
+          "name": "Marco T.",
+          "location": "Roma",
+          "season": "Invierno Frío",
+          "initials": "MT",
+          "quote": "Creía que la colorimetría era cosa de mujeres. Me equivocaba: ahora sé qué camisas comprar y dejé de gastar mal."
+        },
+        {
+          "name": "Sofía R.",
+          "location": "Turín",
+          "season": "Primavera Cálida",
+          "initials": "SR",
+          "quote": "El dossier es detalladísimo y precioso. Vale mucho más que los 29 euros que gasté."
+        }
+      ]
     },
     "pricing": {
       "eyebrow": "Precio transparente",

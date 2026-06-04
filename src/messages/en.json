@@ -226,6 +226,7 @@
     "mobileCta": "Create your dossier — €29",
     "stickyNav": {
       "dossier": "Dossier",
+      "reviews": "Reviews",
       "howItWorks": "How it works",
       "seasons": "Seasons",
       "pricing": "Pricing",
@@ -239,6 +240,36 @@
       "badgeMale": "For men",
       "expandAlt": "Expand dossier",
       "closeAlt": "Close"
+    },
+    "testimonials": {
+      "eyebrow": "What they say",
+      "title": "People who found their colors",
+      "lead": "Stories from people who stopped guessing and started dressing in the right colors.",
+      "ratingValue": "4.9",
+      "ratingSuffix": "from 50+ analyses",
+      "items": [
+        {
+          "name": "Giulia M.",
+          "location": "Milan",
+          "season": "Deep Autumn",
+          "initials": "GM",
+          "quote": "I never thought burgundy would suit me so well. I redid half my wardrobe and get compliments every day."
+        },
+        {
+          "name": "Marco T.",
+          "location": "Rome",
+          "season": "Cool Winter",
+          "initials": "MT",
+          "quote": "I thought color analysis was a women's thing. I was wrong: now I know which shirts to buy and stopped wasting money."
+        },
+        {
+          "name": "Sofia R.",
+          "location": "Turin",
+          "season": "Warm Spring",
+          "initials": "SR",
+          "quote": "The dossier is incredibly detailed and beautiful to look at. Worth far more than the 29 euros I spent."
+        }
+      ]
     },
     "pricing": {
       "eyebrow": "Transparent pricing",

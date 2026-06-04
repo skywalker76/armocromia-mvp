@@ -5,6 +5,7 @@ import { useTranslations } from "@/lib/i18n/translations-context";
 
 const NAV_LINKS = [
   { key: "dossier", href: "#dossier-gallery" },
+  { key: "reviews", href: "#recensioni" },
   { key: "howItWorks", href: "#come-funziona" },
   { key: "seasons", href: "#stagioni" },
   { key: "pricing", href: "#prezzo" },
