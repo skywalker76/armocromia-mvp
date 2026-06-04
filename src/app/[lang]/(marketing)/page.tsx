@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import SeasonCarousel from "@/components/marketing/SeasonCarousel";
+import { SeasonBentoGrid } from "@/components/marketing/SeasonBentoGrid";
+import { DrapingSimulator } from "@/components/marketing/DrapingSimulator";
+import { MorphingAura } from "@/components/marketing/MorphingAura";
 import HowItWorks from "@/components/marketing/HowItWorks";
 import StickyNav from "@/components/marketing/StickyNav";
 import DossierGallery from "@/components/marketing/DossierGallery";
@@ -226,6 +228,9 @@ export default async function HomePage({ params }: HomePageProps) {
                 aria-hidden="true"
               />
 
+              {/* Morphing seasonal aura — pulsa dietro il dossier */}
+              <MorphingAura />
+
               {/* Underlay card 2 (Editorial pile) */}
               <div className="absolute inset-0 rounded-2xl border border-black/5 bg-cream/35 shadow-md rotate-3 scale-[0.97] opacity-55 translate-x-3 translate-y-2 pointer-events-none transition-all duration-500" />
               
@@ -409,7 +414,14 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          SEASON EXPLORER — Carousel interattivo
+          DRAPING — Simulatore interattivo (educa il "perché")
+         ═══════════════════════════════════════════════ */}
+      <section id="draping" className="scroll-mt-20 px-6 py-16 sm:py-24">
+        <DrapingSimulator />
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          SEASON EXPLORER — Bento Grid (12 sotto-stagioni)
          ═══════════════════════════════════════════════ */}
       <section id="stagioni" className="scroll-mt-20 bg-cream-dark/20 px-6 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl">
@@ -425,7 +437,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
           </div>
 
-          <SeasonCarousel />
+          <SeasonBentoGrid />
         </div>
       </section>
 

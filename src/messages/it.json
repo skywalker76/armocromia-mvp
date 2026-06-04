@@ -167,6 +167,77 @@
         }
       }
     },
+    "draping": {
+      "eyebrow": "Il cuore dell'armocromia",
+      "title": "Provalo: cambia il drappo",
+      "lead": "È così che funziona l'armocromia: accostando i colori al viso, la pelle si illumina con le tonalità giuste e si spegne con quelle sbagliate. Tocca un colore e guarda la differenza.",
+      "flatters": "Ti valorizza",
+      "dims": "Ti spegne",
+      "pickLabel": "Scegli un colore da accostare al viso",
+      "imageAlt": "Ritratto per la simulazione del draping cromatico",
+      "ctaTitle": "E i tuoi colori?",
+      "ctaBody": "Questo è solo un esempio. Il dossier individua la tua palette esatta tra le 12 sotto-stagioni — sui tuoi reali incarnato, occhi e capelli.",
+      "drapes": ["Terracotta", "Oro caldo", "Verde oliva", "Fucsia freddo", "Azzurro ghiaccio", "Lavanda"]
+    },
+    "seasonsBento": {
+      "tagLabel": "Stagione",
+      "metricTemp": "Temperatura",
+      "metricContrast": "Contrasto",
+      "metricIntensity": "Intensità",
+      "subgroupsLabel": "Sottogruppi & palette consigliate",
+      "expandHint": "Clicca per esplorare i sottogruppi",
+      "collapseHint": "Clicca per comprimere",
+      "seasons": {
+        "primavera": {
+          "name": "Primavera",
+          "tagline": "Colori caldi, radiosi e vitali che celebrano la rinascita della natura.",
+          "temp": "Caldo",
+          "contrast": "Alto",
+          "intensity": "Alta",
+          "subgroups": [
+            { "name": "Primavera Chiara", "desc": "Colori pastello ma caldi e luminosi, di solarità soffusa." },
+            { "name": "Primavera Calda", "desc": "La massima espressione del calore dorato, senza freddezza." },
+            { "name": "Primavera Brillante", "desc": "Colori saturi ed elettrizzanti, guidati da contrasto elevato." }
+          ]
+        },
+        "estate": {
+          "name": "Estate",
+          "tagline": "Toni freddi, cipriati e soft che evocano le spiagge al tramonto.",
+          "temp": "Freddo",
+          "contrast": "Medio-basso",
+          "intensity": "Bassa",
+          "subgroups": [
+            { "name": "Estate Chiara", "desc": "Toni delicati e confetto, dove la leggerezza è protagonista." },
+            { "name": "Estate Fredda", "desc": "Palette glaciale con assenza totale di pigmento giallo o dorato." },
+            { "name": "Estate Soft", "desc": "Toni vellutati e fumosi, arricchiti da un grigio elegante." }
+          ]
+        },
+        "autunno": {
+          "name": "Autunno",
+          "tagline": "Colori caldi, opachi e avvolgenti ispirati al foliage e alla terra.",
+          "temp": "Caldo",
+          "contrast": "Medio-basso",
+          "intensity": "Bassa",
+          "subgroups": [
+            { "name": "Autunno Profondo", "desc": "Toni scuri e speziati, confinanti con la profondità dell'Inverno." },
+            { "name": "Autunno Caldo", "desc": "Toni dorati e aranciati, privi di qualsiasi influenza fredda." },
+            { "name": "Autunno Soft", "desc": "Toni smorzati e boschivi, a bassa saturazione." }
+          ]
+        },
+        "inverno": {
+          "name": "Inverno",
+          "tagline": "Toni freddi, saturi e puri come i paesaggi innevati sotto le stelle.",
+          "temp": "Freddo",
+          "contrast": "Alto",
+          "intensity": "Alta",
+          "subgroups": [
+            { "name": "Inverno Profondo", "desc": "Colori intensi e scuri, confinanti con l'Autunno Profondo." },
+            { "name": "Inverno Freddo", "desc": "Massima espressione di colori ghiacciati e argentati." },
+            { "name": "Inverno Brillante", "desc": "Colori ad alto impatto e contrasto estremo." }
+          ]
+        }
+      }
+    },
     "valueProp": {
       "feature1": {
         "title": "Il tuo volto, i tuoi colori",

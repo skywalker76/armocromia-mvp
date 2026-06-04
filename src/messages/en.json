@@ -167,6 +167,77 @@
         }
       }
     },
+    "draping": {
+      "eyebrow": "The heart of color analysis",
+      "title": "Try it: change the drape",
+      "lead": "This is how color analysis works: holding colors up to the face, the skin glows with the right tones and dulls with the wrong ones. Tap a color and see the difference.",
+      "flatters": "Flatters you",
+      "dims": "Washes you out",
+      "pickLabel": "Choose a color to hold up to the face",
+      "imageAlt": "Portrait for the color draping simulation",
+      "ctaTitle": "And your colors?",
+      "ctaBody": "This is just an example. Your dossier pinpoints your exact palette among the 12 sub-seasons — on your real skin, eyes and hair.",
+      "drapes": ["Terracotta", "Warm gold", "Olive green", "Cool fuchsia", "Icy blue", "Lavender"]
+    },
+    "seasonsBento": {
+      "tagLabel": "Season",
+      "metricTemp": "Temperature",
+      "metricContrast": "Contrast",
+      "metricIntensity": "Intensity",
+      "subgroupsLabel": "Sub-groups & recommended palettes",
+      "expandHint": "Click to explore the sub-groups",
+      "collapseHint": "Click to collapse",
+      "seasons": {
+        "primavera": {
+          "name": "Spring",
+          "tagline": "Warm, radiant and vital colors that celebrate nature's rebirth.",
+          "temp": "Warm",
+          "contrast": "High",
+          "intensity": "High",
+          "subgroups": [
+            { "name": "Light Spring", "desc": "Pastel yet warm and luminous colors, with a soft glow." },
+            { "name": "Warm Spring", "desc": "The fullest expression of golden warmth, with no coolness." },
+            { "name": "Bright Spring", "desc": "Saturated, electrifying colors driven by high contrast." }
+          ]
+        },
+        "estate": {
+          "name": "Summer",
+          "tagline": "Cool, powdery and soft tones evoking beaches at sunset.",
+          "temp": "Cool",
+          "contrast": "Medium-low",
+          "intensity": "Low",
+          "subgroups": [
+            { "name": "Light Summer", "desc": "Delicate, candy-soft tones where lightness leads." },
+            { "name": "Cool Summer", "desc": "An icy palette with no yellow or golden pigment at all." },
+            { "name": "Soft Summer", "desc": "Velvety, smoky tones softened by elegant grey." }
+          ]
+        },
+        "autunno": {
+          "name": "Autumn",
+          "tagline": "Warm, muted and enveloping colors inspired by foliage and earth.",
+          "temp": "Warm",
+          "contrast": "Medium-low",
+          "intensity": "Low",
+          "subgroups": [
+            { "name": "Deep Autumn", "desc": "Dark, spicy tones bordering on the depth of Winter." },
+            { "name": "Warm Autumn", "desc": "Golden, amber tones free of any cool influence." },
+            { "name": "Soft Autumn", "desc": "Muted, woodland tones with low saturation." }
+          ]
+        },
+        "inverno": {
+          "name": "Winter",
+          "tagline": "Cool, saturated and pure tones like snow under starlight.",
+          "temp": "Cool",
+          "contrast": "High",
+          "intensity": "High",
+          "subgroups": [
+            { "name": "Deep Winter", "desc": "Intense, dark colors bordering on Deep Autumn." },
+            { "name": "Cool Winter", "desc": "The purest expression of icy, silvery colors." },
+            { "name": "Bright Winter", "desc": "High-impact colors with extreme contrast." }
+          ]
+        }
+      }
+    },
     "valueProp": {
       "feature1": {
         "title": "Your face, your colors",

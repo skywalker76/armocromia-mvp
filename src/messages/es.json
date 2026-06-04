@@ -167,6 +167,77 @@
         }
       }
     },
+    "draping": {
+      "eyebrow": "El corazón de la colorimetría",
+      "title": "Pruébalo: cambia el paño",
+      "lead": "Así funciona la colorimetría: al acercar los colores al rostro, la piel se ilumina con los tonos correctos y se apaga con los equivocados. Toca un color y observa la diferencia.",
+      "flatters": "Te favorece",
+      "dims": "Te apaga",
+      "pickLabel": "Elige un color para acercar al rostro",
+      "imageAlt": "Retrato para la simulación de draping cromático",
+      "ctaTitle": "¿Y tus colores?",
+      "ctaBody": "Esto es solo un ejemplo. El dossier identifica tu paleta exacta entre las 12 subestaciones — sobre tu piel, ojos y cabello reales.",
+      "drapes": ["Terracota", "Oro cálido", "Verde oliva", "Fucsia frío", "Azul hielo", "Lavanda"]
+    },
+    "seasonsBento": {
+      "tagLabel": "Estación",
+      "metricTemp": "Temperatura",
+      "metricContrast": "Contraste",
+      "metricIntensity": "Intensidad",
+      "subgroupsLabel": "Subgrupos y paletas recomendadas",
+      "expandHint": "Haz clic para explorar los subgrupos",
+      "collapseHint": "Haz clic para contraer",
+      "seasons": {
+        "primavera": {
+          "name": "Primavera",
+          "tagline": "Colores cálidos, radiantes y vitales que celebran el renacer de la naturaleza.",
+          "temp": "Cálido",
+          "contrast": "Alto",
+          "intensity": "Alta",
+          "subgroups": [
+            { "name": "Primavera Clara", "desc": "Colores pastel pero cálidos y luminosos, de brillo suave." },
+            { "name": "Primavera Cálida", "desc": "La máxima expresión del calor dorado, sin frialdad." },
+            { "name": "Primavera Brillante", "desc": "Colores saturados y vibrantes, guiados por un alto contraste." }
+          ]
+        },
+        "estate": {
+          "name": "Verano",
+          "tagline": "Tonos fríos, empolvados y suaves que evocan playas al atardecer.",
+          "temp": "Frío",
+          "contrast": "Medio-bajo",
+          "intensity": "Baja",
+          "subgroups": [
+            { "name": "Verano Claro", "desc": "Tonos delicados y aterciopelados donde manda la ligereza." },
+            { "name": "Verano Frío", "desc": "Una paleta glacial sin ningún pigmento amarillo o dorado." },
+            { "name": "Verano Suave", "desc": "Tonos aterciopelados y ahumados, suavizados por un gris elegante." }
+          ]
+        },
+        "autunno": {
+          "name": "Otoño",
+          "tagline": "Colores cálidos, apagados y envolventes inspirados en el follaje y la tierra.",
+          "temp": "Cálido",
+          "contrast": "Medio-bajo",
+          "intensity": "Baja",
+          "subgroups": [
+            { "name": "Otoño Profundo", "desc": "Tonos oscuros y especiados que rozan la profundidad del Invierno." },
+            { "name": "Otoño Cálido", "desc": "Tonos dorados y ámbar sin ninguna influencia fría." },
+            { "name": "Otoño Suave", "desc": "Tonos apagados y boscosos con baja saturación." }
+          ]
+        },
+        "inverno": {
+          "name": "Invierno",
+          "tagline": "Tonos fríos, saturados y puros como la nieve bajo la luz de las estrellas.",
+          "temp": "Frío",
+          "contrast": "Alto",
+          "intensity": "Alta",
+          "subgroups": [
+            { "name": "Invierno Profundo", "desc": "Colores intensos y oscuros que rozan el Otoño Profundo." },
+            { "name": "Invierno Frío", "desc": "La expresión más pura de colores helados y plateados." },
+            { "name": "Invierno Brillante", "desc": "Colores de alto impacto y contraste extremo." }
+          ]
+        }
+      }
+    },
     "valueProp": {
       "feature1": {
         "title": "Tu rostro, tus colores",
