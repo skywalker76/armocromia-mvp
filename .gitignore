@@ -65,3 +65,9 @@ scratch_temp_*
 
 .vercel
 .env*.local
+
+.vercel
+
+# scroll-journey local assets
+/public/.tmp/
+/.tmp/

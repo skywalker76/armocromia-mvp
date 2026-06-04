@@ -45,7 +45,7 @@
       "priceNote": "pago único · Satisfacción o reembolso en 14 días",
       "socialProofBold": "Cientos de dossiers",
       "socialProofRest": "generados",
-      "badgeResult": "Otoño Cálido",
+      "badgeResult": "Primavera Cálida",
       "badgeStatus": "Análisis completado",
       "heroImageAlt": "Ejemplo de dossier cromático — estación Otoño con paleta de colores personalizada"
     },
@@ -223,7 +223,76 @@
       "contact": "Contacto",
       "copyrightSuffix": "Cromea Studio — Todos los derechos reservados"
     },
-    "mobileCta": "Crea tu dossier — €29"
+    "mobileCta": "Crea tu dossier — €29",
+    "stickyNav": {
+      "dossier": "Dossier",
+      "howItWorks": "Cómo funciona",
+      "seasons": "Estaciones",
+      "pricing": "Precio",
+      "faq": "FAQ",
+      "cta": "Empieza ahora"
+    },
+    "dossierGallery": {
+      "eyebrow": "Dossiers reales",
+      "title": "Cada análisis es único como tú",
+      "lead": "Explora algunos de nuestros dossiers completados. Cada uno contiene paletas personalizadas, sugerencias de outfit y una comparación visual de colores.",
+      "badgeMale": "Para hombre",
+      "expandAlt": "Ampliar dossier",
+      "closeAlt": "Cerrar"
+    },
+    "pricing": {
+      "eyebrow": "Precio transparente",
+      "title": "Una inversión en tu estilo",
+      "amount": "€29",
+      "period": "pago único",
+      "subtitle": "Un pago, tuyo para siempre",
+      "features": [
+        "Análisis completo de tus colores naturales",
+        "Tu estación entre 12 sub-estaciones",
+        "Paleta personalizada con tonos principales y secundarios",
+        "Comparación visual: colores que te favorecen vs a evitar",
+        "Sugerencias de outfit y look en armonía",
+        "Dossier descargable en alta resolución",
+        "Para mujer y hombre",
+        "Disponible en pocos minutos"
+      ],
+      "cta": "Crea tu dossier",
+      "guarantee": "Satisfacción o reembolso en 14 días"
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Todo lo que quieres saber",
+      "items": [
+        {
+          "q": "¿Qué es la armonía cromática?",
+          "a": "La armonía cromática (armocromia) es la disciplina que analiza los colores naturales de piel, ojos y cabello para identificar la paleta cromática que mejor realza a cada persona. Nuestro servicio utiliza inteligencia artificial para realizar este análisis a partir de tu foto."
+        },
+        {
+          "q": "¿Cuánto tarda en llegar el dossier?",
+          "a": "El análisis se completa en pocos minutos. Recibirás una notificación por email en cuanto tu dossier esté listo para consultarlo y descargarlo."
+        },
+        {
+          "q": "¿Funciona también para hombres?",
+          "a": "Por supuesto. La armonía cromática se aplica a todos, independientemente del género. El dossier incluye sugerencias de look y combinaciones pensadas tanto para hombre como para mujer."
+        },
+        {
+          "q": "¿Qué tipo de foto debo subir?",
+          "a": "Una foto del rostro con luz natural, sin filtros ni maquillaje pesado, con el fondo lo más neutro posible. La calidad del análisis depende mucho de la calidad de la foto."
+        },
+        {
+          "q": "¿Puedo descargar el dossier?",
+          "a": "Sí, el dossier está disponible como imagen en alta resolución que puedes guardar, imprimir o compartir. Permanece accesible en tu cuenta para siempre."
+        },
+        {
+          "q": "¿Y si no estoy satisfecho con el resultado?",
+          "a": "Ofrecemos una garantía de satisfacción o reembolso de 14 días. Si el resultado no te convence, puedes solicitar un reembolso completo sin preguntas."
+        },
+        {
+          "q": "¿Mi foto está segura?",
+          "a": "Tu privacidad es nuestra prioridad. La foto se utiliza exclusivamente para el análisis y se elimina automáticamente en un plazo de 24 horas. Cumplimos plenamente con el GDPR."
+        }
+      ]
+    }
   },
   "app": {
     "errors": {

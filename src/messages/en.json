@@ -45,7 +45,7 @@
       "priceNote": "one-time · 14-day money-back guarantee",
       "socialProofBold": "Hundreds of dossiers",
       "socialProofRest": "delivered",
-      "badgeResult": "Warm Autumn",
+      "badgeResult": "Warm Spring",
       "badgeStatus": "Analysis complete",
       "heroImageAlt": "Example color dossier — Autumn season with personalized color palette"
     },
@@ -223,7 +223,76 @@
       "contact": "Contact",
       "copyrightSuffix": "Cromea Studio — All rights reserved"
     },
-    "mobileCta": "Create your dossier — €29"
+    "mobileCta": "Create your dossier — €29",
+    "stickyNav": {
+      "dossier": "Dossier",
+      "howItWorks": "How it works",
+      "seasons": "Seasons",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "cta": "Get started"
+    },
+    "dossierGallery": {
+      "eyebrow": "Real dossiers",
+      "title": "Every analysis is as unique as you",
+      "lead": "Explore some of our completed dossiers. Each one contains personalized palettes, outfit suggestions and a visual color comparison.",
+      "badgeMale": "For men",
+      "expandAlt": "Expand dossier",
+      "closeAlt": "Close"
+    },
+    "pricing": {
+      "eyebrow": "Transparent pricing",
+      "title": "An investment in your style",
+      "amount": "€29",
+      "period": "one-time",
+      "subtitle": "One payment, yours forever",
+      "features": [
+        "Complete analysis of your natural colors",
+        "Your season among 12 sub-seasons",
+        "Personalized palette with primary and secondary tones",
+        "Visual comparison: flattering vs unflattering colors",
+        "Outfit and look suggestions in harmony",
+        "High-resolution downloadable dossier",
+        "For women and men",
+        "Ready in a few minutes"
+      ],
+      "cta": "Create your dossier",
+      "guarantee": "14-day money-back guarantee"
+    },
+    "faq": {
+      "eyebrow": "Frequently asked questions",
+      "title": "Everything you want to know",
+      "items": [
+        {
+          "q": "What is color analysis?",
+          "a": "Color analysis (armocromia) is the discipline that examines your natural skin, eye and hair colors to identify the color palette that flatters you most. Our service uses artificial intelligence to perform this analysis from your photo."
+        },
+        {
+          "q": "How long does it take to receive the dossier?",
+          "a": "The analysis is completed in a few minutes. You'll receive an email notification as soon as your dossier is ready to view and download."
+        },
+        {
+          "q": "Does it work for men too?",
+          "a": "Absolutely. Color analysis applies to everyone, regardless of gender. The dossier includes look and pairing suggestions designed for both men and women."
+        },
+        {
+          "q": "What kind of photo should I upload?",
+          "a": "A photo of your face in natural light, without filters or heavy makeup, with the most neutral background possible. The quality of the analysis depends heavily on photo quality."
+        },
+        {
+          "q": "Can I download the dossier?",
+          "a": "Yes, the dossier is available as a high-resolution image you can save, print or share. It stays accessible in your account forever."
+        },
+        {
+          "q": "What if I'm not satisfied with the result?",
+          "a": "We offer a 14-day money-back guarantee. If the result doesn't convince you, you can request a full refund with no questions asked."
+        },
+        {
+          "q": "Is my photo safe?",
+          "a": "Your privacy is our priority. The photo is used exclusively for the analysis and is automatically deleted within 24 hours. We are fully GDPR compliant."
+        }
+      ]
+    }
   },
   "app": {
     "errors": {

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import DossierShowcase from "@/components/marketing/DossierShowcase";
 import SeasonCarousel from "@/components/marketing/SeasonCarousel";
 import HowItWorks from "@/components/marketing/HowItWorks";
+import StickyNav from "@/components/marketing/StickyNav";
+import DossierGallery from "@/components/marketing/DossierGallery";
+import PricingCard from "@/components/marketing/PricingCard";
+import FAQAccordion from "@/components/marketing/FAQAccordion";
 import CookiePreferencesLink from "@/components/consent/CookiePreferencesLink";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
 import { getTranslations } from "@/lib/i18n/server";
@@ -115,6 +118,10 @@ export default async function HomePage({ params }: HomePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Sticky floating nav — appears after scrolling past hero */}
+      <StickyNav />
+
       {/* ═══════════════════════════════════════════════
           HERO — Split Layout (Anti-center bias)
          ═══════════════════════════════════════════════ */}
@@ -195,7 +202,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
           {/* Right — Dossier visual */}
           <div className="relative animate-slide-up lg:animate-fade-in flex items-center justify-center" style={{ animationDelay: "0.2s" }}>
-            <div className="relative w-full mx-auto max-w-md lg:max-w-none">
+            <div className="relative w-full mx-auto max-w-xs sm:max-w-sm lg:max-w-md">
               {/* Luxury Background Glow */}
               <div
                 className="absolute -inset-6 sm:-inset-12 -z-10 rounded-[3rem] bg-gradient-to-tr from-orange-300/35 via-amber-900/5 to-transparent blur-3xl opacity-80 animate-breath"
@@ -214,11 +221,11 @@ export default async function HomePage({ params }: HomePageProps) {
                 <div className="absolute inset-0 z-10 bg-gradient-to-tr from-white/0 via-white/10 to-white/20 pointer-events-none opacity-0 group-hover/card:opacity-100 transition-opacity duration-700" />
                 
                 <Image
-                  src="/demo/dossier-autumn.png"
+                  src="/demo/dossier-real-primavera-calda.webp"
                   alt={t("hero.heroImageAlt")}
-                  width={600}
-                  height={750}
-                  className="w-full object-cover"
+                  width={480}
+                  height={620}
+                  className="w-full object-contain"
                   priority
                 />
               </div>
@@ -256,52 +263,32 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          DEMO SHOWCASE — Interactive Dossier Gallery
+          REAL DOSSIER GALLERY — Photo scroll gallery
          ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-24 sm:py-32">
+      <section id="dossier-gallery" className="px-6 py-24 sm:py-32">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center animate-fade-in">
+          <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
-              {t("showcase.eyebrow")}
+              {t("dossierGallery.eyebrow")}
             </p>
             <h2 className="mt-4 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
-              {t("showcase.title")}
+              {t("dossierGallery.title")}
             </h2>
             <p className="mt-5 text-lg text-muted leading-relaxed">
-              {t("showcase.lead")}
+              {t("dossierGallery.lead")}
             </p>
           </div>
-
-          {/* Interactive showcase */}
-          <DossierShowcase />
+          <DossierGallery />
         </div>
       </section>
+
 
       {/* ═══════════════════════════════════════════════
           HOW IT WORKS — 3 Steps
          ═══════════════════════════════════════════════ */}
-      <HowItWorks lang={locale} />
-
-      {/* ═══════════════════════════════════════════════
-          SEASON EXPLORER — Carousel interattivo
-         ═══════════════════════════════════════════════ */}
-      <section className="px-6 py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
-              {t("seasons.eyebrow")}
-            </p>
-            <h2 className="mt-4 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
-              {t("seasons.title")}
-            </h2>
-            <p className="mt-5 text-lg text-muted leading-relaxed">
-              {t("seasons.lead")}
-            </p>
-          </div>
-
-          <SeasonCarousel />
-        </div>
-      </section>
+      <div id="come-funziona" className="scroll-mt-20">
+        <HowItWorks lang={locale} />
+      </div>
 
       {/* ═══════════════════════════════════════════════
           VALUE PROPOSITION — Zig-zag layout
@@ -401,9 +388,52 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* ═══════════════════════════════════════════════
+          SEASON EXPLORER — Carousel interattivo
+         ═══════════════════════════════════════════════ */}
+      <section id="stagioni" className="scroll-mt-20 px-6 py-24 sm:py-32">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
+              {t("seasons.eyebrow")}
+            </p>
+            <h2 className="mt-4 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
+              {t("seasons.title")}
+            </h2>
+            <p className="mt-5 text-lg text-muted leading-relaxed">
+              {t("seasons.lead")}
+            </p>
+          </div>
+
+          <SeasonCarousel />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          PRICING — Single card
+         ═══════════════════════════════════════════════ */}
+      <PricingCard lang={locale} />
+
+      {/* ═══════════════════════════════════════════════
+          FAQ — Accordion
+         ═══════════════════════════════════════════════ */}
+      <section id="faq" className="scroll-mt-20 px-6 py-24 sm:py-32">
+        <div className="mx-auto max-w-2xl">
+          <div className="text-center">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
+              {t("faq.eyebrow")}
+            </p>
+            <h2 className="mt-4 font-serif text-3xl tracking-tight text-ink sm:text-4xl">
+              {t("faq.title")}
+            </h2>
+          </div>
+          <FAQAccordion />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
           FINAL CTA — Closing section
          ═══════════════════════════════════════════════ */}
-      <section className="relative px-6 py-24 sm:py-32">
+      <section id="inizia" className="scroll-mt-20 relative px-6 py-24 sm:py-32">
         {/* Background pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
