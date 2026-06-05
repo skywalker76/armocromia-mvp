@@ -553,7 +553,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <p className="text-xs text-muted-light">
               {t("footer.tagline")}
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-light/80">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-light">
               <a href={privacyHref} className="hover:text-accent transition-colors">{t("footer.privacy")}</a>
               <span className="hidden sm:inline">·</span>
               <a href={termsHref} className="hover:text-accent transition-colors">{t("footer.terms")}</a>
@@ -562,7 +562,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <span className="hidden sm:inline">·</span>
               <a href="mailto:hello@cromeastudio.com" className="hover:text-accent transition-colors">{t("footer.contact")}</a>
             </div>
-            <p className="mt-2 text-xs text-muted-light/50">
+            <p className="mt-2 text-xs text-muted-light">
               &copy; {new Date().getFullYear()} {t("footer.copyrightSuffix")}
             </p>
           </div>

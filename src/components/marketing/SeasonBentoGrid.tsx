@@ -158,7 +158,7 @@ const SeasonBentoGridBase: React.FC = () => {
               </div>
 
               {/* Hint */}
-              <div className="flex justify-end pt-2 text-[10px] font-medium text-muted-light/60 transition-colors group-hover:text-accent">
+              <div className="flex justify-end pt-2 text-[10px] font-medium text-muted-light transition-colors group-hover:text-accent">
                 {isOpen ? t("collapseHint") : t("expandHint")}
               </div>
             </div>

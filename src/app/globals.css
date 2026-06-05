@@ -19,7 +19,8 @@
   --color-muted-light: #7A6354;
 
   /* --- Colori Semantici --- */
-  --color-success: #3D8B6E;
+  /* WCAG AA: scurito da #3D8B6E (3.84:1 su cream) a #2F7355 (5.30:1) per il testo verde es. "Ti valorizza" */
+  --color-success: #2F7355;
   --color-success-light: #E8F5EE;
   --color-error: #C75050;
   --color-error-light: #FEF2F2;
