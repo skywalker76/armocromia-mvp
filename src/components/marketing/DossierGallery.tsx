@@ -15,10 +15,10 @@ interface DossierItem {
 
 const DOSSIERS: DossierItem[] = [
   {
-    id: "autunno-profondo",
-    image: "/demo/dossier-real-autunno-profondo.webp",
+    id: "autunno-caldo",
+    image: "/demo/dossier-real-autunno-caldo.webp",
     season: "autumn",
-    variant: "Autunno Profondo",
+    variant: "Autunno Caldo",
     badge: "🍂",
     gender: "female",
   },
