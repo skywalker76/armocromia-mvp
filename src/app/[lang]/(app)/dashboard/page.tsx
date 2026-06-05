@@ -8,8 +8,8 @@ import FloatingUploadButton from "@/components/app/FloatingUploadButton";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 
-/** Pipeline GPT Image 2 /edit richiede 60-180s. Massimo consentito su Vercel Pro = 300. */
-export const maxDuration = 300;
+/** Pipeline GPT Image 2 /edit richiede 60-180s. Vercel Pro con Fluid Compute consente fino a 800s; usiamo 600 per margine. */
+export const maxDuration = 600;
 
 /**
  * Why: la pagina legge cookies (auth Supabase) + DB dell'utente → MUST be dynamic.

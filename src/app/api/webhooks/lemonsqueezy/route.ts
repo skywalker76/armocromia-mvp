@@ -8,7 +8,7 @@ import { sendEmail } from "@/lib/emails/resend";
 import { getReceiptEmailHtml } from "@/lib/emails/templates";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300; // 5 minuti max execution duration per background pipeline AI in waitUntil
+export const maxDuration = 600; // 10 min (Vercel Pro, max 800s con Fluid Compute) — margine per il pipeline AI in waitUntil, evita troncamenti su generazioni lente
 
 const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET?.trim();
 

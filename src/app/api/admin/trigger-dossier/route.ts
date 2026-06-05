@@ -6,7 +6,7 @@ import { runDossierGenerationPipeline } from "@/lib/armocromia/pipeline";
 import { defaultLocale } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300; // 5 minuti max execution duration per background pipeline AI in waitUntil
+export const maxDuration = 600; // 10 min (Vercel Pro, max 800s con Fluid Compute) — margine per il pipeline AI in waitUntil, evita troncamenti su generazioni lente
 
 /**
  * Endpoint admin temporaneo per triggerare manualmente la generazione di un dossier.
