@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { isValidLocale, localePath, defaultLocale } from "@/lib/i18n/config";
-import { getTranslations } from "@/lib/i18n/server";
 import { MorphingAura } from "@/components/marketing/MorphingAura";
 import { DrapingSimulator } from "@/components/marketing/DrapingSimulator";
 import { SeasonBentoGrid } from "@/components/marketing/SeasonBentoGrid";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}): Promise<Metadata> {
-  const { lang } = await params;
-  const locale = isValidLocale(lang) ? lang : defaultLocale;
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Anteprima UX/UI — Cromea Studio",
     description: "Pagina di anteprima locale per valutare le nuove proposte visive UX/UI per la landing page di Cromea Studio.",
@@ -25,6 +19,9 @@ interface UxPreviewPageProps {
 }
 
 export default async function UxPreviewPage({ params }: UxPreviewPageProps) {
+  // Sandbox interna: accessibile solo in sviluppo, 404 in produzione.
+  if (process.env.NODE_ENV === "production") notFound();
+
   const { lang } = await params;
   const locale = isValidLocale(lang) ? lang : defaultLocale;
 

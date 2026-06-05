@@ -6,7 +6,8 @@ import { MorphingAura } from "@/components/marketing/MorphingAura";
 import HowItWorks from "@/components/marketing/HowItWorks";
 import StickyNav from "@/components/marketing/StickyNav";
 import DossierGallery from "@/components/marketing/DossierGallery";
-import Testimonials from "@/components/marketing/Testimonials";
+// TEMP: testimonianze nascoste fino a recensioni REALI (no recensioni placeholder in prod — Dlgs 206/2005).
+// import Testimonials from "@/components/marketing/Testimonials";
 import PricingCard from "@/components/marketing/PricingCard";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import CookiePreferencesLink from "@/components/consent/CookiePreferencesLink";
@@ -160,8 +161,11 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Left — Copy */}
           <div className="relative z-10">
-            <p className="mb-5 text-xs font-semibold tracking-[0.25em] uppercase text-accent animate-slide-up">
-              {t("hero.eyebrow")}
+            <p className="mb-5 flex items-center gap-4 animate-slide-up">
+              <span className="text-[13px] font-semibold tracking-[0.2em] uppercase text-accent">
+                {t("hero.eyebrow")}
+              </span>
+              <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
             </p>
 
             <h1 className="font-serif text-3xl leading-[1.1] tracking-tight text-ink sm:text-4xl lg:text-6xl animate-slide-up stagger-1">
@@ -306,8 +310,12 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* ═══════════════════════════════════════════════
           TESTIMONIALS — Prova sociale
+          TEMP: nascosta fino a recensioni REALI. Riattivare:
+          1) ripristina l'import di Testimonials sopra
+          2) togli il commento alla riga <Testimonials /> qui sotto
+          3) ripristina la voce "reviews" in StickyNav
          ═══════════════════════════════════════════════ */}
-      <Testimonials lang={locale} />
+      {/* <Testimonials lang={locale} /> */}
 
       {/* ═══════════════════════════════════════════════
           HOW IT WORKS — 3 Steps
