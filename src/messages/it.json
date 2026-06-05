@@ -754,7 +754,7 @@
           "<strong>Indirizzo email</strong>: necessario per autenticarti tramite codice OTP e ricevere comunicazioni di servizio (ricevuta acquisto, notifiche dossier pronto).",
           "<strong>Fotografia del viso</strong>: l'immagine che carichi per l'analisi cromatica costituisce un <strong>dato biometrico</strong> ai sensi dell'art. 9 GDPR (categoria particolare). Viene processata dall'intelligenza artificiale per estrarre informazioni su incarnato, capelli e occhi, e <strong>cancellata automaticamente entro 24 ore</strong> dall'upload.",
           "<strong>Risultato dell'analisi (dossier)</strong>: la classificazione cromatica, la palette e i consigli generati. Sono conservati per consentirti di consultare e scaricare il tuo dossier finché mantieni l'account attivo.",
-          "<strong>Dati di pagamento</strong>: gestiti direttamente da Stripe (vedi § 6). Noi non memorizziamo numeri di carta o credenziali bancarie — riceviamo solo l'ID transazione e l'esito.",
+          "<strong>Dati di pagamento</strong>: gestiti dal nostro fornitore di pagamenti <strong>Lemon Squeezy</strong>, che agisce come Merchant of Record (vedi § 6). Noi non memorizziamo numeri di carta o credenziali bancarie — riceviamo solo l'ID transazione e l'esito.",
           "<strong>Dati tecnici</strong>: indirizzo IP, user agent, timestamp richieste, cookie di sessione necessari al funzionamento del login. Non utilizziamo cookie di profilazione o di terze parti per advertising."
         ]
       },
@@ -794,7 +794,7 @@
           { "provider": "Supabase", "role": "Database, auth, storage foto/dossier", "location": "UE (Francoforte)" },
           { "provider": "fal.ai", "role": "Analisi AI dell'immagine (Google Gemini Vision)", "location": "USA — SCC adottate" },
           { "provider": "Vercel", "role": "Hosting applicazione web", "location": "USA — SCC adottate" },
-          { "provider": "Stripe", "role": "Elaborazione pagamenti, fatturazione, Stripe Tax", "location": "USA / Irlanda" },
+          { "provider": "Lemon Squeezy", "role": "Elaborazione pagamenti, fatturazione e gestione IVA/imposte (Merchant of Record)", "location": "USA — SCC adottate" },
           { "provider": "Google Analytics 4", "role": "Statistiche di utilizzo aggregate (solo con consenso esplicito)", "location": "USA — SCC adottate, IP anonimizzato" }
         ],
         "after": "I trasferimenti extra-UE avvengono sulla base delle <strong>Standard Contractual Clauses (SCC)</strong> approvate dalla Commissione Europea con Decisione 2021/914. fal.ai e Vercel hanno firmato Data Processing Agreement che vietano l'uso dei dati per training di modelli AI. Google Analytics 4 viene attivato <strong>solo dopo il tuo consenso esplicito</strong> tramite il banner cookie (Google Consent Mode v2 con default 'denied')."
@@ -857,8 +857,8 @@
         "heading": "5. Prezzo, IVA e pagamento",
         "items": [
           "Il prezzo del Servizio è <strong>{price}</strong> una tantum per dossier generato. Nessun abbonamento, nessun addebito ricorrente.",
-          "Il prezzo è comprensivo di IVA dove applicabile. Per gli utenti residenti nell'Unione Europea, l'IVA viene applicata all'aliquota del Paese di residenza tramite il regime <strong>OSS (One-Stop-Shop)</strong>. Per gli utenti USA, ove richiesto, si applica la sales tax dello Stato di residenza.",
-          "Il pagamento è gestito da <strong>Stripe Payments Europe Ltd</strong> tramite checkout sicuro. Accettiamo le principali carte di credito/debito. Non memorizziamo numeri di carta sui nostri server.",
+          "Il prezzo è comprensivo di IVA dove applicabile. Il nostro fornitore <strong>Lemon Squeezy</strong> agisce come <strong>Merchant of Record</strong> e si occupa di calcolare, riscuotere e versare le imposte sulle vendite: per gli utenti residenti nell'Unione Europea l'IVA all'aliquota del Paese di residenza, per gli utenti USA la sales tax dello Stato di residenza ove richiesta.",
+          "Il pagamento è gestito dal nostro fornitore <strong>Lemon Squeezy</strong> (Merchant of Record) tramite checkout sicuro. Accettiamo le principali carte di credito/debito, Apple Pay e Google Pay. Non memorizziamo numeri di carta sui nostri server.",
           "La ricevuta dell'acquisto è inviata via email e scaricabile dal tuo account in qualsiasi momento."
         ]
       },

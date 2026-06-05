@@ -754,7 +754,7 @@
           "<strong>Dirección de email</strong>: necesaria para autenticarte mediante código OTP y para enviarte comunicaciones de servicio (recibo de compra, notificaciones de dossier listo).",
           "<strong>Fotografía del rostro</strong>: la imagen que subes para el análisis cromático constituye un <strong>dato biométrico</strong> de acuerdo con el art. 9 GDPR (categoría especial). Es procesada por la inteligencia artificial para extraer información sobre piel, cabello y ojos, y se <strong>elimina automáticamente en un plazo de 24 horas</strong> desde la subida.",
           "<strong>Resultado del análisis (dossier)</strong>: la clasificación cromática, la paleta y los consejos generados. Se conservan para permitirte consultar y descargar tu dossier mientras tu cuenta esté activa.",
-          "<strong>Datos de pago</strong>: gestionados directamente por Stripe (véase § 6). No almacenamos números de tarjeta ni credenciales bancarias — recibimos únicamente el ID de transacción y el resultado.",
+          "<strong>Datos de pago</strong>: gestionados por nuestro proveedor de pagos <strong>Lemon Squeezy</strong>, que actúa como Merchant of Record (véase § 6). No almacenamos números de tarjeta ni credenciales bancarias — recibimos únicamente el ID de transacción y el resultado.",
           "<strong>Datos técnicos</strong>: dirección IP, user agent, marcas de tiempo de las solicitudes, cookies de sesión necesarias para el funcionamiento del login. No utilizamos cookies de perfilado ni cookies de terceros para publicidad."
         ]
       },
@@ -794,7 +794,7 @@
           { "provider": "Supabase", "role": "Base de datos, autenticación, almacenamiento de fotos/dossiers", "location": "UE (Fráncfort)" },
           { "provider": "fal.ai", "role": "Análisis IA de la imagen (Google Gemini Vision)", "location": "EE.UU. — SCC adoptadas" },
           { "provider": "Vercel", "role": "Hosting de la aplicación web", "location": "EE.UU. — SCC adoptadas" },
-          { "provider": "Stripe", "role": "Procesamiento de pagos, facturación, Stripe Tax", "location": "EE.UU. / Irlanda" },
+          { "provider": "Lemon Squeezy", "role": "Procesamiento de pagos, facturación y gestión de IVA/impuestos (Merchant of Record)", "location": "EE.UU. — SCC adoptadas" },
           { "provider": "Google Analytics 4", "role": "Estadísticas de uso agregadas (solo con consentimiento explícito)", "location": "EE.UU. — SCC adoptadas, IP anonimizada" }
         ],
         "after": "Las transferencias fuera de la UE se realizan sobre la base de las <strong>Cláusulas Contractuales Tipo (SCC)</strong> aprobadas por la Comisión Europea mediante Decisión 2021/914. fal.ai y Vercel han firmado Acuerdos de Tratamiento de Datos que prohíben el uso de los datos para entrenar modelos de IA. Google Analytics 4 se activa <strong>solo después de tu consentimiento explícito</strong> mediante el banner de cookies (Google Consent Mode v2 con valor por defecto 'denied')."
@@ -857,8 +857,8 @@
         "heading": "5. Precio, IVA y pago",
         "items": [
           "El precio del Servicio es de <strong>{price}</strong>, pago único por dossier generado. Sin suscripción, sin cargos recurrentes.",
-          "El precio incluye el IVA cuando sea aplicable. Para los usuarios residentes en la Unión Europea, el IVA se aplica al tipo del país de residencia mediante el régimen <strong>OSS (One-Stop-Shop)</strong>. Para los usuarios de EE.UU., cuando proceda, se aplica el sales tax del estado de residencia.",
-          "El pago es gestionado por <strong>Stripe Payments Europe Ltd</strong> mediante checkout seguro. Aceptamos las principales tarjetas de crédito/débito. No almacenamos números de tarjeta en nuestros servidores.",
+          "El precio incluye el IVA cuando sea aplicable. Nuestro proveedor <strong>Lemon Squeezy</strong> actúa como <strong>Merchant of Record</strong> y se encarga de calcular, recaudar y remitir los impuestos sobre las ventas: para los usuarios residentes en la Unión Europea, el IVA al tipo de su país de residencia; para los usuarios de EE.UU., el sales tax de su estado de residencia cuando proceda.",
+          "El pago es gestionado por nuestro proveedor <strong>Lemon Squeezy</strong> (Merchant of Record) mediante checkout seguro. Aceptamos las principales tarjetas de crédito/débito, Apple Pay y Google Pay. No almacenamos números de tarjeta en nuestros servidores.",
           "El recibo de la compra se envía por email y puede descargarse desde tu cuenta en cualquier momento."
         ]
       },

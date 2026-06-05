@@ -754,7 +754,7 @@
           "<strong>Email address</strong>: needed to authenticate you via OTP code and to send service communications (purchase receipt, dossier-ready notifications).",
           "<strong>Photo of your face</strong>: the image you upload for color analysis constitutes a <strong>biometric datum</strong> under Art. 9 GDPR (special category). It is processed by the AI to extract information about skin tone, hair and eyes, and is <strong>automatically deleted within 24 hours</strong> of upload.",
           "<strong>Analysis result (dossier)</strong>: the color classification, palette and generated guidance. These are retained so that you can consult and download your dossier as long as your account remains active.",
-          "<strong>Payment data</strong>: handled directly by Stripe (see § 6). We do not store card numbers or banking credentials — we only receive the transaction ID and the outcome.",
+          "<strong>Payment data</strong>: handled by our payment provider <strong>Lemon Squeezy</strong>, acting as Merchant of Record (see § 6). We do not store card numbers or banking credentials — we only receive the transaction ID and the outcome.",
           "<strong>Technical data</strong>: IP address, user agent, request timestamps, session cookies needed for login to work. We do not use profiling or third-party advertising cookies."
         ]
       },
@@ -794,7 +794,7 @@
           { "provider": "Supabase", "role": "Database, auth, photo/dossier storage", "location": "EU (Frankfurt)" },
           { "provider": "fal.ai", "role": "AI image analysis (Google Gemini Vision)", "location": "USA — SCC in place" },
           { "provider": "Vercel", "role": "Web application hosting", "location": "USA — SCC in place" },
-          { "provider": "Stripe", "role": "Payment processing, invoicing, Stripe Tax", "location": "USA / Ireland" },
+          { "provider": "Lemon Squeezy", "role": "Payment processing, invoicing and VAT/tax handling (Merchant of Record)", "location": "USA — SCC in place" },
           { "provider": "Google Analytics 4", "role": "Aggregated usage statistics (only with explicit consent)", "location": "USA — SCC in place, IP anonymized" }
         ],
         "after": "Transfers outside the EU take place on the basis of the <strong>Standard Contractual Clauses (SCC)</strong> approved by the European Commission with Decision 2021/914. fal.ai and Vercel have signed Data Processing Agreements that prohibit using the data to train AI models. Google Analytics 4 is activated <strong>only after your explicit consent</strong> via the cookie banner (Google Consent Mode v2 with default 'denied')."
@@ -857,8 +857,8 @@
         "heading": "5. Price, VAT and payment",
         "items": [
           "The price of the Service is <strong>{price}</strong>, one-time, per generated dossier. No subscription, no recurring charges.",
-          "The price includes VAT where applicable. For users residing in the European Union, VAT is applied at the rate of the country of residence via the <strong>OSS (One-Stop-Shop)</strong> scheme. For USA users, where required, sales tax of the state of residence applies.",
-          "Payment is handled by <strong>Stripe Payments Europe Ltd</strong> via secure checkout. We accept the main credit/debit cards. We do not store card numbers on our servers.",
+          "The price includes VAT where applicable. Our provider <strong>Lemon Squeezy</strong> acts as <strong>Merchant of Record</strong> and is responsible for calculating, collecting and remitting sales taxes: for users residing in the European Union, VAT at the rate of their country of residence; for USA users, the sales tax of their state of residence where required.",
+          "Payment is handled by our provider <strong>Lemon Squeezy</strong> (Merchant of Record) via secure checkout. We accept the main credit/debit cards, Apple Pay and Google Pay. We do not store card numbers on our servers.",
           "The purchase receipt is sent by email and can be downloaded from your account at any time."
         ]
       },
