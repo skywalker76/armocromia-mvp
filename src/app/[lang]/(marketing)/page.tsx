@@ -226,13 +226,7 @@ export default async function HomePage({ params }: HomePageProps) {
           {/* Right — Dossier visual */}
           <div className="relative animate-slide-up lg:animate-fade-in flex items-center justify-center" style={{ animationDelay: "0.2s" }}>
             <div className="relative w-full mx-auto max-w-xs sm:max-w-sm lg:max-w-md">
-              {/* Luxury Background Glow */}
-              <div
-                className="absolute -inset-6 sm:-inset-12 -z-10 rounded-[3rem] bg-gradient-to-tr from-orange-300/35 via-amber-900/5 to-transparent blur-3xl opacity-80 animate-breath"
-                aria-hidden="true"
-              />
-
-              {/* Morphing seasonal aura — pulsa dietro il dossier */}
+              {/* Morphing seasonal aura — alone stagionale che pulsa e cambia colore (caldo→freddo) dietro il dossier; sostituisce il vecchio glow arancione statico per far emergere le stagioni fredde */}
               <MorphingAura />
 
               {/* Underlay card 2 (Editorial pile) */}
