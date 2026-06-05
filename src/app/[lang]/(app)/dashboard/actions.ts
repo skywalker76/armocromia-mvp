@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
-import { waitUntil } from "@vercel/functions";
 import { createCheckoutSession } from "@/lib/lemonsqueezy";
 import { logAudit } from "@/lib/audit";
 
@@ -29,9 +28,9 @@ export type AnalyzePhotoState = {
  * 1. Valida input (Zod)
  * 2. Crea record dossier (status: pending_payment)
  * 3. Upload foto su Supabase Storage
- * 4. Crea sessione Stripe Checkout
+ * 4. Crea sessione di Checkout Lemon Squeezy
  * 5. Registra record in payments (status: pending)
- * 6. Ritorna URL di Stripe Checkout per redirect client
+ * 6. Ritorna URL di Checkout Lemon Squeezy per redirect client
  *
  * Why: Server Action invece di API route perché:
  * - Invocazione type-safe dal client

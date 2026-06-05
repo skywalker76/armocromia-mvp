@@ -16,7 +16,7 @@ import {
  * Pipeline condivisa di classificazione AI e generazione dossier.
  *
  * Why: questa logica viene invocata in background sia dalla Server Action di
- * verifica del pagamento (immediata al redirect) sia dall'API webhook di Stripe
+ * verifica del pagamento (immediata al redirect) sia dall'API webhook di Lemon Squeezy
  * (paracadute asincrono). Eseguire la pipeline con createAdminClient garantisce
  * type-safety ed immunità da cookie di sessione scaduti in background.
  */

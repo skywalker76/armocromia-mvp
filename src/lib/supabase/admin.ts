@@ -5,7 +5,7 @@ import { Database } from "@/types/database";
 /**
  * Crea un client Supabase amministrativo (bypass RLS) per elaborazioni asincrone in background.
  *
- * Why: nei webhook di Stripe o nei task asincroni 'waitUntil', non vi è un cookie store attivo
+ * Why: nei webhook di Lemon Squeezy o nei task asincroni 'waitUntil', non vi è un cookie store attivo
  * o un utente autenticato nel contesto. L'uso della SUPABASE_SECRET_KEY (service role)
  * garantisce che il server possa aggiornare lo stato del dossier e caricare i file in sicurezza.
  */
