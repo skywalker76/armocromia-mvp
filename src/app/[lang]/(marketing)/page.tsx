@@ -580,7 +580,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <footer className="border-t border-accent/8 px-6 py-12">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col items-center gap-4">
-            <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all hover:scale-105">
+            <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all hover:scale-105">
               <img
                 src="/cromea-logo.jpg"
                 alt="Cromea Studio Logo"
