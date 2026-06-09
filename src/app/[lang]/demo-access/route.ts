@@ -56,29 +56,48 @@ async function ensureDemoDossier(adminClient: AdminClient, demoUserId: string): 
     return;
   }
 
-  // Trova il dossier template: preferisci un dossier completato del founder.
+  // Trova il dossier template. Priorità:
+  // 1. DEMO_TEMPLATE_DOSSIER_ID (env) — dossier pinnato esplicitamente, con volto
+  //    già approvato per uso pubblico (es. #47 Primavera Calda, identico alla Hero
+  //    della landing). Why: l'ultimo dossier del founder può essere un test con un
+  //    volto qualsiasi (es. attore famoso) non adatto agli ispettori.
+  // 2. Fallback: ultimo dossier completato del founder.
   let template: {
     classified_season: string | null;
     classification_result: Json;
     generated_dossier_path: string | null;
   } | null = null;
 
-  const { data: usersPage } = await adminClient.auth.admin.listUsers({ page: 1, perPage: 200 });
-  const founder = usersPage?.users?.find(
-    (u) => u.email?.toLowerCase() === FOUNDER_EMAIL
-  );
-
-  if (founder) {
-    const { data: founderDossiers } = await adminClient
+  const pinnedId = parseInt(process.env.DEMO_TEMPLATE_DOSSIER_ID ?? "", 10);
+  if (!Number.isNaN(pinnedId)) {
+    const { data: pinned } = await adminClient
       .from("dossiers")
       .select("classified_season, classification_result, generated_dossier_path")
-      .eq("user_id", founder.id)
+      .eq("id", pinnedId)
       .eq("status", "completed")
-      .not("classification_result", "is", null)
       .not("generated_dossier_path", "is", null)
-      .order("created_at", { ascending: false })
       .limit(1);
-    template = founderDossiers?.[0] ?? null;
+    template = pinned?.[0] ?? null;
+  }
+
+  if (!template) {
+    const { data: usersPage } = await adminClient.auth.admin.listUsers({ page: 1, perPage: 200 });
+    const founder = usersPage?.users?.find(
+      (u) => u.email?.toLowerCase() === FOUNDER_EMAIL
+    );
+
+    if (founder) {
+      const { data: founderDossiers } = await adminClient
+        .from("dossiers")
+        .select("classified_season, classification_result, generated_dossier_path")
+        .eq("user_id", founder.id)
+        .eq("status", "completed")
+        .not("classification_result", "is", null)
+        .not("generated_dossier_path", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(1);
+      template = founderDossiers?.[0] ?? null;
+    }
   }
 
   // Copia fisica del file dossier nella cartella del demo user, così le
@@ -86,11 +105,14 @@ async function ensureDemoDossier(adminClient: AdminClient, demoUserId: string): 
   let demoDossierPath: string | null = null;
   if (template?.generated_dossier_path) {
     const destPath = `${demoUserId}/demo-dossier.png`;
+    // Rimuovi l'eventuale file precedente: copy non sovrascrive, e un residuo
+    // con contenuto obsoleto resterebbe silenziosamente in uso.
+    await adminClient.storage.from("dossiers").remove([destPath]);
     const { error: copyError } = await adminClient.storage
       .from("dossiers")
       .copy(template.generated_dossier_path, destPath);
 
-    if (!copyError || copyError.message?.includes("already exists")) {
+    if (!copyError) {
       demoDossierPath = destPath;
     } else {
       console.error("[Demo Access] Storage copy failed:", copyError.message);
