@@ -146,13 +146,14 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Header bar at the top of the landing page */}
       <header className="absolute top-0 left-0 right-0 z-30 px-6 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl flex flex-col gap-4 sm:grid sm:grid-cols-3 sm:items-center">
-          {/* Left: Language switcher */}
-          <div className="flex items-center justify-center sm:justify-start">
-            <LocaleSwitcher />
-          </div>
-          
-          {/* Center: Large Centered Logo */}
-          <div className="flex items-center justify-center">
+          {/* Left: Large Logo */}
+          <div className="relative flex items-center justify-center sm:justify-start translate-y-6 sm:translate-y-14">
+            {/* Soft, luxury background glow (aurora) */}
+            <div 
+              className="pointer-events-none absolute -inset-6 -z-10 rounded-full bg-accent/5 opacity-80 blur-2xl animate-pulse" 
+              style={{ animationDuration: '8s' }}
+              aria-hidden="true"
+            />
             <a
               href={localePath(locale, "/")}
               className="group flex flex-col items-center transition-all"
@@ -166,7 +167,12 @@ export default async function HomePage({ params }: HomePageProps) {
               </div>
             </a>
           </div>
-
+          
+          {/* Center: Language switcher */}
+          <div className="flex items-center justify-center">
+            <LocaleSwitcher />
+          </div>
+          
           {/* Right: CTA button */}
           <div className="flex items-center justify-center sm:justify-end">
             <a
@@ -182,7 +188,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           HERO — Split Layout (Anti-center bias)
          ═══════════════════════════════════════════════ */}
-      <section className="relative min-h-[100dvh] flex items-start px-6 pt-[320px] pb-16 sm:pt-[360px] sm:pb-20 lg:pt-[320px] lg:pb-20">
+      <section className="relative min-h-[100dvh] flex items-start px-6 pt-[300px] pb-20 sm:pt-[340px] sm:pb-24 lg:pt-[210px] lg:pb-28">
         {/* Ambient gradient orbs */}
         <div
           className="pointer-events-none absolute top-20 left-10 h-[400px] w-[400px] rounded-full opacity-15 blur-[100px]"
@@ -261,7 +267,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
 
           {/* Right — Dossier visual */}
-          <div className="relative animate-slide-up lg:animate-fade-in flex items-center justify-center" style={{ animationDelay: "0.2s" }}>
+          <div className="relative animate-slide-up lg:animate-fade-in flex items-center justify-center lg:justify-end" style={{ animationDelay: "0.2s" }}>
             <div className="relative w-full mx-auto max-w-xs sm:max-w-sm lg:max-w-md">
               {/* Morphing seasonal aura — alone stagionale che pulsa e cambia colore (caldo→freddo) dietro il dossier; sostituisce il vecchio glow arancione statico per far emergere le stagioni fredde */}
               <MorphingAura />
@@ -308,7 +314,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           TRUST BAR — Credibilità
          ═══════════════════════════════════════════════ */}
-      <section className="border-y border-accent/8 bg-white/50 px-4 sm:px-6 py-6 sm:py-8">
+      <section className="border-y border-accent/8 bg-white/50 px-4 sm:px-6 py-8 sm:py-10">
         <div className="mx-auto grid max-w-5xl grid-cols-2 sm:flex sm:flex-wrap items-center justify-center gap-x-10 gap-y-3 sm:gap-y-4 text-center text-sm text-muted">
           {trustItems.map((item) => (
             <div key={item.text} className="flex items-center gap-2">
@@ -322,7 +328,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           REAL DOSSIER GALLERY — Photo scroll gallery
          ═══════════════════════════════════════════════ */}
-      <section id="dossier-gallery" className="px-6 py-16 sm:py-24">
+      <section id="dossier-gallery" className="px-6 py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -358,7 +364,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           VALUE PROPOSITION — Zig-zag layout
          ═══════════════════════════════════════════════ */}
-      <section className="bg-white/40 px-6 py-16 sm:py-24">
+      <section className="bg-white/40 px-6 py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-5xl space-y-20">
           {/* Feature 1 */}
           <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -455,14 +461,14 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           DRAPING — Simulatore interattivo (educa il "perché")
          ═══════════════════════════════════════════════ */}
-      <section id="draping" className="scroll-mt-20 px-6 py-16 sm:py-24">
+      <section id="draping" className="scroll-mt-20 px-6 py-20 sm:py-28 lg:py-32">
         <DrapingSimulator />
       </section>
 
       {/* ═══════════════════════════════════════════════
           SEASON EXPLORER — Bento Grid (12 sotto-stagioni)
          ═══════════════════════════════════════════════ */}
-      <section id="stagioni" className="scroll-mt-20 bg-cream-dark/20 px-6 py-16 sm:py-24">
+      <section id="stagioni" className="scroll-mt-20 bg-cream-dark/20 px-6 py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -488,7 +494,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           FAQ — Accordion
          ═══════════════════════════════════════════════ */}
-      <section id="faq" className="scroll-mt-20 px-6 py-16 sm:py-24">
+      <section id="faq" className="scroll-mt-20 px-6 py-20 sm:py-28 lg:py-32">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
@@ -507,7 +513,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           FINAL CTA — Closing section
          ═══════════════════════════════════════════════ */}
-      <section id="inizia" className="scroll-mt-20 relative px-6 py-16 sm:py-24">
+      <section id="inizia" className="scroll-mt-20 relative px-6 py-20 sm:py-28 lg:py-32">
         {/* Background pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
@@ -577,7 +583,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           FOOTER
          ═══════════════════════════════════════════════ */}
-      <footer className="border-t border-accent/8 px-6 py-12">
+      <footer className="relative px-6 py-16 bg-gradient-to-t from-cream/35 to-transparent">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col items-center gap-4">
             <div className="flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all hover:scale-105">

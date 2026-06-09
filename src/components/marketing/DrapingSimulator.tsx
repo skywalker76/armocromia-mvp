@@ -41,14 +41,14 @@ const DrapingSimulatorBase: React.FC = () => {
     <div className="mx-auto w-full max-w-4xl rounded-3xl border border-accent/8 bg-white/40 p-6 shadow-lg backdrop-blur-md sm:p-10">
       <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
         {/* ── Stage: viso + drappo + riflesso ── */}
-        <div className="mx-auto w-full max-w-[320px]">
+        <div className="mx-auto w-full max-w-[368px]">
           <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-accent/8 bg-[#e9e7e4] shadow-xl">
             {/* Ritratto base (luce neutra) */}
             <Image
               src="/demo/draping-face-eu.webp"
               alt={t("imageAlt")}
               fill
-              sizes="320px"
+              sizes="368px"
               className="object-cover object-top transition-[filter] duration-500"
               style={{
                 filter: drape.flatters
@@ -120,7 +120,7 @@ const DrapingSimulatorBase: React.FC = () => {
             {t("eyebrow")}
           </span>
           <h3 className="mt-2 font-serif text-2xl text-ink">{t("title")}</h3>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{t("lead")}</p>
+          <p className="mt-3 text-xs leading-relaxed text-muted-light">{t("lead")}</p>
 
           {/* Swatches */}
           <div className="mt-6 grid grid-cols-3 gap-3" role="group" aria-label={t("pickLabel")}>
@@ -141,7 +141,7 @@ const DrapingSimulatorBase: React.FC = () => {
                   }`}
                 >
                   <span
-                    className="h-9 w-9 rounded-full shadow-inner ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-105"
+                    className="h-11 w-11 rounded-full shadow-inner ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-105"
                     style={{ backgroundColor: d.hex }}
                   />
                   <span className="text-[10px] font-medium leading-tight text-muted">{name}</span>
@@ -151,8 +151,8 @@ const DrapingSimulatorBase: React.FC = () => {
           </div>
 
           {/* CTA tie-in */}
-          <div className="mt-6 rounded-xl border border-accent/10 bg-cream-dark/30 px-4 py-3">
-            <p className="text-xs leading-relaxed text-muted">
+          <div className="mt-6 pt-4 border-t border-accent/5">
+            <p className="text-[11px] leading-relaxed text-muted-light">
               <span className="font-semibold text-ink">{t("ctaTitle")}</span> {t("ctaBody")}
             </p>
           </div>

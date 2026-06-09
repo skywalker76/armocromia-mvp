@@ -34,7 +34,7 @@ export default async function HowItWorks({ lang }: { lang: Locale }) {
   const steps = raw<StepCopy[]>("steps");
 
   return (
-    <section className="bg-cream-dark/40 px-6 py-16 sm:py-24">
+    <section className="bg-cream-dark/40 px-6 py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-4xl">
         <div className="text-center">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">

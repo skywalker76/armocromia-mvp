@@ -13,7 +13,7 @@ export default async function PricingCard({ lang }: PricingCardProps) {
   const loginHref = localePath(locale, "/auth/login");
 
   return (
-    <section id="prezzo" className="bg-white/40 px-6 py-16 sm:py-24">
+    <section id="prezzo" className="bg-white/40 px-6 py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-xs font-semibold tracking-[0.2em] uppercase text-accent">
           {t("eyebrow")}
