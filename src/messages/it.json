@@ -460,7 +460,7 @@
       "tipsTitle": "Consigli pratici",
       "looksTitle": "Idee di look in armonia",
       "downloadCta": "Scarica il tuo dossier",
-      "footerGenerated": "Generato il {date} · Cromea Studio by Antigravity",
+      "footerGenerated": "Generato il {date} · Cromea Studio",
       "attrUndertone": "Sottotono",
       "attrValue": "Valore",
       "attrIntensity": "Intensità",
@@ -835,7 +835,7 @@
       "metaDescription": "Termini e condizioni di Cromea Studio: oggetto del servizio, prezzo €29, diritto di recesso 14 giorni, limitazioni di responsabilità.",
       "eyebrow": "Condizioni d'uso",
       "title": "Termini di Servizio",
-      "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Cromea Studio (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
+      "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Cromea Studio (di seguito il &quot;Servizio&quot;) erogato da Gianluca Amati. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
       "sec1": {
         "heading": "1. Fornitore",
         "p1": "Il Servizio è fornito da <strong>Gianluca Amati</strong>, Bellaria (RN) - 47814, Italia (Codice Fiscale: MTAGLC76C02H294J), contattabile all'indirizzo email <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."

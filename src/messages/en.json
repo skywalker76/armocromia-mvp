@@ -460,7 +460,7 @@
       "tipsTitle": "Practical tips",
       "looksTitle": "Looks in harmony",
       "downloadCta": "Download your dossier",
-      "footerGenerated": "Generated on {date} · Cromea Studio by Antigravity",
+      "footerGenerated": "Generated on {date} · Cromea Studio",
       "attrUndertone": "Undertone",
       "attrValue": "Value",
       "attrIntensity": "Intensity",
@@ -835,7 +835,7 @@
       "metaDescription": "Cromea Studio terms and conditions: scope of service, €29 price, 14-day refund right, limitation of liability.",
       "eyebrow": "Terms of use",
       "title": "Terms of Service",
-      "intro": "These Terms of Service (hereinafter the &quot;Terms&quot;) govern access to and use of the Cromea Studio service (hereinafter the &quot;Service&quot;) provided by Antigravity. By using the Service you fully accept these Terms. If you do not accept them, do not use the Service.",
+      "intro": "These Terms of Service (hereinafter the &quot;Terms&quot;) govern access to and use of the Cromea Studio service (hereinafter the &quot;Service&quot;) provided by Gianluca Amati. By using the Service you fully accept these Terms. If you do not accept them, do not use the Service.",
       "sec1": {
         "heading": "1. Provider",
         "p1": "The Service is provided by <strong>Gianluca Amati</strong>, Bellaria (RN) - 47814, Italy (Tax Code: MTAGLC76C02H294J), reachable at the email address <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. For support and refund requests: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
