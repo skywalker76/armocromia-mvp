@@ -327,9 +327,15 @@ export default function InteractiveDossierDashboard({
              ═══════════════════════════════════════════════ */}
           <header className="flex flex-col gap-4 border-b border-accent/8 bg-white/50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <div className="flex items-center gap-3">
-              <span className="font-serif text-2xl font-bold tracking-tight text-ink uppercase">Cromea Studio</span>
-              <span className="h-4 w-px bg-accent/20 hidden sm:inline" />
-              <span className="hidden sm:inline text-xs font-semibold uppercase tracking-widest text-accent-light">Premium Dossier</span>
+              <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-sm">
+                <img
+                  src="/cromea-logo.jpg"
+                  alt="Cromea Studio Logo"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <span className="h-4 w-px bg-accent/20" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-accent-light">Premium Dossier</span>
             </div>
 
             {/* TAB MENU */}

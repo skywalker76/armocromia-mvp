@@ -102,26 +102,15 @@ export default function NavBar({ email, isAdmin = false }: NavBarProps) {
           {/* Logo */}
           <a
             href={dashboardHref}
-            className="group flex items-center gap-2 sm:gap-2.5 transition-colors"
+            className="group flex items-center transition-colors"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 transition-all group-hover:bg-accent/15 group-hover:shadow-sm">
-              <svg
-                className="h-4.5 w-4.5 text-accent transition-transform group-hover:scale-110"
-                viewBox="0 0 24 24"
-                fill="none"
-                strokeWidth={1.5}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"
-                />
-              </svg>
+            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-sm transition-all group-hover:scale-105 group-hover:shadow-md">
+              <img
+                src="/cromea-logo.jpg"
+                alt="Cromea Studio Logo"
+                className="h-full w-full object-cover"
+              />
             </div>
-            <span className="font-serif text-lg tracking-tight text-ink">
-              Cromea Studio
-            </span>
           </a>
 
           {/* Desktop — Actions & Avatar */}

@@ -288,7 +288,7 @@
     },
     "footer": {
       "brand": "Cromea Studio",
-      "tagline": "Powered by NexaFrontiers",
+      "tagline": "Cromea Studio di Gianluca Amati · Bellaria (RN) · C.F. MTAGLC76C02H294J · Powered by NexaFrontiers",
       "privacy": "Privacy Policy",
       "terms": "Termini di Servizio",
       "contact": "Contatti",
@@ -726,7 +726,7 @@
       "brand": "Cromea Studio",
       "backHome": "← Torna alla home",
       "footerBrand": "Cromea Studio",
-      "footerTagline": "Powered by NexaFrontiers",
+      "footerTagline": "Cromea Studio di Gianluca Amati · Bellaria (RN) · C.F. MTAGLC76C02H294J · Powered by NexaFrontiers",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Termini di Servizio",
       "footerContact": "Contatti",
@@ -744,7 +744,7 @@
       ],
       "sec1": {
         "heading": "1. Titolare del trattamento",
-        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>",
+        "p1": "<strong>Gianluca Amati</strong><br>Bellaria (RN) - 47814, Italia<br>Codice Fiscale: MTAGLC76C02H294J<br>Email: <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>",
         "p2": "Per qualsiasi richiesta relativa al trattamento dei tuoi dati personali puoi scriverci a <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>."
       },
       "sec2": {
@@ -838,7 +838,7 @@
       "intro": "I presenti Termini di Servizio (di seguito &quot;Termini&quot;) regolano l'accesso e l'uso del servizio Cromea Studio (di seguito il &quot;Servizio&quot;) erogato da Antigravity. Utilizzando il Servizio accetti integralmente questi Termini. Se non accetti, non utilizzare il Servizio.",
       "sec1": {
         "heading": "1. Fornitore",
-        "p1": "Il Servizio è fornito da <strong>Antigravity</strong>, contattabile all'indirizzo email <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
+        "p1": "Il Servizio è fornito da <strong>Gianluca Amati</strong>, Bellaria (RN) - 47814, Italia (Codice Fiscale: MTAGLC76C02H294J), contattabile all'indirizzo email <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. Per richieste di supporto e rimborsi: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
       },
       "sec2": {
         "heading": "2. Oggetto del Servizio",
@@ -874,7 +874,7 @@
           "Il <strong>dossier generato è di tua proprietà</strong> per uso personale. Puoi scaricarlo, stamparlo, condividerlo con amici e professionisti del settore moda.",
           "<strong>Non puoi</strong> rivendere, sub-licenziare o utilizzare il dossier per scopi commerciali (es. consulenze a terzi a pagamento) senza nostro consenso scritto.",
           "Il software, il design del sito, i prompt AI, la grafica dell'infografica e i template di output rimangono di nostra esclusiva proprietà.",
-          "Mantieni la piena titolarità della fotografia caricata. Concedi ad Antigravity una licenza limitata, gratuita e temporanea (massimo 24 ore) per il solo scopo di processarla con l'AI e generare il dossier. Non utilizziamo la tua foto per addestrare modelli AI né la vendiamo a terzi."
+          "Mantieni la piena titolarità della fotografia caricata. Concedi a Gianluca Amati una licenza limitata, gratuita e temporanea (massimo 24 ore) per il solo scopo di processarla con l'AI e generare il dossier. Non utilizziamo la tua foto per addestrare modelli AI né la vendiamo a terzi."
         ]
       },
       "sec8": {

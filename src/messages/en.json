@@ -288,7 +288,7 @@
     },
     "footer": {
       "brand": "Cromea Studio",
-      "tagline": "Powered by NexaFrontiers",
+      "tagline": "Cromea Studio by Gianluca Amati · Bellaria (RN), Italy · Tax Code: MTAGLC76C02H294J · Powered by NexaFrontiers",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "contact": "Contact",
@@ -726,7 +726,7 @@
       "brand": "Cromea Studio",
       "backHome": "← Back to home",
       "footerBrand": "Cromea Studio",
-      "footerTagline": "Powered by NexaFrontiers",
+      "footerTagline": "Cromea Studio by Gianluca Amati · Bellaria (RN), Italy · Tax Code: MTAGLC76C02H294J · Powered by NexaFrontiers",
       "footerPrivacy": "Privacy Policy",
       "footerTerms": "Terms of Service",
       "footerContact": "Contact",
@@ -744,7 +744,7 @@
       ],
       "sec1": {
         "heading": "1. Data controller",
-        "p1": "<strong>Antigravity</strong><br>Email: <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>",
+        "p1": "<strong>Gianluca Amati</strong><br>Bellaria (RN) - 47814, Italy<br>Tax Code: MTAGLC76C02H294J<br>Email: <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>",
         "p2": "For any request regarding the processing of your personal data, write to us at <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>."
       },
       "sec2": {
@@ -838,7 +838,7 @@
       "intro": "These Terms of Service (hereinafter the &quot;Terms&quot;) govern access to and use of the Cromea Studio service (hereinafter the &quot;Service&quot;) provided by Antigravity. By using the Service you fully accept these Terms. If you do not accept them, do not use the Service.",
       "sec1": {
         "heading": "1. Provider",
-        "p1": "The Service is provided by <strong>Antigravity</strong>, reachable at the email address <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. For support and refund requests: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
+        "p1": "The Service is provided by <strong>Gianluca Amati</strong>, Bellaria (RN) - 47814, Italy (Tax Code: MTAGLC76C02H294J), reachable at the email address <a href=\"mailto:hello@cromeastudio.com\" class=\"text-accent hover:underline\">hello@cromeastudio.com</a>. For support and refund requests: <a href=\"mailto:{refundEmail}\" class=\"text-accent hover:underline\">{refundEmail}</a>."
       },
       "sec2": {
         "heading": "2. Scope of the Service",
@@ -874,7 +874,7 @@
           "The <strong>generated dossier is yours</strong> for personal use. You can download it, print it, share it with friends and fashion professionals.",
           "<strong>You may not</strong> resell, sub-license or use the dossier for commercial purposes (e.g. paid advice to third parties) without our written consent.",
           "The software, site design, AI prompts, infographic artwork and output templates remain our exclusive property.",
-          "You retain full ownership of the photo you upload. You grant Antigravity a limited, free, temporary license (maximum 24 hours) for the sole purpose of processing it with the AI and generating the dossier. We do not use your photo to train AI models nor do we sell it to third parties."
+          "You retain full ownership of the photo you upload. You grant Gianluca Amati a limited, free, temporary license (maximum 24 hours) for the sole purpose of processing it with the AI and generating the dossier. We do not use your photo to train AI models nor do we sell it to third parties."
         ]
       },
       "sec8": {

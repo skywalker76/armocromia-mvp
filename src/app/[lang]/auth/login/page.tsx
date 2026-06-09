@@ -212,9 +212,15 @@ function LoginPageContent() {
 
       <div className="relative z-10 w-full max-w-md">
         {/* Logo / Brand */}
-        <div className="text-center mb-12">
-          <a href={localePath(locale, "/")} className="font-serif text-2xl text-ink hover:text-accent transition-colors">
-            {t("brandLink")}
+        <div className="text-center mb-12 flex flex-col items-center">
+          <a href={localePath(locale, "/")} className="group inline-flex flex-col items-center">
+            <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all group-hover:scale-105 group-hover:shadow-xl">
+              <img
+                src="/cromea-logo.jpg"
+                alt="Cromea Studio Logo"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </a>
         </div>
 
