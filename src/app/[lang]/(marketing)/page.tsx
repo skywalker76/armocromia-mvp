@@ -145,9 +145,9 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Header bar at the top of the landing page */}
       <header className="absolute top-0 left-0 right-0 z-30 px-6 py-6 sm:py-8">
-        <div className="mx-auto max-w-7xl grid grid-cols-3 items-center">
+        <div className="mx-auto max-w-7xl flex flex-col gap-4 sm:grid sm:grid-cols-3 sm:items-center">
           {/* Left: Language switcher */}
-          <div className="flex items-center justify-start">
+          <div className="flex items-center justify-center sm:justify-start">
             <LocaleSwitcher />
           </div>
           
@@ -157,7 +157,7 @@ export default async function HomePage({ params }: HomePageProps) {
               href={localePath(locale, "/")}
               className="group flex flex-col items-center transition-all"
             >
-              <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg">
+              <div className="flex h-48 w-48 sm:h-60 sm:w-60 items-center justify-center overflow-hidden rounded-full border border-accent/10 bg-white shadow-md transition-all group-hover:scale-105 group-hover:shadow-lg">
                 <img
                   src="/cromea-logo.jpg"
                   alt="Cromea Studio Logo"
@@ -168,7 +168,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
 
           {/* Right: CTA button */}
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-center sm:justify-end">
             <a
               href={loginHref}
               className="hidden sm:inline-flex rounded-xl border border-accent/15 bg-white/70 px-4.5 py-2.5 text-xs font-semibold uppercase tracking-wider text-ink transition-all hover:bg-cream hover:border-accent/30 active:scale-98 shadow-sm"
@@ -182,7 +182,7 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* ═══════════════════════════════════════════════
           HERO — Split Layout (Anti-center bias)
          ═══════════════════════════════════════════════ */}
-      <section className="relative min-h-[100dvh] flex items-center px-6 pt-36 pb-16 sm:pt-44 sm:pb-20 lg:py-0">
+      <section className="relative min-h-[100dvh] flex items-start px-6 pt-[320px] pb-16 sm:pt-[360px] sm:pb-20 lg:pt-[320px] lg:pb-20">
         {/* Ambient gradient orbs */}
         <div
           className="pointer-events-none absolute top-20 left-10 h-[400px] w-[400px] rounded-full opacity-15 blur-[100px]"
