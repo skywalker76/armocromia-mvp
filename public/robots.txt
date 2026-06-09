@@ -5,4 +5,4 @@ Disallow: /auth/
 Disallow: /dashboard
 Disallow: /dossier/
 
-Sitemap: https://armocromia-mvp-nine.vercel.app/sitemap.xml
+Sitemap: https://www.cromeastudio.com/sitemap.xml
