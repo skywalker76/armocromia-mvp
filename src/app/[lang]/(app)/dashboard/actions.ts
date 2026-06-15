@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { uploadPhotoSchema } from "@/lib/armocromia/schemas";
 import { getTranslations } from "@/lib/i18n/server";
 import { isValidLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
-import { createCheckoutSession } from "@/lib/lemonsqueezy";
+import { createStripeCheckoutSession } from "@/lib/stripe";
 import { logAudit } from "@/lib/audit";
 
 /**
@@ -185,8 +185,8 @@ export async function analyzePhoto(
       throw new Error("Dossier ID mancante per la generazione");
     }
 
-    // ── 4. Crea la sessione di Checkout su Lemon Squeezy ──
-    const checkoutUrl = await createCheckoutSession({
+    // ── 4. Crea la sessione di Checkout su Stripe ──
+    const checkoutUrl = await createStripeCheckoutSession({
       dossierId,
       userId: user.id,
       userEmail: user.email || "",

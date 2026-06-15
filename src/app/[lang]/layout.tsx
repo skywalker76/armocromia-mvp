@@ -218,23 +218,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* Lemon Squeezy Affiliate Tracking Script */}
-        <Script
-          id="lemonsqueezy-affiliate-config"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.lemonSqueezyAffiliateConfig = {
-                store: 'cromeastudio'
-              };
-            `,
-          }}
-        />
-        <Script
-          src="https://lmsqueezy.com/affiliate.js"
-          strategy="afterInteractive"
-          defer
-        />
+
       </body>
     </html>
   );
