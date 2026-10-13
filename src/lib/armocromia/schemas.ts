@@ -64,6 +64,15 @@ export const ANALYSIS_MODES = [
  * con Zod per garantire che il risultato sia strutturato.
  */
 export const classificationResultSchema = z.object({
+  /** Valutazione qualità tecnica della foto (illuminazione, filtri, ostruzioni) — AI-3 */
+  photoQuality: z.string().transform((v) => {
+    const lower = v.toLowerCase();
+    if (lower.includes("poor") || lower.includes("scars") || lower.includes("bad") || lower.includes("bassa") || lower.includes("insufficient")) return "poor" as const;
+    if (lower.includes("accept") || lower.includes("accettab") || lower.includes("fair") || lower.includes("media")) return "acceptable" as const;
+    return "good" as const;
+  }).optional(),
+  /** Eventuali problemi rilevati nella foto (es. luce artificiale gialla, filtro beauty, occhiali) — AI-3 */
+  photoQualityIssues: z.array(z.string()).optional(),
   subSeason: z.enum([
     "primavera-chiara", "primavera-calda", "primavera-brillante",
     "estate-chiara", "estate-fredda", "estate-tenue",

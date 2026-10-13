@@ -1,6 +1,10 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { classifyPhoto } from "@/lib/fal/classify";
-import { generateDossierImage, type DossierMode } from "@/lib/fal/generate-dossier";
+import {
+  generateDossierImage,
+  verifyDossierImageQuality,
+  type DossierMode,
+} from "@/lib/fal/generate-dossier";
 import { getPaletteBySubSeason } from "@/lib/armocromia/palettes";
 import { type Locale } from "@/lib/i18n/config";
 import { sendEmail } from "@/lib/emails/resend";
@@ -12,11 +16,17 @@ import {
   getMacroSeason,
 } from "@/lib/emails/templates";
 
+const LOW_CONFIDENCE_MESSAGES: Record<Locale, string> = {
+  it: "La foto caricata non permette un'analisi armocromatica affidabile (illuminazione insufficiente, filtri pesanti o volto non chiaramente visibile). Carica una foto a colori con luce naturale e viso ben visibile.",
+  en: "The uploaded photo does not allow a reliable color analysis (insufficient lighting, heavy filters, or face not clearly visible). Please upload a color photo in natural daylight with your face clearly visible.",
+  es: "La foto subida no permite un análisis de colorimetría fiable (iluminación insuficiente, filtros intensos o rostro no claramente visible). Sube una foto en color con luz natural y el rostro bien visible.",
+};
+
 /**
  * Pipeline condivisa di classificazione AI e generazione dossier.
  *
  * Why: questa logica viene invocata in background sia dalla Server Action di
- * verifica del pagamento (immediata al redirect) sia dall'API webhook di Lemon Squeezy
+ * verifica del pagamento (immediata al redirect) sia dall'API webhook di Stripe
  * (paracadute asincrono). Eseguire la pipeline con createAdminClient garantisce
  * type-safety ed immunità da cookie di sessione scaduti in background.
  */
@@ -48,7 +58,7 @@ export async function runDossierGenerationPipeline({
       throw new Error("Failed to generate signed URL for photo");
     }
 
-    // ── 2. Classifica con Vision AI ──
+    // ── 2. Classifica con Vision AI (AI-1, AI-3, AI-5) ──
     console.log(`[Pipeline Background] Classificazione foto con Vision AI per dossier=${dossierId}...`);
     const classification = await classifyPhoto(
       signedUrl.signedUrl,
@@ -56,7 +66,7 @@ export async function runDossierGenerationPipeline({
       locale
     );
 
-    // Aggiorna dossier con risultato classificazione
+    // Salva subito il risultato diagnostico nel DB
     await supabase
       .from("dossiers")
       .update({
@@ -66,16 +76,58 @@ export async function runDossierGenerationPipeline({
       })
       .eq("id", dossierId);
 
-    // ── 3. Genera dossier visivo con GPT Image 2 ──
+    // ── 2b. Gate qualità foto e confidenza (AI-3) ──
+    if (classification.confidence < 0.45) {
+      const issuesDetail =
+        classification.photoQualityIssues && classification.photoQualityIssues.length > 0
+          ? ` (${classification.photoQualityIssues.join(", ")})`
+          : "";
+      throw new Error(
+        `${LOW_CONFIDENCE_MESSAGES[locale] || LOW_CONFIDENCE_MESSAGES.it}${issuesDetail}`
+      );
+    }
+
+    if (classification.photoQuality === "poor" || classification.confidence < 0.65) {
+      console.warn(
+        `[Pipeline Background] Attenzione per dossier=${dossierId}: photoQuality=${classification.photoQuality ?? "n/a"}, confidence=${classification.confidence}. Issues: ${(classification.photoQualityIssues ?? []).join("; ") || "nessuna"}`
+      );
+    }
+
+    // ── 3. Genera dossier visivo con GPT Image 2 + Post-Gen Vision QA (AI-2, AI-4) ──
     console.log(`[Pipeline Background] Generazione infografica 4K per dossier=${dossierId} (stagione=${classification.subSeason})...`);
     const palette = getPaletteBySubSeason(classification.subSeason);
-    const dossierImageUrl = await generateDossierImage(
+    const mode = analysisMode as DossierMode;
+
+    let dossierImageUrl = await generateDossierImage(
       palette,
       classification,
       signedUrl.signedUrl,
-      analysisMode as DossierMode,
+      mode,
       locale
     );
+
+    const qaResult = await verifyDossierImageQuality(
+      dossierImageUrl,
+      signedUrl.signedUrl,
+      mode
+    );
+
+    if (!qaResult.passed) {
+      console.warn(
+        `[Pipeline Background] Vision QA non superato per dossier=${dossierId} (score=${qaResult.score}, reason: ${qaResult.reason ?? "n/a"}). Rigenerazione automatica (tentativo 2/2)...`
+      );
+      dossierImageUrl = await generateDossierImage(
+        palette,
+        classification,
+        signedUrl.signedUrl,
+        mode,
+        locale
+      );
+    } else {
+      console.log(
+        `[Pipeline Background] Vision QA superato al primo tentativo per dossier=${dossierId} (score=${qaResult.score})`
+      );
+    }
 
     // ── 4. Scarica e upload dossier su Supabase Storage (con retry) ──
     console.log(`[Pipeline Background] Download dossier generato per dossier=${dossierId} da fal.ai...`);

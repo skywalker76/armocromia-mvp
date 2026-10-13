@@ -9,7 +9,7 @@ if (!stripeSecretKey) {
 
 // Inizializza Stripe con la chiave segreta.
 const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
-  apiVersion: "2023-10-16" as any,
+  apiVersion: "2023-10-16" as NonNullable<ConstructorParameters<typeof Stripe>[1]>["apiVersion"],
 }) : null;
 
 interface CreateStripeCheckoutParams {
@@ -41,6 +41,12 @@ export async function createStripeCheckoutSession({
 
   console.log(`[Stripe] Creating checkout for user=${userId} dossier=${dossierId}`);
 
+  const productDescriptions: Record<string, string> = {
+    it: "Dossier di analisi cromatica stagionale 4K in una modalità a scelta (Infografica, Lookbook o Guardaroba).",
+    en: "4K seasonal color analysis dossier in one selected mode (Infographic, Lookbook, or Capsule Wardrobe).",
+    es: "Dossier de análisis cromático estacional 4K en una modalidad a elección (Infografía, Lookbook o Armario Cápsula).",
+  };
+
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -50,7 +56,7 @@ export async function createStripeCheckoutSession({
             currency: "eur",
             product_data: {
               name: "Cromea Studio - Analisi Cromatica",
-              description: "Dossier di analisi stagionale personalizzato 4K con palette, guardaroba e lookbook.",
+              description: productDescriptions[locale] || productDescriptions.it,
             },
             unit_amount: 2900, // €29.00 in centesimi
           },

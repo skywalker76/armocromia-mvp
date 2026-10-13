@@ -406,6 +406,24 @@ const METAL_BY_LOCALE: Record<Locale, Record<string, string>> = {
 };
 
 // ═══════════════════════════════════════
+// HELPERS CONDIVISI PALETTE (AI-2)
+// ═══════════════════════════════════════
+
+function getPaletteTiers(palette: SeasonPalette) {
+  return (
+    palette.colorTiers ?? {
+      primary: palette.colors.filter((c) => c.category === "accent" || c.category === "base").slice(0, 7),
+      secondary: palette.colors.filter((c) => c.category === "neutral" || c.category === "accent").slice(0, 7),
+      neutrals: palette.colors.filter((c) => c.category === "neutral" || c.category === "base").slice(0, 7),
+    }
+  );
+}
+
+function formatColors(arr: SeasonPalette["colors"]): string {
+  return arr.map((c) => `${c.name} (${c.hex})`).join(", ");
+}
+
+// ═══════════════════════════════════════
 // PROMPT: INFOGRAFICA
 // ═══════════════════════════════════════
 
@@ -423,8 +441,31 @@ function buildDossierPrompt(
   const contrastLabel = L.contrast[a.contrast];
 
   const seasonName = PALETTE_DISPLAY_BY_LOCALE[locale][palette.subSeason].toUpperCase();
+  const tiers = getPaletteTiers(palette);
   const avoidColors = palette.avoidColors.map((c) => c.name).slice(0, 4).join(", ");
+  const avoidColorsWithHex = palette.avoidColors
+    .slice(0, 4)
+    .map((c) => `${c.name} (${c.hex})`)
+    .join(", ");
   const metals = palette.metals.map((m) => METAL_BY_LOCALE[locale][m]).join(", ");
+
+  // Usa i look personalizzati generati dalla classificazione Vision AI (se presenti),
+  // ancorandoli ai colori reali della palette; altrimenti fallback sui tier curati.
+  const customLooks = analysis.reasoning.lookSuggestions?.slice(0, 4) ?? [];
+  const lookBlocksText =
+    customLooks.length >= 4
+      ? customLooks
+          .map(
+            (look, idx) =>
+              `  - Look ${idx + 1} ("${look.name}"): colors ${look.colors}. Effect: ${look.description}`
+          )
+          .join("\n")
+      : [
+          `  - Look 1: ${formatColors(tiers.primary.slice(0, 2))} + ${formatColors(tiers.neutrals.slice(0, 1))}`,
+          `  - Look 2: ${formatColors(tiers.secondary.slice(0, 2))} + ${formatColors(tiers.neutrals.slice(1, 2))}`,
+          `  - Look 3: ${formatColors(tiers.primary.slice(2, 4))} + ${formatColors(tiers.neutrals.slice(0, 1))}`,
+          `  - Look 4: ${formatColors(tiers.secondary.slice(2, 4))} + ${formatColors(tiers.primary.slice(0, 1))}`,
+        ].join("\n");
 
   return `FUNDAMENTAL RULE: The attached image contains the subject's face. ABSOLUTELY, in EVERY single photo or portrait generated in this infographic, you MUST use EXACTLY the face, somatic traits, age, gender and ethnicity of the person in the attached photo.
 
@@ -447,13 +488,17 @@ HEADER (TOP)
 ═══════════════════════════════════════
 SECTION 1: ANALYSIS AND PALETTE
 ═══════════════════════════════════════
-- LEFT: A large half-bust portrait of the EXACT SAME person from the attached photo, wearing a top in the season's colors.
+- LEFT: A large half-bust portrait of the EXACT SAME person from the attached photo, wearing a top in ${formatColors(tiers.primary.slice(0, 1))}.
 - CENTER (narrow column): 4 icons with explanatory text in ${L.outputLanguageNative}:
   1. Face icon: "${L.infografica.section1FaceText}"
   2. Eye icon: "${L.infografica.section1EyesText(a.eyeColor)}"
   3. Hair icon: "${L.infografica.section1HairText(a.hairColor)}"
   4. Leaf icon: "${L.infografica.section1SkinText(a.skinTone)}"
-- RIGHT: Box titled "${L.infografica.section1BoxColors}" with a grid of color swatches (rounded squares) on multiple rows. Show about 15-18 typical colors for ${seasonName}, with the color name written below each square (color names in Italian — kept as fashion loanwords).
+- RIGHT: Box titled "${L.infografica.section1BoxColors}" with a grid of 16 color swatches (rounded squares) on 4 rows. DO NOT invent random colors: render ONLY these exact curated colors using their exact HEX shade, with the color name written cleanly below each square (color names in Italian — kept as fashion loanwords):
+  • Row 1 (Primary): ${formatColors(tiers.primary.slice(0, 4))}
+  • Row 2 (Accents): ${formatColors([...tiers.primary.slice(4, 6), ...tiers.secondary.slice(0, 2)])}
+  • Row 3 (Secondary): ${formatColors(tiers.secondary.slice(2, 6))}
+  • Row 4 (Neutrals): ${formatColors(tiers.neutrals.slice(0, 4))}
 
 ═══════════════════════════════════════
 SECTION 2: VISUAL COMPARISON
@@ -462,11 +507,11 @@ Center title: "${L.infografica.section2Title}"
 Divided into two large blocks:
 - LEFT BLOCK (Sage green, Heart icon): "${L.infografica.section2GoodBlock}"
   - 4 portraits side by side of the EXACT SAME person from the attached photo.
-  - Each wears a DIFFERENT color, all perfect for ${seasonName}.
+  - Each wears one of these 4 flattering palette colors: ${formatColors(tiers.primary.slice(0, 4))}.
   - Text below (in ${L.outputLanguageNative}): "${L.infografica.section2GoodText}"
 - RIGHT BLOCK (Dark red, X icon): "${L.infografica.section2BadBlock}"
   - 4 portraits side by side of the EXACT SAME person from the attached photo.
-  - Each wears a color to AVOID.
+  - Each wears one of these 4 disharmonious colors to AVOID: ${avoidColorsWithHex}.
   - Text below (in ${L.outputLanguageNative}): "${L.infografica.section2BadText(avoidColors)}"
 
 ═══════════════════════════════════════
@@ -474,9 +519,10 @@ SECTION 3: LOOK IDEAS
 ═══════════════════════════════════════
 Center title: "${L.infografica.section3Title}"
 4 vertical blocks side by side. Each block contains:
-- Descriptive look text (write category labels in ${L.outputLanguageNative}) and colors used.
-- Full-figure (or three-quarter) photo of the EXACT SAME person from the attached photo wearing the outfit.
-- Small illustrations of matching accessories (bags, shoes, jewelry).
+- Descriptive look text (write category labels in ${L.outputLanguageNative}) and colors used:
+${lookBlocksText}
+- Full-figure (or three-quarter) photo of the EXACT SAME person from the attached photo wearing the outfit in those exact season colors.
+- Small illustrations of matching accessories (bags, shoes, jewelry in ${metals}).
 - Brief description of the effect (in ${L.outputLanguageNative}).
 
 ═══════════════════════════════════════
@@ -504,15 +550,7 @@ function buildLookbookPrompt(
   const a = analysis.analysis;
   const undertoneLabel = L.undertone[a.undertone];
   const seasonDisplay = PALETTE_DISPLAY_BY_LOCALE[locale][palette.subSeason];
-
-  const tiers = palette.colorTiers ?? {
-    primary: palette.colors.filter((c) => c.category === "accent" || c.category === "base").slice(0, 7),
-    secondary: palette.colors.filter((c) => c.category === "neutral" || c.category === "accent").slice(0, 7),
-    neutrals: palette.colors.filter((c) => c.category === "neutral" || c.category === "base").slice(0, 7),
-  };
-
-  const formatColors = (arr: typeof palette.colors) =>
-    arr.map((c) => `${c.name} (${c.hex})`).join(", ");
+  const tiers = getPaletteTiers(palette);
 
   return `FUNDAMENTAL RULE: The attached photo contains the real subject. You MUST reproduce EXACTLY the same face, somatic traits, skin color, hair color and eye color of the person in the attached photo in EVERY outfit. NEVER invent a different face. Do not change gender, age or ethnicity.
 
@@ -587,16 +625,7 @@ function buildGuardarobaPrompt(
   const a = analysis.analysis;
   const undertoneLabel = L.undertone[a.undertone];
   const seasonDisplay = PALETTE_DISPLAY_BY_LOCALE[locale][palette.subSeason];
-
-  const tiers = palette.colorTiers ?? {
-    primary: palette.colors.filter((c) => c.category === "accent" || c.category === "base").slice(0, 7),
-    secondary: palette.colors.filter((c) => c.category === "neutral" || c.category === "accent").slice(0, 7),
-    neutrals: palette.colors.filter((c) => c.category === "neutral" || c.category === "base").slice(0, 7),
-  };
-
-  const formatColors = (arr: typeof palette.colors) =>
-    arr.map((c) => `${c.name} (${c.hex})`).join(", ");
-
+  const tiers = getPaletteTiers(palette);
   const metalList = palette.metals.map((m) => METAL_BY_LOCALE[locale][m]).join(", ");
 
   // unused but kept for symmetry; might be used by future variants
@@ -718,3 +747,89 @@ export async function generateDossierImage(
 
   return images[0].url;
 }
+
+// ═══════════════════════════════════════
+// QA VISION POST-GENERAZIONE (AI-4)
+// ═══════════════════════════════════════
+
+export interface DossierQaResult {
+  passed: boolean;
+  score: number;
+  reason?: string;
+}
+
+/**
+ * Esegue una verifica Vision rapida (~$0.01) sull'immagine dossier generata
+ * per intercettare immagini corrotte, testo gravemente illeggibile o assenza
+ * di ritratti/palette prima della consegna al cliente (AI-4).
+ *
+ * Fail-open: se la chiamata QA stessa fallisce per errore di rete transitorio,
+ * restituisce passed=true per non bloccare un dossier valido.
+ */
+export async function verifyDossierImageQuality(
+  dossierImageUrl: string,
+  originalPhotoUrl: string,
+  mode: DossierMode = "infografica"
+): Promise<DossierQaResult> {
+  try {
+    const qaPrompt = `You are a Quality Assurance inspector for an editorial Personal Color Analysis infographic (mode: ${mode}).
+Image 1 is the original subject portrait. Image 2 is the generated editorial infographic.
+
+Inspect Image 2 and verify:
+1. Layout completeness: Is it a complete editorial color analysis board with color swatches, text headings, and portraits (not blank, heavily cropped, or visually corrupted)?
+2. Text legibility: Are the main headings and labels reasonably legible (no severe gibberish or overlapping garbled text across the main title)?
+3. Subject consistency: Do the portraits in Image 2 depict a person consistent in gender, ethnicity, and general appearance with Image 1?
+
+Reply ONLY with valid JSON (no markdown fences):
+{
+  "passed": <true if score >= 0.65, false if severely defective>,
+  "score": <0.0 to 1.0>,
+  "reason": "<short explanation if failed, or 'OK' if passed>"
+}`;
+
+    const result = await fal.subscribe("openrouter/router/vision", {
+      input: {
+        image_urls: [originalPhotoUrl, dossierImageUrl],
+        prompt: qaPrompt,
+        model: "google/gemini-2.5-flash",
+      },
+    });
+
+    const raw =
+      typeof result.data === "string"
+        ? result.data
+        : (result.data as { output?: string }).output ?? "";
+
+    const cleaned = raw
+      .replace(/```json\n?/g, "")
+      .replace(/```\n?/g, "")
+      .trim();
+    const startIdx = cleaned.indexOf("{");
+    const endIdx = cleaned.lastIndexOf("}");
+    if (startIdx < 0 || endIdx <= startIdx) {
+      return { passed: true, score: 1, reason: "QA parse skipped (fail-open)" };
+    }
+
+    const parsed = JSON.parse(cleaned.slice(startIdx, endIdx + 1)) as {
+      passed?: boolean;
+      score?: number;
+      reason?: string;
+    };
+
+    const score = typeof parsed.score === "number" ? parsed.score : 0.8;
+    const passed = typeof parsed.passed === "boolean" ? parsed.passed : score >= 0.65;
+
+    return {
+      passed,
+      score,
+      reason: parsed.reason,
+    };
+  } catch (err) {
+    console.warn(
+      "[verifyDossierImageQuality] QA check error (fail-open):",
+      err instanceof Error ? err.message : String(err)
+    );
+    return { passed: true, score: 1, reason: "QA error fail-open" };
+  }
+}
+

@@ -35,42 +35,63 @@ const NOTES_LABEL: Record<ClassifyLocale, string> = {
 
 function buildPrompt(locale: ClassifyLocale): string {
   const lang = LANGUAGE_NAME[locale];
-  return `You are an expert color analyst specialized in the "Armocromia" 12 sub-season system. You are analyzing a portrait photo of a person (man or woman) to build their complete color profile.
+  return `You are a master color analyst specialized in the Italian "Armocromia" 12 sub-season system. You are analyzing a portrait photo of a person (man or woman) to build their complete, clinically accurate color profile.
 
-Carefully analyze:
-1. **Skin tone**: warm undertone (golden/peach), cool (pink/blue) or neutral? Light, medium or dark?
-2. **Hair**: natural color? Warm or cool highlights? Intensity?
-3. **Eyes**: color? Warm or cool? Brightness?
-4. **Overall undertone**: warm (golden/yellow/peach) or cool (pink/blue/olive) or neutral?
-5. **Natural contrast**: difference between skin, hair and eyes (low / medium-low / medium / medium-high / high)?
-6. **Value**: is the subject overall light, medium or dark?
-7. **Intensity**: are the subject's natural colors soft/muted, medium or bright/saturated?
+Follow this exact step-by-step diagnostic protocol BEFORE choosing the sub-season:
 
+STEP 1 — PHOTO QUALITY & LIGHTING ASSESSMENT:
+- Check whether the lighting is natural/neutral daylight or distorted by strong yellow/blue indoor bulbs, heavy color filters, beauty smoothing filters, heavy makeup, or obstructions (sunglasses, hats, deep shadows).
+- Rate "photoQuality" as:
+  - "good": natural/balanced lighting, clear face, true skin and eye tones visible.
+  - "acceptable": slight indoor warmth/coolness or light makeup, but somatic undertone and contrast remain clearly readable.
+  - "poor": heavy color filter, black & white, extreme artificial color cast, sunglasses covering eyes, or face not clearly visible.
+- List any detected technical limitations in "photoQualityIssues" (written in ${lang}; empty array [] if none).
+
+STEP 2 — SOMATIC & BIOMETRIC ANALYSIS (WATCH OUT FOR DYED HAIR):
+1. **Skin tone & Undertone**: Examine the jaw, neck, under-eye area, and overall complexion. Compensate for minor indoor lighting casts. Is the true undertone warm (golden/peach/apricot), cool (pink/rosy/bluish/cool-olive) or neutral?
+2. **Hair (DYED HAIR PROTOCOL)**: Many subjects have dyed, bleached, or highlighted hair. NEVER let dyed hair lengths mislead your season choice! Always inspect the hair roots (if visible), eyebrows, and eyelashes to deduce the true natural hair value and temperature. In "hairColor", explicitly describe both the visible hair color and whether roots/eyebrows indicate a different natural base.
+3. **Eyes**: Analyze iris color, temperature (warm amber/golden/olive vs cool icy/steel/cocoa), and clarity/brightness (jewel-clear vs soft/muted pattern).
+4. **Natural contrast**: Measure the intrinsic value difference between skin, eyebrows/natural hair roots, and eyes ("low" | "medium-low" | "medium" | "medium-high" | "high").
+5. **Value**: Overall lightness/depth of the subject's native features ("light" | "medium" | "dark").
+6. **Intensity (Chroma)**: Are the subject's natural features soft/muted/velvety ("soft"), balanced ("medium"), or bright/clear/saturated ("bright")?
+
+STEP 3 — DEDUCTIVE REASONING & STYLING:
+- Explain WHY the identified season's colors harmonize with the analyzed skin, eyes, and natural contrast ("whyTheseColors"), and why opposite tones penalize the face ("whyNotOthers").
+- Provide 4 actionable, specific styling/makeup/fabric tips ("practicalTips") and 4 concrete outfit color combinations ("lookSuggestions").
+
+STEP 4 — FINAL SUB-SEASON VERDICT & CONFIDENCE RUBRIC:
 Classify into EXACTLY ONE sub-season (use these IDs verbatim, do not translate):
 - primavera-chiara, primavera-calda, primavera-brillante
 - estate-chiara, estate-fredda, estate-tenue
 - autunno-tenue, autunno-caldo, autunno-profondo
 - inverno-profondo, inverno-freddo, inverno-brillante
 
-Then explain the REASONING: why those colors flatter and why others don't.
-Provide practical tips and look suggestions.
+Assign "confidence" strictly according to this rubric:
+- 0.85 to 0.98: Natural daylight ("good" photo quality), unambiguous undertone, value, and chroma.
+- 0.65 to 0.84: Slight indoor lighting cast or dyed hair, but eyebrows/roots/skin/eyes allow a solid professional diagnosis.
+- 0.45 to 0.64: Borderline photo (strong lighting cast or heavy makeup) where two adjacent sub-seasons are both plausible.
+- 0.10 to 0.44: Unusable photo ("poor" photo quality: extreme filter, B&W, covered face/sunglasses, or unreadable features).
 
 CRITICAL OUTPUT RULES:
-- All free-text fields (skinTone, hairColor, eyeColor, whyTheseColors, whyNotOthers, practicalTips, lookSuggestions) MUST be written in ${lang}.
-- The enum fields (undertone, contrast, value, intensity) MUST be in English using these EXACT lowercase keys (do NOT translate):
+- All free-text fields (photoQualityIssues, skinTone, hairColor, eyeColor, whyTheseColors, whyNotOthers, practicalTips, lookSuggestions) MUST be written in ${lang}.
+- The enum fields (photoQuality, undertone, contrast, value, intensity) MUST be in English using these EXACT lowercase keys (do NOT translate):
+  - photoQuality: "good" | "acceptable" | "poor"
   - undertone: "warm" | "cool" | "neutral"
   - contrast: "low" | "medium-low" | "medium" | "medium-high" | "high"
   - value: "light" | "medium" | "dark"
   - intensity: "soft" | "medium" | "bright"
 - subSeason MUST be one of the kebab-case Italian IDs listed above (kept stable across languages as data keys).
+- Follow the exact field order below (analysis and reasoning BEFORE subSeason and confidence).
 
 REPLY ONLY WITH VALID JSON (no markdown, no code fences):
 {
-  "subSeason": "<sub-season-id>",
-  "confidence": <0.0-1.0>,
+  "photoQuality": "<good|acceptable|poor>",
+  "photoQualityIssues": [
+    "<optional issue in ${lang}, or leave array empty if none>"
+  ],
   "analysis": {
     "skinTone": "<detailed description in ${lang}>",
-    "hairColor": "<detailed description in ${lang}>",
+    "hairColor": "<detailed description in ${lang}, noting natural roots/eyebrows if dyed>",
     "eyeColor": "<detailed description in ${lang}>",
     "undertone": "<warm|cool|neutral>",
     "contrast": "<low|medium-low|medium|medium-high|high>",
@@ -92,7 +113,9 @@ REPLY ONLY WITH VALID JSON (no markdown, no code fences):
       { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" },
       { "name": "<look name in ${lang}>", "colors": "<color combination in ${lang}>", "description": "<short description in ${lang}>" }
     ]
-  }
+  },
+  "subSeason": "<sub-season-id>",
+  "confidence": <0.0-1.0>
 }`;
 }
 
@@ -120,9 +143,9 @@ export async function classifyPhoto(
   let lastError: unknown;
   for (let attempt = 1; attempt <= MAX_CLASSIFY_ATTEMPTS; attempt++) {
     try {
-      const result = await fal.subscribe("fal-ai/any-llm/vision", {
+      const result = await fal.subscribe("openrouter/router/vision", {
         input: {
-          image_url: photoUrl,
+          image_urls: [photoUrl],
           prompt,
           model: "google/gemini-2.5-flash",
         },

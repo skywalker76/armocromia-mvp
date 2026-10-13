@@ -82,40 +82,46 @@
 
 ---
 
-## M2 — Qualità dossier & continuità AI
+## M2 — Qualità dossier & continuità AI ✅ (Completato su `feat/m2-dossier-ai-upgrade`)
 
-### AI-1 · Migrare l'endpoint di classificazione fal deprecato · Alta · M
+### AI-1 · Migrare l'endpoint di classificazione fal deprecato · Alta · M · ✅ Completato
 **Contesto:** `classify.ts:123-129` usa `fal-ai/any-llm/vision` (deprecato). Se fal lo dismette, ogni generazione fallisce.
 **File:** `src/lib/fal/classify.ts`, eventualmente `src/lib/fal/client.ts`.
 **Azione:** individuare nel catalogo fal corrente un endpoint vision supportato equivalente (modello Gemini/GPT vision), aggiornare la chiamata e ri-validare il parsing JSON + schema Zod (`schemas.ts`). Verificare che il formato di output resti compatibile.
+**Stato:** Migrato a `openrouter/router/vision` (`image_urls: [photoUrl]`, `model: "google/gemini-2.5-flash"`).
 **Criteri di accettazione:** la classificazione funziona su ≥5 foto di test con lo stesso schema di output; nessun call site usa un endpoint marcato deprecato; il costo per chiamata resta nell'ordine di ~$0,01 (o documentare la variazione).
 **NON toccare:** lo schema di output atteso a valle (la pipeline e l'infografica dipendono dai campi).
 
-### AI-2 · Palette reale nell'infografica · Alta · S
+### AI-2 · Palette reale nell'infografica · Alta · S · ✅ Completato
 **File:** `src/lib/fal/generate-dossier.ts:456` (ramo infografica).
 **Azione:** passare al prompt infografica i colori reali (nome+hex) da `palettes.json`, usando lo stesso `formatColors` già impiegato per lookbook (`:534-563`) e guardaroba (`:616-647`).
+**Stato:** Estratti helper condivisi `getPaletteTiers` e `formatColors`; passati i 16 colori reali con `#HEX` (`primary`, `accents`, `secondary`, `neutrals`), `avoidColorsWithHex` e `lookSuggestions` nel prompt `buildDossierPrompt`.
 **Criteri di accettazione:** su un dossier infografica di test, gli hex mostrati corrispondono a quelli della sotto-stagione in `palettes.json` (non inventati); nessuna regressione su lookbook/guardaroba.
 
-### AI-3 · Confidence come gate + qualità foto + capelli tinti · Media · M
+### AI-3 · Confidence come gate + qualità foto + capelli tinti · Media · M · ✅ Completato
 **File:** `src/lib/fal/classify.ts` (prompt + schema), `src/lib/armocromia/pipeline.ts` (gate a valle).
 **Azione:** aggiungere al prompt la valutazione di illuminazione/filtri/trucco (campo `photoQuality` + `photoQualityIssues`) e le istruzioni per capelli tinti (giudicare da radici/sopracciglia/incarnato); definire una rubrica confidence con ancore esplicite; nella pipeline, sotto una soglia → non consegnare: dossier `needs_better_photo` (o simile), email all'utente + rigenerazione gratuita quando ricarica.
+**Stato:** Aggiunti `photoQuality` (`good | acceptable | poor`) e `photoQualityIssues` opzionali in `schemas.ts`; protocollo diagnostico in 4 step in `classify.ts` (inclusa analisi ricrescita/sopracciglia per capelli tinti e rubrica di confidenza); gate `confidence < 0.45` in `pipeline.ts` con messaggio localizzato IT/EN/ES salvato in `error_message`.
 **Criteri di accettazione:** una foto in luce calda/filtrata produce confidence bassa e **non** viene consegnato un dossier; una foto buona passa; il caso sotto-soglia genera l'email corretta.
 **Vincolo:** `dossiers.status` ha un vincolo CHECK su 6 stati (definito in `supabase/migrations/001_initial_schema.sql`). Introdurre un nuovo stato (es. `needs_better_photo`) significa **modificare il CHECK per aggiungere un valore**: è consentito perché additivo (nessun drop/rename, nessuna perdita dati) — è l'eccezione alla regola "solo additive". In alternativa, per evitare del tutto la modifica del CHECK, usa il campo `error_message` per marcare il caso e non introdurre un nuovo stato. Scegli la prima via se il caso "foto inadeguata" deve avere una UI dedicata.
 
-### AI-4 · QA vision post-generazione · Media · S
+### AI-4 · QA vision post-generazione · Media · S · ✅ Completato
 **File:** `src/lib/armocromia/pipeline.ts:80-122`.
 **Azione:** dopo la generazione, una chiamata vision economica valuta leggibilità testo + coerenza (volto/palette); sotto soglia → 1 retry di generazione prima di marcare `completed`.
+**Stato:** Implementato `verifyDossierImageQuality` (`openrouter/router/vision`, fail-open su errori di rete) e integrato in `pipeline.ts` con 1 retry automatico di `generateDossierImage` se `!qaResult.passed`.
 **Criteri di accettazione:** un output volutamente degradato (mock) innesca il retry; un output buono passa al primo colpo; il costo aggiuntivo è ~1 chiamata vision (~$0,01).
 
-### AI-5 · Riordinare i campi JSON della classificazione · Bassa · S
+### AI-5 · Riordinare i campi JSON della classificazione · Bassa · S · ✅ Completato
 **File:** `src/lib/fal/classify.ts:68-71`.
 **Azione:** nel template JSON, mettere `analysis`/`reasoning`/`confidence` **prima** di `subSeason`.
+**Stato:** Riordinato il template JSON in `buildPrompt` (`photoQuality` → `photoQualityIssues` → `analysis` → `reasoning` → `subSeason` → `confidence` → `lookSuggestions`).
 **Criteri di accettazione:** lo schema Zod continua a validare; su un set di test la distribuzione di confidence/accuratezza non peggiora (idealmente migliora).
 
-### PROD-1 · Correggere il copy prodotto (1 modalità, non 3) · Bassa · S
+### PROD-1 · Correggere il copy prodotto (1 modalità, non 3) · Bassa · S · ✅ Completato
 **Contesto:** confermato dal proprietario che il prodotto è **una modalità a scelta**; il copy Stripe è il bug.
 **File:** `src/lib/stripe.ts:53` (description), eventuali copy correlati in `messages/*.json`.
 **Azione:** riscrivere la descrizione prodotto Stripe e i testi che promettono le tre modalità insieme, per riflettere "una modalità a scelta (infografica, lookbook o guardaroba)".
+**Stato:** Aggiornata e localizzata (IT/EN/ES) la descrizione prodotto in `src/lib/stripe.ts` per indicare chiaramente "una modalità a scelta (Infografica, Lookbook o Guardaroba)".
 **Criteri di accettazione:** nessun copy cliente-facing promette le 3 modalità in un singolo acquisto da €29.
 **NON toccare:** la pipeline (il comportamento a 1 immagine è corretto). Il bundle 3-in-1 è un tema di crescita (M6), non questo task.
 
