@@ -185,6 +185,34 @@ export async function analyzePhoto(
       throw new Error("Dossier ID mancante per la generazione");
     }
 
+    // ── Bypass Checkout Stripe per Admin in Development locale (double-gate) ──
+    const { isAdmin } = await import("@/lib/admin");
+    const isDevAdminBypass =
+      Boolean(user.email && isAdmin(user.email)) &&
+      process.env.NODE_ENV === "development" &&
+      !process.env.VERCEL_ENV;
+
+    if (isDevAdminBypass) {
+      const supabaseAdmin = createAdminClient();
+      await supabaseAdmin
+        .from("dossiers")
+        .update({ status: "processing" })
+        .eq("id", dossierId);
+
+      const { runDossierGenerationPipeline } = await import("@/lib/armocromia/pipeline");
+      void runDossierGenerationPipeline({
+        dossierId,
+        userId: user.id,
+        photoPath,
+        userNotes: userNotes || null,
+        analysisMode: analysisMode || "infografica",
+        locale,
+      });
+
+      const directSuccessUrl = `/${locale}/dashboard?payment_success=true&dossier_id=${dossierId}`;
+      return { status: "success", dossierId, checkoutUrl: directSuccessUrl };
+    }
+
     // ── 4. Crea la sessione di Checkout su Stripe ──
     const checkoutUrl = await createStripeCheckoutSession({
       dossierId,
